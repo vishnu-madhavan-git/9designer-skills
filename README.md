@@ -14,7 +14,9 @@
 
 It is built for visual reconstruction work: reference-led design, exact asset handling, section-by-section implementation specs, and screenshot-based QA.
 
-![9Designer social preview](docs/media/social-preview.png)
+<p align="center">
+  <img src="docs/media/social-preview.png" alt="9Designer image-to-website pipeline preview" width="920">
+</p>
 
 ## Preview
 
