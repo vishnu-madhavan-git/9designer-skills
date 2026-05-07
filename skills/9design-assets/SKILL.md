@@ -33,6 +33,8 @@ If the user gives only attached images, treat those images as the reference kit.
 
 Do not invent a new visual style. The output must follow the supplied kit exactly: same brand identity, colors, lighting, composition language, typography mood, icon style, UI styling, borders, shadows, masks, and texture system.
 
+Identify which elements should become reusable image assets and which must remain HTML/CSS text. Normal navigation, headings, paragraphs, buttons, cards, CTA text, form labels, and footer copy should stay code-native. Generate text as an image only for a decorative logo, custom wordmark, hand-lettered title, poster, sign, packaging, or artwork where the text is part of the visual object.
+
 Asset fidelity rules:
 
 - Match icon metaphor, stroke/fill style, optical weight, corner style, color, padding, and alignment from the approved design. Do not swap in generic nearby icons.
@@ -67,6 +69,19 @@ Default required set and background policy:
 
 Add extra assets only when the reference kit clearly requires them or the user asks.
 
+Reference-driven asset coverage:
+
+- Logo mark as transparent PNG.
+- Brand wordmark as transparent PNG when the typography is decorative or hard to reproduce with CSS.
+- Hero artwork/background as a clean high-resolution image.
+- Standalone hero characters, objects, foreground props, or floating motifs with transparency when they layer over the page.
+- Section illustrations for story, showcase, gallery, feature, CTA, and footer areas.
+- Custom illustrated feature-card icons as transparent PNGs when icons are visual world elements.
+- Gallery images, visual cards, framed artwork, or masks matching the reference style.
+- CTA background artwork or decorative objects.
+- Background textures, patterns, dividers, clouds, waves, leaves, stars, magic effects, mountains, animals, or other motifs found in the reference.
+- Footer logo and small decorative visuals when present.
+
 For each asset, decide:
 
 - Source reference image or board
@@ -75,6 +90,7 @@ For each asset, decide:
 - Aspect ratio and background policy: `transparent`, `flat-neutral`, `full-bleed-background`, or `component-internal-background`
 - Whether it must be generated as an isolated object, full-width image, component strip, or square icon
 - Exact fidelity notes: color, stroke/fill, typography mood, radius, shadow, padding, crop, and whether text is allowed inside the asset
+- Whether the website builder must provide accessible hidden text for a decorative image-text asset
 
 ### Step 3: Scaffold The Export Folder
 
@@ -172,6 +188,7 @@ Include for each asset:
 - Notes about transparency, aspect ratio, state, and responsive use
 - Background policy and whether background removal is needed before implementation
 - Cleanup fields: `background_cleanup_required`, `background_cleaned`, `alpha_verified`, `background_removal_method`, and `background_removal_needed`
+- Text policy: `code-native-text`, `decorative-image-text`, or `no-text`; for decorative image text, include the exact accessible text that the website must expose.
 
 Also create:
 
@@ -218,6 +235,7 @@ Generate one separate website implementation image asset: hero-background. Use o
 - Always run background cleanup for reusable non-background assets before website handoff.
 - Never accept a baked-in checkerboard as transparency.
 - Generate separate files, not one giant board.
+- Do not crop the supplied screenshot as the primary source for reusable assets unless the user explicitly allows it. Generate clean assets that match the reference instead.
 - Keep implementation assets isolated. Logos, icons, UI elements, overlays, and dividers must not include the page background from the screenshot.
 - Only true background assets may include full-bleed background art.
 - Default to exactly 5 icons unless the user asks for more or fewer.

@@ -23,6 +23,8 @@ Use the reference image as the creative source of truth. Internally analyze:
 - Lighting, mood, color palette, texture, atmosphere, and visual style
 - Existing logo, wordmark, lettering, typography, symbols, motifs, objects, and patterns
 - Best hero text placement based on the image composition
+- Which visual elements need transparent backgrounds
+- Which text should be HTML/CSS and which text is decorative image-based typography
 
 Before generating, define internally:
 
@@ -120,6 +122,8 @@ Default exported assets:
 - `section-texture`
 - `decorative-divider`
 
+Also export reference-driven assets when present: decorative wordmarks, hero objects/characters, section illustrations, custom feature icons, gallery cards, CTA artwork, footer visuals, and background motifs such as clouds, waves, leaves, stars, magic effects, mountains, animals, dividers, textures, or masks.
+
 Background policy:
 
 - Logos, icons, overlays, dividers, and decorative elements: transparent preferred.
@@ -151,6 +155,7 @@ Stage 2 fidelity rules:
 - Match actual colors; do not warm, cool, mute, or "improve" the palette.
 - Preserve hero/media treatment. Do not add overlays or tints that are not in the approved design.
 - Keep interactive UI text and controls code-native for Stage 3 unless the text belongs inside a decorative image asset.
+- For decorative image-text assets, record the exact accessible hidden text required in Stage 3.
 
 ## Stage 3: Working Website Build
 
@@ -168,6 +173,8 @@ Required behavior:
 6. Use CSS variables for colors, typography, spacing, radii, borders, shadows, overlays, and textures.
 7. Preserve the approved brand direction and avoid redesigning.
 8. Strictly clone the approved template layout instead of creating an inspired redesign.
+9. Use real HTML/CSS text for navigation, headings, paragraphs, buttons, cards, CTA, forms, and footer whenever possible.
+10. Use accessible hidden text for decorative image-based logos, wordmarks, or hand-lettered titles.
 
 Before coding, create an implementation inventory:
 
@@ -185,6 +192,7 @@ Frontend implementation rules:
 - Keep interactive controls code-native, accessible, and deliberately typed.
 - Preserve the container model; do not add cards, wrappers, borders, glows, or panels where the concept uses open space or full-bleed composition.
 - Use exported icons/assets only when clean, and use SVG/icon components only when they faithfully match the approved icon style.
+- Use semantic HTML, accessible alt text, reusable components, and modern CSS layout. Do not hardcode everything with absolute positioning unless needed for faithful visual layering.
 
 Default files for a new Vite app:
 
@@ -200,6 +208,23 @@ public/assets/*
 README.md
 ```
 
+Default reusable components for a landing-page build:
+
+```text
+Header
+Hero
+StorySection
+FeatureSection
+ShowcaseSection
+GallerySection
+CTASection
+Footer
+Button
+Card
+```
+
+Use only the components supported by the approved design.
+
 Default pages when supported by the prototype:
 
 - Home
@@ -213,6 +238,7 @@ Verification requirements:
 
 - Run the smallest meaningful verification for the stack.
 - For a Vite app, run `npm install` if needed and `npm run build`.
+- Confirm `npm run dev` starts successfully for new Vite projects when practical.
 - Start the dev server and provide the local URL.
 - Use browser testing or screenshots for desktop and mobile when available.
 - Compare desktop and mobile screenshots against the approved prototype/template at matching viewport sizes.
@@ -258,6 +284,7 @@ Keep the final concise and include:
 - Prototype images generated or approval status
 - Asset export folder path
 - Website folder or key files changed
+- Sections recreated, assets generated/used, and main design decisions
 - Verification commands and results
 - Dev URL or run command
 - Any missing assets, uncertain fonts, or remaining risks

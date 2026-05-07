@@ -29,6 +29,7 @@ Create an implementation map:
 - Reference screenshot/template for each page
 - Asset cleanup status for every logo, icon, overlay, divider, and UI image
 - Exact visible copy, typography system, icon inventory, component families, container model, and hero/media treatment
+- Text policy: real HTML/CSS text versus decorative image text that needs hidden accessible text
 - Missing assets or assumptions
 
 Before building:
@@ -65,9 +66,14 @@ Website requirements:
 - No generic SaaS styling unless the asset kit clearly uses that style
 - No invented hero eyebrows, badges, pills, sections, forms, dashboards, carousels, or visible above-the-fold copy unless present in the approved design or explicitly requested
 - Code-native interactive controls with deliberate typography, accessible labels/states, and shared component variants
+- Real HTML/CSS text for nav, headings, paragraphs, buttons, cards, CTA, forms, and footer whenever possible
+- Hidden accessible text for decorative logo/wordmark/hand-lettered image text
+- Reusable components such as Header, Hero, StorySection, FeatureSection, ShowcaseSection, GallerySection, CTASection, Footer, Button, and Card when those sections exist
+- README with install, dev, build, and asset-source notes
 
 Verification:
 - Run npm install if dependencies are missing.
+- Confirm npm run dev starts for new Vite projects when practical.
 - Run npm run build.
 - Start the dev server.
 - Test desktop and mobile views with browser testing or screenshots.

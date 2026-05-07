@@ -49,6 +49,8 @@ Before generating or designing, internally inspect the image for:
 - Symbols, creatures, objects, landscape elements, textures, and patterns
 - Illustration, photo, 3D, cinematic, editorial, or hand-drawn style
 - Existing title text, logo, lettering, brand mark, or typography
+- Which elements should later become transparent assets
+- Which text should remain real HTML/CSS and which text is decorative logo, wordmark, or hand-lettering
 
 Preserve strong existing identity. If the image contains a polished wordmark, logo, title, or lettering, keep it as the brand foundation. If it does not, create a short brand name that feels native to the image.
 
@@ -126,6 +128,7 @@ For Image 1, include:
 - A fresh brand direction derived only from the current image
 - Clear instruction to stop after Image 1 and wait for approval
 - Implementation clarity: readable text, stable section dimensions, clear button/card/form details, and extractable spacing/type/color decisions
+- Clear distinction between normal HTML text and decorative image-based lettering or logo marks
 
 For later images after approval, include:
 

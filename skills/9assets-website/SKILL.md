@@ -71,6 +71,7 @@ Inventory every asset path and map it to a website role:
 - Decorative overlays/dividers/textures
 - Cards, forms, CTA, footer, and other UI elements
 - Page-specific imagery
+- Decorative image-text assets that need accessible hidden text
 
 Before building, inspect manifest cleanup fields:
 
@@ -78,6 +79,7 @@ Before building, inspect manifest cleanup fields:
 - Do not use assets marked `background_removal_needed: true` in `06-ready-for-builder/`.
 - If a reusable asset visibly contains a checkerboard, flat page background, or screenshot background, treat it as unclean and return to `9design-assets` cleanup or regenerate that asset.
 - Only true background assets may be full-bleed.
+- For assets marked `decorative-image-text`, add equivalent accessible hidden text in the website.
 
 ### Step 2: Plan The Real Website
 
@@ -116,6 +118,7 @@ Before coding, create a compact implementation inventory:
 - Component families: buttons, navigation, media frames, cards only where present, forms, tags, galleries, CTA, footer, and responsive variants.
 - Container model: full-bleed sections, bands, rails, lists, panels, cards, masks, overlays, or open whitespace.
 - Hero/media treatment: no overlay, color overlay, gradient, edge fade, mask, transparent cutout, or matching background color.
+- Text policy: which text is real HTML/CSS and which, if any, is decorative image text with hidden accessible text.
 
 Do not invent new visible above-the-fold copy, hero eyebrows/kickers, badges, pills, major carousels, pricing blocks, dashboards, forms, or tab systems unless they appear in the approved design, are in the user request, or are required for a concrete function.
 
@@ -147,6 +150,11 @@ Implementation requirements:
 - Avoid generic SaaS layout unless the asset kit clearly has that style.
 - Use CSS variables for tokens.
 - Use semantic HTML and accessible controls.
+- Use accessible alt text for meaningful images and empty alt text for purely decorative images.
+- Use visually hidden accessible text for decorative logo/wordmark/hand-lettered image text.
+- Normal website text must be real HTML/CSS text: navigation, headings, paragraphs, buttons, cards, CTA, forms, and footer.
+- Do not hardcode the whole page with absolute positioning. Use modern CSS layout with grid, flexbox, `clamp()`, `minmax()`, `object-fit`, and `aspect-ratio`; reserve absolute positioning for accurate visual layering only.
+- Include a README with how to install, run, build, and understand the asset source.
 
 Use generated UI element images as visual references, but implement interactive controls as HTML/CSS unless they are intentionally decorative bitmap elements.
 
@@ -161,6 +169,21 @@ Frontend implementation rules:
 - Use SVG/icon components only when they faithfully match the approved icon style; otherwise use the cleaned exported icon assets.
 - Respect `prefers-reduced-motion` for motion.
 
+Default reusable component names for a landing-page build:
+
+- `Header`
+- `Hero`
+- `StorySection`
+- `FeatureSection`
+- `ShowcaseSection`
+- `GallerySection`
+- `CTASection`
+- `Footer`
+- `Button`
+- `Card`
+
+Use the names that fit the actual design; do not force unused sections.
+
 Template cloning requirements:
 
 - Match the approved screenshot/template section-by-section.
@@ -173,6 +196,7 @@ Template cloning requirements:
 Run the smallest meaningful verification, then broaden as needed:
 
 - Install dependencies if needed.
+- Confirm `npm install`, `npm run dev`, and `npm run build` work for new Vite projects when practical.
 - Run `npm run build`.
 - Start the dev server.
 - Use browser testing or Playwright screenshots for desktop and mobile.
@@ -206,6 +230,9 @@ Final response must include:
 - Pages/routes built
 - Asset export folder used
 - Important assets copied into `public/assets/`
+- Sections recreated
+- Assets generated or used
+- Main design decisions
 - Verification commands and results
 - Local dev URL or run command
 - Remaining risks, especially missing fonts or incomplete asset coverage
