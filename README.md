@@ -77,5 +77,30 @@ Use $9assets-website with this asset export folder.
 ## Notes
 
 - `$9image-design` waits for approval after the first landing page unless explicitly overridden.
-- `$9design-assets` generates clean separate image assets and avoids baked-in screenshot backgrounds for logos, icons, and UI elements.
-- `$9assets-website` builds the working responsive website from the exported assets.
+- `$9design-assets` generates clean separate image assets, runs background cleanup for reusable non-background assets, and avoids baked-in screenshot/checkerboard backgrounds for logos, icons, and UI elements.
+- `$9assets-website` builds the working responsive website from the exported assets, then uses screenshot comparison against the approved template to tighten the visual clone.
+
+## Background Cleanup
+
+`$9design-assets` includes:
+
+```text
+skills/9design-assets/scripts/remove_background.py
+```
+
+Use it after image generation for logos, icons, overlays, dividers, and reusable UI assets:
+
+```text
+python skills/9design-assets/scripts/remove_background.py --input generated.png --output cleaned.png --mode auto
+```
+
+The exporter manifest tracks:
+
+```text
+background_cleanup_required
+background_cleaned
+alpha_verified
+background_removal_needed
+```
+
+Do not pass checkerboard-backed or screenshot-backed reusable assets into `$9assets-website`.

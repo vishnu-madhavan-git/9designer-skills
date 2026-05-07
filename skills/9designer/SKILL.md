@@ -81,8 +81,9 @@ Required behavior:
 1. Use image generation for every visual asset.
 2. Generate each asset separately. Do not create one giant sheet as the only output.
 3. Save every generated image into the correct folder.
-4. Copy final implementation assets into `06-ready-for-builder/`.
-5. Write or update `asset-export-manifest.json` so the website build can consume the folder without guessing.
+4. Run background cleanup for every reusable non-background asset.
+5. Copy only cleaned and verified final implementation assets into `06-ready-for-builder/`.
+6. Write or update `asset-export-manifest.json` so the website build can consume the folder without guessing.
 
 Default exported assets:
 
@@ -106,10 +107,17 @@ Default exported assets:
 Background policy:
 
 - Logos, icons, overlays, dividers, and decorative elements: transparent preferred.
-- If transparency is not reliable, use a perfectly flat neutral background and mark `background-removal-needed` in the manifest.
+- If transparency is not reliable, use a perfectly flat neutral background, run background cleanup, and verify alpha before handoff.
 - Buttons, nav, cards, forms, and reusable UI elements: isolated component only, no screenshot/page background.
 - CTA and footer modules may include their internal component background, but not the full page screenshot background.
 - Only true background assets such as `hero-background`, `section-texture`, or background patterns may be full-bleed.
+
+Background cleanup requirements:
+
+- Use the `9design-assets` cleanup behavior for all logos, wordmarks, favicons, icons, overlays, dividers, buttons, nav, cards, forms, CTA modules, and footer modules.
+- Never accept a baked-in checkerboard pattern as transparency.
+- Manifest entries for reusable assets must include `background_cleaned: true`, `alpha_verified: true`, and `background_removal_needed: false` before Stage 3 starts.
+- If cleanup fails, regenerate the asset on a flat neutral background and clean it again.
 
 Stage 2 output:
 
@@ -130,11 +138,13 @@ Use the existing repository stack if one exists. If no stack exists or the works
 Required behavior:
 
 1. Read `asset-export-manifest.json`, `06-ready-for-builder/`, and the notes from Stage 2.
-2. Copy final assets into the website project under `public/assets/`.
-3. Build a real website, not a screenshot background.
-4. Implement responsive pages, navigation, sections, cards, forms, CTAs, footer, and visual styling using HTML/CSS/React components.
-5. Use CSS variables for colors, typography, spacing, radii, borders, shadows, overlays, and textures.
-6. Preserve the approved brand direction and avoid redesigning.
+2. Verify reusable assets are cleaned: no checkerboards, no screenshot backgrounds, and alpha verified where required.
+3. Copy final assets into the website project under `public/assets/`.
+4. Build a real website, not a screenshot background.
+5. Implement responsive pages, navigation, sections, cards, forms, CTAs, footer, and visual styling using HTML/CSS/React components.
+6. Use CSS variables for colors, typography, spacing, radii, borders, shadows, overlays, and textures.
+7. Preserve the approved brand direction and avoid redesigning.
+8. Strictly clone the approved template layout instead of creating an inspired redesign.
 
 Default files for a new Vite app:
 
@@ -165,7 +175,10 @@ Verification requirements:
 - For a Vite app, run `npm install` if needed and `npm run build`.
 - Start the dev server and provide the local URL.
 - Use browser testing or screenshots for desktop and mobile when available.
+- Compare desktop and mobile screenshots against the approved prototype/template at matching viewport sizes.
+- Iterate on CSS/components/assets until the website closely matches the reference layout, typography scale, spacing, colors, and section rhythm.
 - Fix broken images, console errors, text overflow, layout overlap, and mobile navigation issues.
+- Fix visual drift such as wrong background layering, checkerboard-backed assets, wrong card ratios, wrong button heights, or incorrect font weight/size.
 - If the workspace has graphify instructions and code files changed, run `graphify update .`.
 
 Stage 3 output:

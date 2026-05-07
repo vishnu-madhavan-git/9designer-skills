@@ -9,7 +9,7 @@ description: "Generate the production asset stage of the 9Designer pipeline from
 
 Take an existing reference asset kit, prototype image set, or approved design board and turn it into separated image files for website implementation. This is the bridge between a visual prototype kit and a real website build.
 
-This skill must generate assets as individual images with the image generation tool. Do not hand-build low-quality SVG approximations as the primary output.
+This skill must generate assets as individual images with the image generation tool, then run real background cleanup for all reusable non-background assets. Do not hand-build low-quality SVG approximations as the primary output.
 
 ## Five-Step Process
 
@@ -94,6 +94,11 @@ notes/                 Asset plan, prompts, font notes, implementation notes
 asset-export-manifest.json
 ```
 
+Bundled scripts:
+
+- `scripts/create_asset_export.py`: creates the export folder and manifest.
+- `scripts/remove_background.py`: removes baked-in flat/checkerboard backgrounds and verifies alpha transparency.
+
 ### Step 4: Generate Each Asset Separately With Imagegen
 
 Use the image generation tool for every visual asset. Generate each requested asset as its own separate image, not one combined sheet, unless the user explicitly asks for a sheet.
@@ -109,13 +114,37 @@ Required behavior:
 - Generate each background or texture separately.
 - Generate logos, icons, and UI components without the screenshot/page background. They must be clean isolated implementation assets.
 - Save or move each generated image into the correct folder.
-- Copy final web-builder-ready files into `06-ready-for-builder/`.
+- Run background cleanup for every reusable non-background asset before copying it into `06-ready-for-builder/`.
+- Copy only cleaned and verified final files into `06-ready-for-builder/`.
 
 Do not satisfy this step by drawing SVGs manually. Optional SVG tracing can happen later, but only after the image exists.
 
-Use transparent backgrounds when possible for logos, icons, overlays, dividers, and decorative elements. If imagegen cannot reliably output transparency, use a plain flat neutral background with no texture, no gradient, no scene, no screenshot, and mark the manifest note as `background-removal-needed`.
+Use transparent backgrounds when possible for logos, icons, overlays, dividers, and decorative elements. If imagegen cannot reliably output transparency, use a plain flat neutral background with no texture, no gradient, no scene, no screenshot, then run background cleanup.
 
 Use full-bleed backgrounds only for assets whose purpose is the website background itself, such as `hero-background`, `section-texture`, or a true background pattern. Never put the page background behind a logo, icon, button, card, nav, form, or reusable UI element.
+
+### Step 4.5: Mandatory Background Cleanup
+
+For every asset whose manifest has `background_cleanup_required: true`, run:
+
+```bash
+python <skill-dir>/scripts/remove_background.py --input "<generated-image>" --output "<asset-export>/<folder>/<asset-id>.png" --mode auto
+```
+
+Then copy the cleaned file into:
+
+```text
+06-ready-for-builder/<asset-id>.png
+```
+
+Required cleanup behavior:
+
+- Logos, wordmarks, favicons, icons, overlays, dividers, buttons, nav, cards, forms, CTA modules, and footer modules must be cleaned before handoff.
+- Do not pass through images that show a checkerboard background. A checkerboard pattern inside the PNG means transparency failed; run cleanup or regenerate on a flat neutral background and clean again.
+- Do not pass through white/gray/pink/blue gradient backgrounds behind isolated assets.
+- Update the manifest with `background_cleaned: true`, `alpha_verified: true`, `background_removal_method`, and `background_removal_needed: false` after cleanup succeeds.
+- If alpha cannot be verified, leave `background_removal_needed: true`, do not copy that asset into `06-ready-for-builder/`, and report it as a blocker or regenerate it.
+- Full-bleed background assets do not need alpha cleanup unless they are overlays or dividers.
 
 ### Step 5: Package For The Next Website Skill
 
@@ -132,6 +161,7 @@ Include for each asset:
 - Intended website use
 - Notes about transparency, aspect ratio, state, and responsive use
 - Background policy and whether background removal is needed before implementation
+- Cleanup fields: `background_cleanup_required`, `background_cleaned`, `alpha_verified`, `background_removal_method`, and `background_removal_needed`
 
 Also create:
 
@@ -174,6 +204,8 @@ Generate one separate website implementation image asset: hero-background. Use o
 ## Rules
 
 - Always use imagegen for the visual asset itself.
+- Always run background cleanup for reusable non-background assets before website handoff.
+- Never accept a baked-in checkerboard as transparency.
 - Generate separate files, not one giant board.
 - Keep implementation assets isolated. Logos, icons, UI elements, overlays, and dividers must not include the page background from the screenshot.
 - Only true background assets may include full-bleed background art.

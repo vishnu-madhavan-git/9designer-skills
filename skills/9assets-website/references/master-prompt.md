@@ -9,6 +9,8 @@ Build the complete working website from the provided asset export kit.
 
 The asset kit is the production source of truth. Do not redesign the brand, replace assets with stock imagery, or invent generic sections. Use the exported images, logos, icons, backgrounds, UI elements, tokens, and manifest to build the real site.
 
+Strictly clone the approved template/prototype. Do not make an inspired redesign. Match the reference layout, spacing, typography scale, image placement, colors, component shapes, shadows, borders, and responsive behavior as closely as possible.
+
 First read the kit:
 - asset-export-manifest.json
 - asset-manifest.json if present
@@ -24,7 +26,15 @@ Create an implementation map:
 - Components needed
 - Which exported asset is used by each component
 - Tokens, fonts, colors, spacing, radii, shadows, borders, overlays, and textures
+- Reference screenshot/template for each page
+- Asset cleanup status for every logo, icon, overlay, divider, and UI image
 - Missing assets or assumptions
+
+Before building:
+- Reject any reusable asset that has a checkerboard background baked in.
+- Reject any logo, icon, or UI element with a screenshot/page background behind it.
+- Require manifest fields such as background_cleaned and alpha_verified to be true for reusable assets that need transparency.
+- Only true background assets may be full-bleed.
 
 Build the full website. Unless I specify a different stack or an existing app already exists, use React + TypeScript + Vite.
 
@@ -58,7 +68,9 @@ Verification:
 - Run npm run build.
 - Start the dev server.
 - Test desktop and mobile views with browser testing or screenshots.
-- Fix broken images, console errors, text overflow, layout overlap, and mobile nav issues.
+- Compare desktop and mobile screenshots against the approved reference/template at matching viewport sizes.
+- Iterate until the website closely matches the approved template.
+- Fix broken images, console errors, text overflow, layout overlap, mobile nav issues, visual drift, wrong spacing, wrong font scale, wrong component sizing, and incorrect background layering.
 - If graphify instructions apply after code edits, run graphify update .
 
 After implementation, briefly report:

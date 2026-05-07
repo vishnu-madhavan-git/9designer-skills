@@ -105,22 +105,35 @@ def main() -> int:
     if args.source_kit:
         source_record = copy_source_kit(Path(args.source_kit).expanduser().resolve(), export_dir / "00-source-kit")
 
-    assets = [
-        {
-            "id": asset_id,
-            "type": asset_type,
-            "folder": folder,
-            "expected_file": f"{asset_id}.png",
-            "status": "pending-imagegen",
-            "use": description,
-            "background_policy": background_policy,
-            "background_removal_needed": False,
-            "source_reference": source_record,
-            "prompt_summary": "",
-            "notes": "",
+    assets = []
+    for asset_id, asset_type, folder, description, background_policy in DEFAULT_ASSETS:
+        alpha_required = background_policy in {
+            "transparent-preferred",
+            "isolated-component",
+            "component-internal-background",
         }
-        for asset_id, asset_type, folder, description, background_policy in DEFAULT_ASSETS
-    ]
+        assets.append(
+            {
+                "id": asset_id,
+                "type": asset_type,
+                "folder": folder,
+                "expected_file": f"{asset_id}.png",
+                "clean_file": f"{asset_id}.png",
+                "ready_file": f"06-ready-for-builder/{asset_id}.png",
+                "status": "pending-imagegen",
+                "use": description,
+                "background_policy": background_policy,
+                "alpha_required": alpha_required,
+                "background_cleanup_required": alpha_required,
+                "background_cleaned": False,
+                "alpha_verified": False,
+                "background_removal_needed": False,
+                "background_removal_method": "",
+                "source_reference": source_record,
+                "prompt_summary": "",
+                "notes": "",
+            }
+        )
 
     manifest = {
         "project": args.name,
@@ -143,7 +156,7 @@ def main() -> int:
 
     write_if_missing(
         export_dir / "notes" / "asset-plan.md",
-        "# Asset Plan\n\nGenerate each listed asset as its own imagegen output. Update `asset-export-manifest.json` after each asset is saved.\n",
+        "# Asset Plan\n\nGenerate each listed asset as its own imagegen output. For every asset with `background_cleanup_required: true`, run `remove_background.py` and verify `alpha_verified: true` before copying it into `06-ready-for-builder/`. Update `asset-export-manifest.json` after each asset is saved and cleaned.\n",
     )
     write_if_missing(
         export_dir / "notes" / "generation-prompts.md",

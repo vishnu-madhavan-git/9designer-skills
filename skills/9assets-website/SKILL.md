@@ -21,6 +21,8 @@ Treat the exported asset kit as the production source of truth. Do not redesign 
 
 If an asset is missing, first check the manifest and notes for alternatives. If the missing asset blocks a faithful build, either generate only that missing asset with image generation or state the gap clearly before proceeding. Do not silently replace it with unrelated placeholder art.
 
+Strict visual clone mode is required. The approved prototype/template screenshots are the visual truth for layout, spacing, typography scale, colors, section order, image placement, and responsive behavior. Build, screenshot, compare, and iterate until the website closely matches the reference.
+
 ## Expected Input
 
 Prefer an export folder shaped like:
@@ -70,6 +72,13 @@ Inventory every asset path and map it to a website role:
 - Cards, forms, CTA, footer, and other UI elements
 - Page-specific imagery
 
+Before building, inspect manifest cleanup fields:
+
+- Assets with `alpha_required: true` must have `background_cleaned: true` and `alpha_verified: true`.
+- Do not use assets marked `background_removal_needed: true` in `06-ready-for-builder/`.
+- If a reusable asset visibly contains a checkerboard, flat page background, or screenshot background, treat it as unclean and return to `9design-assets` cleanup or regenerate that asset.
+- Only true background assets may be full-bleed.
+
 ### Step 2: Plan The Real Website
 
 Infer the complete website structure from the prototype references and manifest. Unless the user narrows scope, build all pages represented by the asset kit.
@@ -91,6 +100,8 @@ Create a concise implementation plan:
 - Components
 - Asset-to-component mapping
 - Design tokens to implement
+- Reference screenshot/template for each page
+- Pixel-critical visual details: section heights, max widths, typography scale, spacing, image aspect ratios, radii, shadows, borders, and color values
 - Missing assets or assumptions
 - Verification commands
 
@@ -119,12 +130,20 @@ Implementation requirements:
 - Use the exported logo, icons, imagery, backgrounds, UI references, and tokens.
 - Recreate the approved visual system: colors, typography mood, spacing, radii, shadows, borders, overlays, masks, textures, and section rhythm.
 - Build real responsive UI, not a single screenshot background.
+- Clone the approved template closely. Do not reinterpret layouts, move sections, change hierarchy, swap fonts casually, or invent new component shapes.
 - Keep text readable on desktop and mobile.
 - Avoid generic SaaS layout unless the asset kit clearly has that style.
 - Use CSS variables for tokens.
 - Use semantic HTML and accessible controls.
 
 Use generated UI element images as visual references, but implement interactive controls as HTML/CSS unless they are intentionally decorative bitmap elements.
+
+Template cloning requirements:
+
+- Match the approved screenshot/template section-by-section.
+- Use the same typography proportions, button sizes, image/card aspect ratios, border radii, shadows, backgrounds, and vertical rhythm.
+- Build reusable UI as live HTML/CSS, not pasted screenshots, unless the asset is decorative imagery.
+- Keep isolated image assets clean over the real page background; never layer a background-baked logo/icon/UI image over another background.
 
 ### Step 4: Verify Fidelity And Responsiveness
 
@@ -134,8 +153,18 @@ Run the smallest meaningful verification, then broaden as needed:
 - Run `npm run build`.
 - Start the dev server.
 - Use browser testing or Playwright screenshots for desktop and mobile.
+- Compare screenshots against the approved reference/template at the same viewport sizes.
 - Check for broken images, console errors, missing assets, text overflow, incoherent overlap, and mobile navigation issues.
+- Check for visual drift: wrong spacing, wrong font weight/size, wrong button height, wrong card ratio, wrong background layering, wrong section order, and visible asset backgrounds.
 - Fix issues found during verification.
+
+Screenshot comparison loop:
+
+1. Capture desktop screenshot, preferably at the same aspect ratio as the approved template.
+2. Capture mobile screenshot, preferably at the same width as the mobile reference.
+3. Compare against the reference visually and note mismatches.
+4. Patch CSS/components/assets.
+5. Repeat until the remaining differences are minor or blocked by missing assets/fonts.
 
 If the repo has graphify instructions and code files changed, run `graphify update .`.
 
@@ -158,6 +187,7 @@ Final response must include:
 - Do not crop whole-page mockups into sections unless the kit explicitly marks them as production assets.
 - Do not invent a new logo, new icon style, or new palette.
 - Do not leave placeholder gray boxes.
+- Do not use unclean transparent assets, checkerboard-backed images, or screenshot-backed logos/icons/UI components.
 - Do not use remote image URLs when local assets are available.
 - Keep source kit files untouched; copy into the website project instead.
 
