@@ -27,6 +27,11 @@ body:
     attributes:
       label: What worked or failed?
       description: Mention any visual fidelity, asset cleanup, or website build lessons.
+  - type: textarea
+    id: benchmark
+    attributes:
+      label: Benchmark evidence
+      description: Link or summarize rendered screenshots, visual QA ledger, benchmark score, and any unresolved blockers.
   - type: checkboxes
     id: permissions
     attributes:

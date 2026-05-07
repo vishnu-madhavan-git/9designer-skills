@@ -40,6 +40,8 @@ Advanced tools such as Playwright, pixelmatch, SSIM comparison, rembg, Segment A
 
 When the local 9Designer skill scripts are available, prefer the bundled helpers for repeatable QA: `9assets-website/scripts/capture_visual_qa.mjs`, `9assets-website/scripts/compare_visual_qa.mjs`, and `9assets-website/scripts/create_visual_qa_ledger.py`. These helpers remain optional wrappers around the same manual comparison process.
 
+For public examples, benchmark submissions, or final quality review, use the `9assets-website` visual benchmark rubric and scoring helper. The final build should be judged across reference fidelity, asset quality, responsive quality, accessibility, build reliability, and visual QA completeness.
+
 ## Stage 1: Design Prototype
 
 Goal: create the approved visual direction from the single reference image.
@@ -328,6 +330,7 @@ Verification requirements:
 - Use browser testing or screenshots for desktop and mobile when available; prefer automated screenshot capture when the environment supports it.
 - Compare desktop and mobile screenshots against the approved prototype/template at matching viewport sizes. Optional pixelmatch or SSIM-style comparison may supplement, but not replace, human visual review.
 - Use the optional `9assets-website` QA helper scripts for screenshot capture, diff summaries, and ledger generation when they are available in the installed skills folder.
+- For final benchmark-grade work, create a visual benchmark score with the `9assets-website` rubric or `score_visual_qa.py` helper after the QA ledger is complete.
 - Iterate on CSS/components/assets until the website closely matches the reference layout, typography scale, spacing, colors, and section rhythm.
 - Fix broken images, console errors, text overflow, layout overlap, and mobile navigation issues.
 - Fix visual drift such as wrong background layering, checkerboard-backed assets, wrong card ratios, wrong button heights, or incorrect font weight/size.
@@ -385,5 +388,6 @@ Keep the final concise and include:
 - Sections recreated, assets generated/used, and main design decisions
 - Verification commands and results
 - Visual QA ledger location and the main mismatches fixed
+- Visual benchmark score summary when scoring was run
 - Dev URL or run command
 - Any missing assets, uncertain fonts, or remaining risks

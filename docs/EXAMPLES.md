@@ -2,6 +2,8 @@
 
 This page shows how a completed 9Designer run is organized.
 
+For benchmark scoring and public-safe submissions, see the [benchmark gallery](examples/README.md).
+
 ## Dreaming Example
 
 The Dreaming example started from a visual reference with atmospheric, editorial, surreal styling. The output demonstrates the intended flow:

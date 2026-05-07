@@ -146,6 +146,11 @@ Use $9assets-website with this asset export folder.
 - **Section specs before code:** every major section gets copy, asset mapping, tokens, icon rules, states, and responsive behavior.
 - **Visual QA:** desktop, tablet, and mobile screenshots are compared against the approved prototype.
 - **Optional advanced QA:** teams can add Playwright, pixelmatch, SSIM-style comparison, rembg, SVGO, or other tools later without making them required for basic skill use.
+- **Benchmark scoring:** final builds can be scored for fidelity, asset quality, responsiveness, accessibility, build reliability, and QA completeness.
+
+## Benchmark Gallery
+
+Start with the public [Dreaming benchmark seed](docs/examples/dreaming/README.md), then use the [scoring rubric](docs/examples/SCORING_RUBRIC.md) to judge future examples and final website builds.
 
 ## Repository Layout
 
@@ -157,6 +162,7 @@ skills/
   9design-kit/
   9assets-website/
 docs/
+  examples/
   GETTING_STARTED.md
   EXAMPLES.md
   RESEARCH_NOTES.md

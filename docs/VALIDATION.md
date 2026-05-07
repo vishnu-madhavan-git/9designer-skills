@@ -68,12 +68,14 @@ These commands must work without installing optional Playwright or pixel diff de
 node skills/9assets-website/scripts/capture_visual_qa.mjs --help
 node skills/9assets-website/scripts/compare_visual_qa.mjs --help
 python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --out visual-qa/test-ledger.md
+python skills/9assets-website/scripts/score_visual_qa.py --ledger visual-qa/test-ledger.md --build-passed --score fidelity=4 --score asset_quality=4 --score responsive_quality=4 --score accessibility=4 --score visual_qa_completeness=4 --out visual-qa/test-score.md
 ```
 
 Expected result:
 
 - The Node scripts print help text.
 - The Python script creates a ledger template.
+- The score script prints JSON and creates a score Markdown file.
 - No Playwright, pixelmatch, or pngjs dependency is required for these smoke tests.
 
 When optional tooling is installed in a website project, run:
@@ -82,6 +84,7 @@ When optional tooling is installed in a website project, run:
 node skills/9assets-website/scripts/capture_visual_qa.mjs --url http://localhost:5173 --out visual-qa/screenshots
 node skills/9assets-website/scripts/compare_visual_qa.mjs --reference-dir visual-qa/reference --actual-dir visual-qa/screenshots --out visual-qa/diffs
 python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --summary visual-qa/diffs/visual-qa-diff-summary.json
+python skills/9assets-website/scripts/score_visual_qa.py --ledger docs/research/VISUAL_QA_LEDGER.md --diff-summary visual-qa/diffs/visual-qa-diff-summary.json --build-passed --out docs/research/VISUAL_BENCHMARK_SCORE.md
 ```
 
 ## README Media Check

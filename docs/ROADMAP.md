@@ -52,6 +52,10 @@ Acceptance:
 - Store reference, prototype, asset overview, rendered website screenshots, and visual QA ledger summaries.
 - Define a scoring rubric for fidelity, asset quality, responsiveness, accessibility, and build reliability.
 
+Status:
+
+- Implemented with a public benchmark gallery, Dreaming seed example, scoring rubric, and a reusable visual benchmark scoring helper.
+
 Acceptance:
 
 - Examples do not include private or unlicensed assets.

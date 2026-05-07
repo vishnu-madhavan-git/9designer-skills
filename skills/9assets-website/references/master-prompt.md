@@ -87,6 +87,7 @@ Verification:
 - Iterate until the website closely matches the approved template.
 - Fix broken images, console errors, text overflow, layout overlap, mobile nav issues, visual drift, wrong spacing, wrong font scale, wrong component sizing, and incorrect background layering.
 - Keep a visual QA ledger with at least eight comparison points across copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
+- Create a visual benchmark score when final quality matters, scoring reference fidelity, asset quality, responsive quality, accessibility, build reliability, and visual QA completeness.
 - Check 1440px desktop, 768px tablet, and 390px mobile when practical.
 - If graphify instructions apply after code edits, run graphify update .
 
@@ -95,6 +96,7 @@ After implementation, briefly report:
 2. Asset kit folder used.
 3. Major assets copied into public/assets/.
 4. Verification commands and results.
-5. How to run the website locally.
-6. Any remaining risks such as missing exact fonts or incomplete assets.
+5. Visual QA ledger and visual benchmark score summary.
+6. How to run the website locally.
+7. Any remaining risks such as missing exact fonts or incomplete assets.
 ```

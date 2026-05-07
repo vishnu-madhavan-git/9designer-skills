@@ -20,8 +20,11 @@ Bundled optional QA helpers:
 - `scripts/capture_visual_qa.mjs`: captures desktop, tablet, and mobile screenshots with Playwright when Playwright is installed.
 - `scripts/compare_visual_qa.mjs`: creates pixel diff summaries and diff images when `pixelmatch` and `pngjs` are installed.
 - `scripts/create_visual_qa_ledger.py`: creates `docs/research/VISUAL_QA_LEDGER.md` with or without automated summaries.
+- `scripts/score_visual_qa.py`: scores the final build against the visual benchmark rubric with automated hints and manual category scores.
 
 These helpers are optional. Do not block a website build only because Playwright, pixelmatch, or pngjs is unavailable; use manual browser screenshots and the same ledger categories instead.
+
+For public examples, benchmark submissions, or final quality review, read `references/visual-benchmark-rubric.md` before scoring the build.
 
 ## Core Rule
 
@@ -254,6 +257,12 @@ Ledger generation, with or without automated summaries:
 python <9assets-website-skill-dir>/scripts/create_visual_qa_ledger.py --website-root "." --asset-export "<asset-export-folder>" --summary "visual-qa/diffs/visual-qa-diff-summary.json"
 ```
 
+Benchmark scoring, after human review:
+
+```bash
+python <9assets-website-skill-dir>/scripts/score_visual_qa.py --ledger docs/research/VISUAL_QA_LEDGER.md --diff-summary visual-qa/diffs/visual-qa-diff-summary.json --build-passed --out docs/research/VISUAL_BENCHMARK_SCORE.md
+```
+
 Screenshot comparison loop:
 
 1. Capture desktop screenshot, preferably at the same aspect ratio as the approved template.
@@ -271,6 +280,14 @@ Visual QA ledger:
 - If a reference dimension cannot be matched exactly, state the blocker and verify the nearest practical viewport.
 - If automated diff artifacts exist, link the screenshot and diff files in the ledger, but still summarize the human-visible mismatch and repair decision.
 
+Benchmark score:
+
+- Before public handoff or benchmark submission, create `docs/research/VISUAL_BENCHMARK_SCORE.md` using the scoring helper or the same rubric manually.
+- Score reference fidelity, asset quality, responsive quality, accessibility, build reliability, and visual QA completeness from `0` to `5`.
+- Public benchmark target is every category at least `4.0` with no unresolved blockers.
+- Internal working-build target is an overall score of at least `3.5` with blockers recorded and repairable.
+- Do not average away serious blockers such as a failed build, unusable mobile layout, inaccessible primary navigation/form, or checkerboard-backed core asset.
+
 If the repo has graphify instructions and code files changed, run `graphify update .`.
 
 ### Step 5: Handoff The Working Site
@@ -286,6 +303,7 @@ Final response must include:
 - Main design decisions
 - Verification commands and results
 - Visual QA ledger path, visual mismatches fixed, and unresolved visual blockers
+- Visual benchmark score path or score summary when a final quality gate was run
 - Local dev URL or run command
 - Remaining risks, especially missing fonts or incomplete asset coverage
 

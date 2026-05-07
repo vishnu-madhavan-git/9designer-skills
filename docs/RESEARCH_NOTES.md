@@ -54,9 +54,15 @@ All of these remain optional or roadmap items. They are not required dependencie
 - `create_visual_qa_ledger.py` creates the required visual QA ledger without dependencies, so manual screenshot comparison remains fully supported.
 - Automated mismatch ratios are treated as review signals. They do not replace human judgment about layout, spacing, typography, color, asset, icon, interaction, or responsive behavior.
 
+## Phase 4 Benchmark Notes
+
+- `score_visual_qa.py` turns final website QA into explicit scores for reference fidelity, asset quality, responsive quality, accessibility, build reliability, and visual QA completeness.
+- `docs/examples/` now separates public benchmark material from general docs so examples can carry source/licensing notes, QA summaries, and score evidence.
+- The Dreaming example is intentionally marked as a seed benchmark until a rendered website, QA ledger, and final benchmark score are added.
+
 ## Future Improvements
 
 - Add an optional `target_stack` decision in prompts: React/Vite default, Next/Tailwind, static HTML/CSS, Vue/Tailwind, or existing repo stack.
-- Add a sample visual QA ledger from a completed website build.
+- Add a complete rendered website benchmark with a full visual QA ledger.
 - Add optional benchmark examples with before/reference/render/diff images.
 - Add a repo-level gallery index for community-submitted examples.
