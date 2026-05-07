@@ -1,0 +1,184 @@
+---
+name: 9design-assets
+description: "Generate the production asset stage of the 9Designer pipeline from approved 9image-design prototype images, an existing reference asset kit, mockup folder, or reference boards. Use when the user wants each logo, icon, UI element, texture, background, and website asset generated individually with imagegen, saved into a clean asset-exports folder, and prepared as input for 9assets-website."
+---
+
+# 9Design Assets
+
+## Purpose
+
+Take an existing reference asset kit, prototype image set, or approved design board and turn it into separated image files for website implementation. This is the bridge between a visual prototype kit and a real website build.
+
+This skill must generate assets as individual images with the image generation tool. Do not hand-build low-quality SVG approximations as the primary output.
+
+## Five-Step Process
+
+### Step 1: Reference The Kit
+
+Read the provided asset kit or reference image folder first.
+
+Look for:
+
+- `asset-manifest.json`
+- `00-reference/`
+- `01-logo/`
+- `02-icons/`
+- `03-imagery/`
+- `04-ui-components/`
+- `06-design-tokens/`
+- `07-export-sheets/`
+- Any page mockups, generated prototype screens, UI boards, icon sheets, or logo sheets
+
+If the user gives only attached images, treat those images as the reference kit.
+
+Do not invent a new visual style. The output must follow the supplied kit exactly: same brand identity, colors, lighting, composition language, typography mood, icon style, UI styling, borders, shadows, masks, and texture system.
+
+### Step 2: Create The Export Plan
+
+Create a short asset checklist before generating.
+
+Default required set and background policy:
+
+- `logo-primary`: isolated, transparent preferred, otherwise flat neutral background
+- `logo-wordmark`: isolated, transparent preferred, otherwise flat neutral background
+- `logo-mark`: isolated, transparent preferred, otherwise flat neutral background
+- `favicon`: isolated square, transparent preferred, otherwise flat neutral background
+- Exactly `5` core icons unless the user specifies a different count: isolated, transparent preferred, otherwise flat neutral background
+- Primary button: isolated component only, no page background
+- Secondary button: isolated component only, no page background
+- Navigation bar: isolated nav component only, no page screenshot background
+- Mobile navigation: isolated component only, no page screenshot background
+- Card component: isolated card only, no page screenshot background
+- Form input: isolated input only, no page screenshot background
+- CTA banner: isolated banner component only; include its internal designed background only if that background is part of the banner itself
+- Footer module: isolated footer component only; include its internal designed background only if the footer needs it
+- Hero background: full-bleed background image allowed
+- Section background or texture: full-bleed or seamless background image allowed
+- Decorative overlay or divider: transparent preferred; no full page background
+
+Add extra assets only when the reference kit clearly requires them or the user asks.
+
+For each asset, decide:
+
+- Source reference image or board
+- Target filename
+- Target folder
+- Aspect ratio and background policy: `transparent`, `flat-neutral`, `full-bleed-background`, or `component-internal-background`
+- Whether it must be generated as an isolated object, full-width image, component strip, or square icon
+
+### Step 3: Scaffold The Export Folder
+
+Create a dedicated output folder in the current workspace unless the user gives another path:
+
+```text
+asset-exports/<project-slug>-YYYYMMDD-HHMM/
+```
+
+Use the bundled script:
+
+```bash
+python <skill-dir>/scripts/create_asset_export.py --name "<project name>" --root "<workspace>" --source-kit "<path-to-reference-kit>"
+```
+
+Save outputs into:
+
+```text
+00-source-kit/          Source kit manifest, copied refs, or source notes
+01-logos/              Separate generated logo images
+02-icons/              Exactly 5 generated core icon images by default
+03-ui-elements/        Buttons, nav, cards, form, CTA, footer images
+04-backgrounds/        Hero, section, texture, overlay, divider images
+05-page-assets/        Larger page-specific reusable image assets
+06-ready-for-builder/  Final renamed copies for the website-building skill
+notes/                 Asset plan, prompts, font notes, implementation notes
+asset-export-manifest.json
+```
+
+### Step 4: Generate Each Asset Separately With Imagegen
+
+Use the image generation tool for every visual asset. Generate each requested asset as its own separate image, not one combined sheet, unless the user explicitly asks for a sheet.
+
+Required behavior:
+
+- Generate `logo-primary` separately.
+- Generate `logo-wordmark` separately.
+- Generate `logo-mark` separately.
+- Generate `favicon` separately.
+- Generate each of the 5 core icons separately as `icon-01-*` through `icon-05-*`.
+- Generate each UI element separately: buttons, nav, mobile nav, card, form input, CTA banner, footer module.
+- Generate each background or texture separately.
+- Generate logos, icons, and UI components without the screenshot/page background. They must be clean isolated implementation assets.
+- Save or move each generated image into the correct folder.
+- Copy final web-builder-ready files into `06-ready-for-builder/`.
+
+Do not satisfy this step by drawing SVGs manually. Optional SVG tracing can happen later, but only after the image exists.
+
+Use transparent backgrounds when possible for logos, icons, overlays, dividers, and decorative elements. If imagegen cannot reliably output transparency, use a plain flat neutral background with no texture, no gradient, no scene, no screenshot, and mark the manifest note as `background-removal-needed`.
+
+Use full-bleed backgrounds only for assets whose purpose is the website background itself, such as `hero-background`, `section-texture`, or a true background pattern. Never put the page background behind a logo, icon, button, card, nav, form, or reusable UI element.
+
+### Step 5: Package For The Next Website Skill
+
+Update `asset-export-manifest.json` so another skill can consume the folder without guessing.
+
+Include for each asset:
+
+- Asset id
+- File path
+- Folder
+- Type: logo, icon, ui-element, background, texture, page-asset
+- Source reference
+- Generation prompt summary
+- Intended website use
+- Notes about transparency, aspect ratio, state, and responsive use
+- Background policy and whether background removal is needed before implementation
+
+Also create:
+
+- `notes/asset-plan.md`
+- `notes/generation-prompts.md`
+- `notes/font-and-token-notes.md`
+- `notes/builder-handoff.md`
+
+The final response must include the export folder path, number of generated images, and any missing or uncertain assets.
+
+## Imagegen Prompt Requirements
+
+Every prompt must include:
+
+- The source kit or reference images being followed
+- The exact single asset being generated
+- Instruction to keep the asset visually identical to the kit style
+- Background requirement: transparent, flat neutral, component-internal, or full-bleed background
+- Output purpose: website implementation asset
+- Clean framing with no extra unrelated objects
+
+Example:
+
+```text
+Generate one separate website implementation image asset: icon-03-search. Use only the supplied reference asset kit for style. Match the exact approved icon language, stroke weight, corner radius, color palette, glow/shadow treatment, and typography mood. Create a clean isolated icon with transparent background if possible; if transparency is not possible, use a perfectly flat neutral background with no texture, gradient, scene, or page screenshot. Center the icon, no labels, no extra icons, no sheet layout.
+```
+
+For UI elements:
+
+```text
+Generate one separate website implementation image asset: button-primary. Use only the supplied reference asset kit for style. Match the approved button shape, fill, border, glow, shadow, typography mood, and spacing. Output only the isolated button component, not the page background and not a screenshot crop. Use transparent background if possible; otherwise use a flat neutral background suitable for clean background removal.
+```
+
+For true backgrounds only:
+
+```text
+Generate one separate website implementation image asset: hero-background. Use only the supplied reference asset kit for style. This asset is a full-bleed website background, so include the atmospheric background art, lighting, texture, and composition. Do not include text, logos, buttons, cards, navigation, or UI elements.
+```
+
+## Rules
+
+- Always use imagegen for the visual asset itself.
+- Generate separate files, not one giant board.
+- Keep implementation assets isolated. Logos, icons, UI elements, overlays, and dividers must not include the page background from the screenshot.
+- Only true background assets may include full-bleed background art.
+- Default to exactly 5 icons unless the user asks for more or fewer.
+- Do not redesign the brand.
+- Do not create generic icon packs or generic UI components.
+- Do not output SVG-only assets as the final deliverable.
+- Preserve the source kit as reference and write a manifest for downstream website building.

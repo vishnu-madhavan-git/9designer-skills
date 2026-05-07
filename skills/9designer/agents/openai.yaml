@@ -1,0 +1,4 @@
+interface:
+  display_name: "9Designer"
+  short_description: "Image to working website pipeline"
+  default_prompt: "Use $9designer with this reference image to run the full three-stage process: design prototype, production asset export, and working website build."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "9Design Assets"
+  short_description: "Export design into clean assets"
+  default_prompt: "Use $9design-assets with this approved design to generate separate isolated imagegen assets and organize them for website building."

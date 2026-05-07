@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.env.*
+asset-exports/
+asset-kits/
+generated_images/

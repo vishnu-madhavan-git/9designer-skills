@@ -1,0 +1,4 @@
+interface:
+  display_name: "9Image Design"
+  short_description: "Turn one image into a site design"
+  default_prompt: "Use $9image-design on the attached image to create only the first landing page, then wait for my approval before building the rest of the design."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "9Design Kit"
+  short_description: "Build an expanded design-system kit"
+  default_prompt: "Use $9design-kit with these approved design references to generate an expanded brand, UI, imagery, and design-system asset kit."
