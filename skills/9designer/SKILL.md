@@ -42,6 +42,8 @@ When the local 9Designer skill scripts are available, prefer the bundled helpers
 
 For public examples, benchmark submissions, or final quality review, use the `9assets-website` visual benchmark rubric and scoring helper. The final build should be judged across reference fidelity, asset quality, responsive quality, accessibility, build reliability, and visual QA completeness.
 
+For deploy-ready work, create a reconstruction contract before coding and run production-readiness validation before final handoff. Do not call the website complete if the production build, iPad/tablet/mobile views, interactions, local assets, visual QA ledger, or benchmark score are missing.
+
 ## Stage 1: Design Prototype
 
 Goal: create the approved visual direction from the single reference image.
@@ -246,6 +248,8 @@ Before coding, create an implementation inventory:
 - Asset-to-component mapping and cleanup status.
 - Reference screenshot/template for each page.
 
+Also create `docs/research/RECONSTRUCTION_CONTRACT.md` using the `9assets-website` helper when available. Treat it as the locked source-of-truth map for pages, target viewports, interactions, and pass/fail gates before coding.
+
 Then create section specs before implementation. For every major visible section, write a spec in:
 
 ```text
@@ -336,6 +340,7 @@ Verification requirements:
 - Fix visual drift such as wrong background layering, checkerboard-backed assets, wrong card ratios, wrong button heights, or incorrect font weight/size.
 - Keep a visual QA ledger with at least eight comparison points covering copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
 - Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
+- Check iPad/tablet explicitly: around 1024px x 1366px and 768px x 1024px when practical.
 - Click or trigger every visible button, link, nav item, tab, filter, form, carousel control, mobile menu, and social icon. Record behavior in the QA ledger.
 - If a screenshot comparison shows a mismatch, fix the component or regenerate the relevant asset. Do not explain away fixable drift.
 - Run a visual refinement loop after the first successful build:
@@ -348,6 +353,7 @@ Verification requirements:
 - Prefer element or section screenshots for debugging when a full-page screenshot makes differences hard to isolate.
 - Keep screenshots stable by using fixed viewports, waiting for fonts/images, and disabling nonessential animations during visual QA when practical.
 - The first rendered website is a draft checkpoint, never the final. Complete at least one compare-and-repair pass unless a concrete blocker prevents screenshot capture.
+- Run the `9assets-website` production-readiness validator when available. Fix errors before final handoff; explain any warnings that remain.
 - If the workspace has graphify instructions and code files changed, run `graphify update .`.
 
 Stage 3 output:
@@ -389,5 +395,6 @@ Keep the final concise and include:
 - Verification commands and results
 - Visual QA ledger location and the main mismatches fixed
 - Visual benchmark score summary when scoring was run
+- Production-readiness validator result
 - Dev URL or run command
 - Any missing assets, uncertain fonts, or remaining risks

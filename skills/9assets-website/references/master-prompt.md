@@ -35,6 +35,8 @@ Create an implementation map:
 - Social icon mapping: exact platform/community glyph, source asset, container treatment, accessible label, href placeholder, and hover/active state
 - Missing assets or assumptions
 
+Before coding, create `docs/research/RECONSTRUCTION_CONTRACT.md`. Lock the approved reference pages, desktop, iPad/tablet, mobile, and small-mobile viewports, required interactions, and final pass/fail gates. Do not start implementation until this contract exists.
+
 Before building:
 - Reject any reusable asset that has a checkerboard background baked in.
 - Reject any logo, icon, or UI element with a screenshot/page background behind it.
@@ -80,14 +82,16 @@ Verification:
 - Run npm install if dependencies are missing.
 - Confirm npm run dev starts for new Vite projects when practical.
 - Run npm run build.
-- Start the dev server.
+- Start the dev server and, when practical, the production preview server.
 - Test desktop and mobile views with browser testing or screenshots.
 - Use the optional 9assets-website visual QA helper scripts when available: Playwright screenshot capture, pixel diff comparison, and visual QA ledger generation.
 - Compare desktop and mobile screenshots against the approved reference/template at matching viewport sizes.
+- Check iPad/tablet viewports around 1024px x 1366px and 768px x 1024px, plus mobile around 390px and small mobile around 360px.
 - Iterate until the website closely matches the approved template.
 - Fix broken images, console errors, text overflow, layout overlap, mobile nav issues, visual drift, wrong spacing, wrong font scale, wrong component sizing, and incorrect background layering.
 - Keep a visual QA ledger with at least eight comparison points across copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
 - Create a visual benchmark score when final quality matters, scoring reference fidelity, asset quality, responsive quality, accessibility, build reliability, and visual QA completeness.
+- Run production-readiness validation when the helper exists. Fix errors before final handoff and explain remaining warnings.
 - Check 1440px desktop, 768px tablet, and 390px mobile when practical.
 - If graphify instructions apply after code edits, run graphify update .
 
@@ -96,7 +100,7 @@ After implementation, briefly report:
 2. Asset kit folder used.
 3. Major assets copied into public/assets/.
 4. Verification commands and results.
-5. Visual QA ledger and visual benchmark score summary.
-6. How to run the website locally.
+5. Visual QA ledger, visual benchmark score summary, and production-readiness validator result.
+6. How to run the website locally or preview the production build.
 7. Any remaining risks such as missing exact fonts or incomplete assets.
 ```

@@ -60,6 +60,13 @@ All of these remain optional or roadmap items. They are not required dependencie
 - `docs/examples/` now separates public benchmark material from general docs so examples can carry source/licensing notes, QA summaries, and score evidence.
 - The Dreaming example is intentionally marked as a seed benchmark until a rendered website, QA ledger, and final benchmark score are added.
 
+## Reconstruction Hardening Notes
+
+- `create_reconstruction_contract.py` forces the website builder to lock approved reference pages, desktop, iPad/tablet, mobile, small-mobile targets, interactions, and pass/fail gates before coding.
+- `validate_production_readiness.py` checks final handoff evidence: build metadata, local assets, reconstruction contract, visual QA ledger, benchmark score, screenshot coverage, placeholder text risks, and remote image risks.
+- Final QA should prefer production build or preview screenshots when practical, not only dev-server screenshots.
+- A generated website should not be called deploy-ready until validator errors are fixed and remaining warnings are explained.
+
 ## Future Improvements
 
 - Add an optional `target_stack` decision in prompts: React/Vite default, Next/Tailwind, static HTML/CSS, Vue/Tailwind, or existing repo stack.

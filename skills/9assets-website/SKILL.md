@@ -17,10 +17,12 @@ Optional expanded kit step: `9design-kit` can create broader brand-system boards
 
 Bundled optional QA helpers:
 
+- `scripts/create_reconstruction_contract.py`: creates `docs/research/RECONSTRUCTION_CONTRACT.md` before coding.
 - `scripts/capture_visual_qa.mjs`: captures desktop, tablet, and mobile screenshots with Playwright when Playwright is installed.
 - `scripts/compare_visual_qa.mjs`: creates pixel diff summaries and diff images when `pixelmatch` and `pngjs` are installed.
 - `scripts/create_visual_qa_ledger.py`: creates `docs/research/VISUAL_QA_LEDGER.md` with or without automated summaries.
 - `scripts/score_visual_qa.py`: scores the final build against the visual benchmark rubric with automated hints and manual category scores.
+- `scripts/validate_production_readiness.py`: checks deploy-readiness evidence before final handoff.
 
 These helpers are optional. Do not block a website build only because Playwright, pixelmatch, or pngjs is unavailable; use manual browser screenshots and the same ledger categories instead.
 
@@ -33,6 +35,8 @@ Treat the exported asset kit as the production source of truth. Do not redesign 
 If an asset is missing, first check the manifest and notes for alternatives. If the missing asset blocks a faithful build, either generate only that missing asset with image generation or state the gap clearly before proceeding. Do not silently replace it with unrelated placeholder art.
 
 Strict visual clone mode is required. The approved prototype/template screenshots are the visual truth for layout, spacing, typography scale, colors, section order, image placement, and responsive behavior. Build, screenshot, compare, and iterate until the website closely matches the reference.
+
+Do not claim the site is deploy-ready until the production build passes, desktop/iPad/tablet/mobile views are checked, interactions work, visual QA evidence exists, and unresolved blockers are listed.
 
 ## Expected Input
 
@@ -145,6 +149,14 @@ Before coding, create a compact implementation inventory:
 - Text policy: which text is real HTML/CSS and which, if any, is decorative image text with hidden accessible text.
 
 Do not invent new visible above-the-fold copy, hero eyebrows/kickers, badges, pills, major carousels, pricing blocks, dashboards, forms, or tab systems unless they appear in the approved design, are in the user request, or are required for a concrete function.
+
+Before coding, create a reconstruction contract:
+
+```bash
+python <9assets-website-skill-dir>/scripts/create_reconstruction_contract.py --website-root "." --asset-export "<asset-export-folder>" --reference-root "<approved-reference-folder>"
+```
+
+Use `docs/research/RECONSTRUCTION_CONTRACT.md` as a pass/fail checklist. It must lock the approved pages, desktop, iPad/tablet, mobile, small-mobile targets, interactions, and final handoff gates.
 
 Create section specs before coding. For every major visible section, write:
 
@@ -276,6 +288,7 @@ Visual QA ledger:
 
 - Before final handoff, write `docs/research/VISUAL_QA_LEDGER.md` and record at least eight comparison points covering copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
 - Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
+- Check iPad/tablet explicitly: around 1024px x 1366px for iPad portrait and around 768px x 1024px for tablet portrait when practical.
 - Inspect hover, click, menu, form, social link, tab/filter/carousel, and scroll states that are visible in the design or required by the UI.
 - If a reference dimension cannot be matched exactly, state the blocker and verify the nearest practical viewport.
 - If automated diff artifacts exist, link the screenshot and diff files in the ledger, but still summarize the human-visible mismatch and repair decision.
@@ -287,6 +300,14 @@ Benchmark score:
 - Public benchmark target is every category at least `4.0` with no unresolved blockers.
 - Internal working-build target is an overall score of at least `3.5` with blockers recorded and repairable.
 - Do not average away serious blockers such as a failed build, unusable mobile layout, inaccessible primary navigation/form, or checkerboard-backed core asset.
+
+Production-readiness validation:
+
+```bash
+python <9assets-website-skill-dir>/scripts/validate_production_readiness.py --website-root "." --strict
+```
+
+Run this after build, screenshot review, ledger, and benchmark score. Fix reported errors before calling the website complete. Warnings may be handed off only when they are explicitly explained.
 
 If the repo has graphify instructions and code files changed, run `graphify update .`.
 
@@ -304,6 +325,7 @@ Final response must include:
 - Verification commands and results
 - Visual QA ledger path, visual mismatches fixed, and unresolved visual blockers
 - Visual benchmark score path or score summary when a final quality gate was run
+- Production-readiness validator result
 - Local dev URL or run command
 - Remaining risks, especially missing fonts or incomplete asset coverage
 

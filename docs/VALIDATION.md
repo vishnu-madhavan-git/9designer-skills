@@ -67,15 +67,19 @@ These commands must work without installing optional Playwright or pixel diff de
 ```bash
 node skills/9assets-website/scripts/capture_visual_qa.mjs --help
 node skills/9assets-website/scripts/compare_visual_qa.mjs --help
+python skills/9assets-website/scripts/create_reconstruction_contract.py --website-root . --out visual-qa/test-contract.md
 python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --out visual-qa/test-ledger.md
 python skills/9assets-website/scripts/score_visual_qa.py --ledger visual-qa/test-ledger.md --build-passed --score fidelity=4 --score asset_quality=4 --score responsive_quality=4 --score accessibility=4 --score visual_qa_completeness=4 --out visual-qa/test-score.md
+python skills/9assets-website/scripts/validate_production_readiness.py --website-root .
 ```
 
 Expected result:
 
 - The Node scripts print help text.
+- The reconstruction contract script creates a contract template.
 - The Python script creates a ledger template.
 - The score script prints JSON and creates a score Markdown file.
+- The production-readiness script prints JSON. It may report missing website artifacts in the repo root because it is meant to run against generated website projects.
 - No Playwright, pixelmatch, or pngjs dependency is required for these smoke tests.
 
 When optional tooling is installed in a website project, run:
@@ -85,6 +89,7 @@ node skills/9assets-website/scripts/capture_visual_qa.mjs --url http://localhost
 node skills/9assets-website/scripts/compare_visual_qa.mjs --reference-dir visual-qa/reference --actual-dir visual-qa/screenshots --out visual-qa/diffs
 python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --summary visual-qa/diffs/visual-qa-diff-summary.json
 python skills/9assets-website/scripts/score_visual_qa.py --ledger docs/research/VISUAL_QA_LEDGER.md --diff-summary visual-qa/diffs/visual-qa-diff-summary.json --build-passed --out docs/research/VISUAL_BENCHMARK_SCORE.md
+python skills/9assets-website/scripts/validate_production_readiness.py --website-root . --strict
 ```
 
 ## README Media Check

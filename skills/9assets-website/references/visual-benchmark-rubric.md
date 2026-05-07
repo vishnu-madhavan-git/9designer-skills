@@ -20,6 +20,7 @@ Score each category from `0` to `5`.
 - Public benchmark target: every category `>= 4.0`, no unresolved blockers.
 - Internal working-build target: overall `>= 3.5`, blockers recorded with a repair path.
 - Do not average away a serious blocker. A failed build, unusable mobile layout, inaccessible primary form/nav, or checkerboard-backed core asset blocks public benchmark status.
+- Deploy-ready target: production build passes, reconstruction contract exists, visual QA ledger exists, benchmark score exists, desktop/iPad/tablet/mobile screenshots are reviewed, and production-readiness validator errors are fixed.
 
 ## Repair Priority
 
@@ -33,6 +34,7 @@ Fix in this order:
 6. Color and atmosphere drift: wrong palette, missing grain/light/glow/texture, incorrect overlays.
 7. Interaction gaps: buttons, links, filters, forms, mobile menu, social links, and focus/hover states.
 8. Benchmark documentation gaps: missing screenshots, ledger notes, score output, source/license notes.
+9. Deploy-readiness gaps: missing reconstruction contract, missing production preview QA, missing local assets, missing run/build instructions, or unresolved validator errors.
 
 ## Scoring Helper
 

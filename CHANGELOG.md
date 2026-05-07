@@ -4,6 +4,7 @@ All notable changes to 9Designer Skills are tracked here.
 
 ## Unreleased
 
+- Hardened the website reconstruction workflow with a pre-coding reconstruction contract and production-readiness validator for desktop, iPad/tablet, mobile, assets, QA, and deploy handoff evidence.
 - Added Phase 4 benchmark gallery with a Dreaming seed example, scoring rubric, and visual benchmark scoring helper.
 - Added Phase 3 optional visual QA tooling for Playwright screenshot capture, pixelmatch/pngjs diff summaries, and dependency-free QA ledger generation.
 - Added Phase 2 manifest/script upgrades with richer asset scaffold fields, a dependency-free manifest validator, optional `rembg` fallback reporting, and starter design-token JSON output.

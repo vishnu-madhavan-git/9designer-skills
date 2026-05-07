@@ -59,8 +59,10 @@ When changing website QA behavior, smoke test the optional helper entrypoints:
 ```bash
 node skills/9assets-website/scripts/capture_visual_qa.mjs --help
 node skills/9assets-website/scripts/compare_visual_qa.mjs --help
+python skills/9assets-website/scripts/create_reconstruction_contract.py --website-root . --out visual-qa/test-contract.md
 python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --out visual-qa/test-ledger.md
 python skills/9assets-website/scripts/score_visual_qa.py --ledger visual-qa/test-ledger.md --build-passed --score fidelity=4 --score asset_quality=4 --score responsive_quality=4 --score accessibility=4 --score visual_qa_completeness=4 --out visual-qa/test-score.md
+python skills/9assets-website/scripts/validate_production_readiness.py --website-root .
 ```
 
 When submitting a public benchmark example, include source/licensing notes, visual QA evidence, and a score using `docs/examples/SCORING_RUBRIC.md`.

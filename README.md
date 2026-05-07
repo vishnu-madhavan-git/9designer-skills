@@ -219,12 +219,17 @@ Do not pass checkerboard-backed or screenshot-backed reusable assets into `$9ass
 `$9assets-website` includes optional helpers for final website comparison:
 
 ```bash
+python skills/9assets-website/scripts/create_reconstruction_contract.py --website-root . --asset-export asset-exports/<project>
 node skills/9assets-website/scripts/capture_visual_qa.mjs --url http://localhost:5173 --out visual-qa/screenshots
 node skills/9assets-website/scripts/compare_visual_qa.mjs --reference-dir visual-qa/reference --actual-dir visual-qa/screenshots --out visual-qa/diffs
 python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --summary visual-qa/diffs/visual-qa-diff-summary.json
+python skills/9assets-website/scripts/score_visual_qa.py --ledger docs/research/VISUAL_QA_LEDGER.md --build-passed --out docs/research/VISUAL_BENCHMARK_SCORE.md
+python skills/9assets-website/scripts/validate_production_readiness.py --website-root . --strict
 ```
 
 Playwright, pixelmatch, and pngjs are optional project-level tools. If they are unavailable, capture screenshots manually and still keep `docs/research/VISUAL_QA_LEDGER.md` with the same mismatch categories.
+
+The production-readiness validator is dependency-free. It checks that the final handoff has a reconstruction contract, QA ledger, benchmark score, local assets, screenshot evidence, and build metadata before the site is called deploy-ready.
 
 ## Contributing
 

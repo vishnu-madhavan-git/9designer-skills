@@ -21,6 +21,7 @@ Do not mark a benchmark as public-ready when any of these remain:
 - Mobile layout has horizontal scrolling, overlap, or unusable navigation.
 - Primary nav, CTA, form, or social links are inaccessible or nonfunctional.
 - The result looks like a generic redesign instead of a reconstruction of the approved design.
+- Reconstruction contract, visual QA ledger, benchmark score, production build evidence, or deploy-readiness validation is missing.
 
 ## Score Bands
 
