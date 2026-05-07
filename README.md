@@ -77,8 +77,9 @@ Use $9assets-website with this asset export folder.
 ## Notes
 
 - `$9image-design` waits for approval after the first landing page unless explicitly overridden.
+- `$9image-design` now uses a frontend design bar: visual thesis, content plan, interaction thesis, image-led composition, no generic card grids, and section/detail concepts when the full-page design is too compressed to implement.
 - `$9design-assets` generates clean separate image assets, runs background cleanup for reusable non-background assets, and avoids baked-in screenshot/checkerboard backgrounds for logos, icons, and UI elements.
-- `$9assets-website` builds the working responsive website from the exported assets, then uses screenshot comparison against the approved template to tighten the visual clone.
+- `$9assets-website` builds the working responsive website from the exported assets, then uses implementation inventories, responsive checks, and screenshot comparison against the approved template to tighten the visual clone.
 
 ## Background Cleanup
 

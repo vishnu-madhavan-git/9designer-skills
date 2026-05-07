@@ -24,6 +24,12 @@ Use the reference image as the creative source of truth. Internally analyze:
 - Existing logo, wordmark, lettering, typography, symbols, motifs, objects, and patterns
 - Best hero text placement based on the image composition
 
+Before generating, define internally:
+
+- Visual thesis: mood, material, and energy.
+- Content plan: hero, support/story, detail/showcase, final CTA.
+- Interaction thesis: 2-3 motion or interaction cues for the eventual website.
+
 Required behavior:
 
 1. Generate only the first full landing-page prototype image first.
@@ -32,6 +38,16 @@ Required behavior:
 4. Stop after Image 1 and wait for user approval or requested changes, unless the user explicitly overrides this approval gate.
 5. If changes are requested, revise Image 1 before continuing.
 6. After approval, generate the remaining prototype pages and boards needed for the website.
+7. Generate section/detail concepts when a full-page prototype is too compressed to implement precisely.
+
+Stage 1 design quality rules:
+
+- Start with composition, not component count.
+- Prefer image-led/full-bleed heroes and cardless section layouts unless the reference demands otherwise.
+- Keep brand/product name dominant in the first viewport.
+- Keep copy short, specific, and scannable.
+- Avoid hero cards, generic card grids, stat strips, logo clouds, decorative pill clutter, and unrequested hero eyebrows/kickers/badges.
+- Make concepts readable enough to extract typography, spacing, button details, colors, and component shapes.
 
 Default prototype set after approval:
 
@@ -129,6 +145,13 @@ Stage 2 output:
 - `notes/font-and-token-notes.md`
 - `notes/builder-handoff.md`
 
+Stage 2 fidelity rules:
+
+- Match icon metaphor, stroke/fill, optical weight, radius, color, padding, and alignment from the approved design.
+- Match actual colors; do not warm, cool, mute, or "improve" the palette.
+- Preserve hero/media treatment. Do not add overlays or tints that are not in the approved design.
+- Keep interactive UI text and controls code-native for Stage 3 unless the text belongs inside a decorative image asset.
+
 ## Stage 3: Working Website Build
 
 Goal: build the real responsive website from the exported assets.
@@ -145,6 +168,23 @@ Required behavior:
 6. Use CSS variables for colors, typography, spacing, radii, borders, shadows, overlays, and textures.
 7. Preserve the approved brand direction and avoid redesigning.
 8. Strictly clone the approved template layout instead of creating an inspired redesign.
+
+Before coding, create an implementation inventory:
+
+- Exact visible copy, nav items, CTA labels, headings, labels, captions, and footer text.
+- Design tokens for color, type, spacing, radii, borders, shadows, overlays, and motion.
+- Typography system, icon inventory, component families, container model, and hero/media treatment.
+- Asset-to-component mapping and cleanup status.
+- Reference screenshot/template for each page.
+
+Frontend implementation rules:
+
+- Use existing repo stack when present; otherwise default to React + TypeScript + Vite.
+- Build small focused components, shared primitives, page sections, and shared tokens/styles.
+- Implement repeated elements through shared components or variants.
+- Keep interactive controls code-native, accessible, and deliberately typed.
+- Preserve the container model; do not add cards, wrappers, borders, glows, or panels where the concept uses open space or full-bleed composition.
+- Use exported icons/assets only when clean, and use SVG/icon components only when they faithfully match the approved icon style.
 
 Default files for a new Vite app:
 
@@ -179,6 +219,8 @@ Verification requirements:
 - Iterate on CSS/components/assets until the website closely matches the reference layout, typography scale, spacing, colors, and section rhythm.
 - Fix broken images, console errors, text overflow, layout overlap, and mobile navigation issues.
 - Fix visual drift such as wrong background layering, checkerboard-backed assets, wrong card ratios, wrong button heights, or incorrect font weight/size.
+- Keep a short visual QA ledger with at least five comparison points covering copy, layout, typography, palette, asset treatment, spacing/container model, responsive behavior, or motion.
+- Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
 - If the workspace has graphify instructions and code files changed, run `graphify update .`.
 
 Stage 3 output:

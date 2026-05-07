@@ -33,6 +33,15 @@ If the user gives only attached images, treat those images as the reference kit.
 
 Do not invent a new visual style. The output must follow the supplied kit exactly: same brand identity, colors, lighting, composition language, typography mood, icon style, UI styling, borders, shadows, masks, and texture system.
 
+Asset fidelity rules:
+
+- Match icon metaphor, stroke/fill style, optical weight, corner style, color, padding, and alignment from the approved design. Do not swap in generic nearby icons.
+- Match actual colors from the design; do not warm, cool, mute, or "improve" the palette.
+- Preserve the accepted media treatment. If the design has no color overlay on an image, do not add one to the exported asset.
+- Generate implementation-friendly assets with stable aspect ratios, clean edges, and enough resolution for desktop and mobile.
+- Product/background assets may include text or branding only when that text belongs inside the asset itself, such as a poster, sign, packaging, or card artwork.
+- Interactive UI text, buttons, forms, navigation, and page copy should stay code-native in the website build, not baked into decorative images.
+
 ### Step 2: Create The Export Plan
 
 Create a short asset checklist before generating.
@@ -65,6 +74,7 @@ For each asset, decide:
 - Target folder
 - Aspect ratio and background policy: `transparent`, `flat-neutral`, `full-bleed-background`, or `component-internal-background`
 - Whether it must be generated as an isolated object, full-width image, component strip, or square icon
+- Exact fidelity notes: color, stroke/fill, typography mood, radius, shadow, padding, crop, and whether text is allowed inside the asset
 
 ### Step 3: Scaffold The Export Folder
 
@@ -182,6 +192,7 @@ Every prompt must include:
 - Background requirement: transparent, flat neutral, component-internal, or full-bleed background
 - Output purpose: website implementation asset
 - Clean framing with no extra unrelated objects
+- Fidelity anchors: exact color family, icon weight, edge treatment, radius, shadow, and asset role
 
 Example:
 

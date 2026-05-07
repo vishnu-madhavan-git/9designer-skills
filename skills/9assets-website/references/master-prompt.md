@@ -28,6 +28,7 @@ Create an implementation map:
 - Tokens, fonts, colors, spacing, radii, shadows, borders, overlays, and textures
 - Reference screenshot/template for each page
 - Asset cleanup status for every logo, icon, overlay, divider, and UI image
+- Exact visible copy, typography system, icon inventory, component families, container model, and hero/media treatment
 - Missing assets or assumptions
 
 Before building:
@@ -62,6 +63,8 @@ Website requirements:
 - No broken images
 - No remote assets when local kit assets exist
 - No generic SaaS styling unless the asset kit clearly uses that style
+- No invented hero eyebrows, badges, pills, sections, forms, dashboards, carousels, or visible above-the-fold copy unless present in the approved design or explicitly requested
+- Code-native interactive controls with deliberate typography, accessible labels/states, and shared component variants
 
 Verification:
 - Run npm install if dependencies are missing.
@@ -71,6 +74,8 @@ Verification:
 - Compare desktop and mobile screenshots against the approved reference/template at matching viewport sizes.
 - Iterate until the website closely matches the approved template.
 - Fix broken images, console errors, text overflow, layout overlap, mobile nav issues, visual drift, wrong spacing, wrong font scale, wrong component sizing, and incorrect background layering.
+- Keep a short visual QA ledger with at least five comparison points across copy, layout, typography, palette, asset treatment, spacing/container model, responsive behavior, or motion.
+- Check 1440px desktop, 768px tablet, and 390px mobile when practical.
 - If graphify instructions apply after code edits, run graphify update .
 
 After implementation, briefly report:

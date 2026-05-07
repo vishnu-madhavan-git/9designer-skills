@@ -13,6 +13,28 @@ Do not make a generic SaaS, startup, dashboard, or template layout unless the im
 
 When the user asks for generated design images, use the image generation tool. Generate separate images one at a time or as separate tool calls. Do not combine the full system into one giant image.
 
+## Frontend Design Bar
+
+Before generating Image 1, define internally:
+
+- Visual thesis: one sentence for mood, material, and energy.
+- Content plan: hero, support/story, detail/showcase, final CTA.
+- Interaction thesis: 2-3 motion or interaction ideas the future website should support.
+
+Design with these rules:
+
+- Start with composition, not component count.
+- Make the brand/product name the loudest signal in the first viewport.
+- Prefer a full-bleed or image-led hero with text placed on a calm area of the artwork.
+- Keep copy short, specific, and scannable.
+- Use cardless layouts by default; use cards only when the reference image or page concept needs them.
+- Avoid hero cards, generic stat strips, logo clouds, pill clutter, fake dashboards, and generic SaaS grids unless the image clearly implies them.
+- Do not add hero eyebrows, kickers, badges, or decorative pills unless the reference already contains that structure or the user explicitly asks.
+- Use at most two typeface directions and one dominant accent color unless the reference image has a stronger system.
+- Use motion cues to support hierarchy and atmosphere, not noise.
+
+Reject or regenerate concepts that are header-only for a full website, too blurry to implement, generic, crowded, repetitive, tiny, unreadable, or not faithful to the reference image.
+
 ## Reference Analysis
 
 Before generating or designing, internally inspect the image for:
@@ -66,6 +88,8 @@ Even if the user initially asks for the whole prototype, create only the first l
 
 Within one approved prototype, maintain the same brand name, logo style, color palette, typography, icon style, button style, copy tone, and atmospheric visual system across every image.
 
+After approval, generate section/detail concepts when the full-page image is too small to read precisely. For multi-section websites, prefer coordinated section-level images for complex areas over relying on one compressed full-page board. Keep the same design system; do not crop or zoom an old image as the main source of truth.
+
 ## Standard 10-Image System
 
 Use this sequence unless the user gives a different scope:
@@ -101,6 +125,7 @@ For Image 1, include:
 - Hero composition based on the reference image's focal point, empty space, horizon, and movement
 - A fresh brand direction derived only from the current image
 - Clear instruction to stop after Image 1 and wait for approval
+- Implementation clarity: readable text, stable section dimensions, clear button/card/form details, and extractable spacing/type/color decisions
 
 For later images after approval, include:
 
@@ -110,6 +135,7 @@ For later images after approval, include:
 - Text/copy examples that should be readable
 - Explicit instruction to keep consistency with previous generated images
 - Explicit instruction to avoid generic SaaS/corporate styling and overcrowded text
+- Explicit instruction that each page/section must be practical for HTML/CSS implementation and later screenshot comparison
 
 Example framing:
 

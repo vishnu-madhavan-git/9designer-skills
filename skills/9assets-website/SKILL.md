@@ -107,6 +107,18 @@ Create a concise implementation plan:
 
 Then implement. Do not stop with only the plan unless the user explicitly asks for planning only.
 
+Before coding, create a compact implementation inventory:
+
+- Exact visible copy, nav items, CTA labels, headings, body text, captions, form labels, and footer text.
+- Design tokens: background, surface, text, muted text, border, accent, shadow, radius, spacing scale, and motion timing.
+- Typography system: font family or fallback, type scale, weights, line heights, tracking, label treatment, button text, and responsive behavior.
+- Icon inventory: meaning, source asset, outline vs filled, stroke width, size, color, alignment, spacing, and states.
+- Component families: buttons, navigation, media frames, cards only where present, forms, tags, galleries, CTA, footer, and responsive variants.
+- Container model: full-bleed sections, bands, rails, lists, panels, cards, masks, overlays, or open whitespace.
+- Hero/media treatment: no overlay, color overlay, gradient, edge fade, mask, transparent cutout, or matching background color.
+
+Do not invent new visible above-the-fold copy, hero eyebrows/kickers, badges, pills, major carousels, pricing blocks, dashboards, forms, or tab systems unless they appear in the approved design, are in the user request, or are required for a concrete function.
+
 ### Step 3: Build The Website
 
 Use the existing repo stack if one exists. If starting from an empty or unspecified project, use React + TypeScript + Vite.
@@ -138,6 +150,17 @@ Implementation requirements:
 
 Use generated UI element images as visual references, but implement interactive controls as HTML/CSS unless they are intentionally decorative bitmap elements.
 
+Frontend implementation rules:
+
+- Use the existing repo framework and design system when present; otherwise use React + TypeScript + Vite for a new complex site.
+- Keep `App` as composition glue. Build small focused components, reusable primitives, page sections, and shared tokens/styles.
+- Implement repeated elements through shared components or style primitives; use explicit variants instead of one-off copied CSS.
+- Keep buttons, forms, navigation, tabs, links, cards, and labels code-native and accessible.
+- Define typography deliberately for controls; do not rely on browser-default button/input text sizing.
+- Preserve the container model. Do not add cards, panels, borders, glows, or wrappers where the reference uses open space or full-bleed composition.
+- Use SVG/icon components only when they faithfully match the approved icon style; otherwise use the cleaned exported icon assets.
+- Respect `prefers-reduced-motion` for motion.
+
 Template cloning requirements:
 
 - Match the approved screenshot/template section-by-section.
@@ -165,6 +188,13 @@ Screenshot comparison loop:
 3. Compare against the reference visually and note mismatches.
 4. Patch CSS/components/assets.
 5. Repeat until the remaining differences are minor or blocked by missing assets/fonts.
+
+Visual QA ledger:
+
+- Before final handoff, record at least five comparison points covering copy, layout, typography, palette, asset treatment, spacing/container model, responsive behavior, or motion.
+- Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
+- Inspect hover, click, menu, form, and scroll states that are visible in the design or required by the UI.
+- If a reference dimension cannot be matched exactly, state the blocker and verify the nearest practical viewport.
 
 If the repo has graphify instructions and code files changed, run `graphify update .`.
 

@@ -11,6 +11,14 @@ Turn approved reference images into a structured asset kit that a developer can 
 
 This skill is an optional expanded kit stage after a visual direction exists. If the user only has a raw inspiration image and has not approved a landing-page direction, use `9image-design` first.
 
+Use frontend-grade design-system discipline:
+
+- Convert the approved visuals into tokens, component families, icon rules, container rules, typography rules, asset treatment rules, and responsive rules.
+- Preserve the accepted concept exactly; do not introduce a new palette, new icon style, new card system, or new typography direction.
+- Document whether sections use full-bleed, bands, rails, cards, open whitespace, masks, overlays, or panels.
+- Include control typography for buttons, forms, navigation, tabs, labels, and captions, not just hero headings.
+- Include interaction/motion guidance only where it supports hierarchy, state, or atmosphere.
+
 ## Non-Negotiable Imagegen Rule
 
 Use the image generation tool for every visual asset category. Do not replace image generation with hand-authored SVGs, rough CSS shapes, ASCII diagrams, or placeholder files.
