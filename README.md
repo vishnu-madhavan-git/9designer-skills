@@ -145,6 +145,7 @@ Use $9assets-website with this asset export folder.
 - **Code-native text:** navigation, headings, paragraphs, buttons, forms, and footer copy stay real HTML/CSS whenever possible.
 - **Section specs before code:** every major section gets copy, asset mapping, tokens, icon rules, states, and responsive behavior.
 - **Visual QA:** desktop, tablet, and mobile screenshots are compared against the approved prototype.
+- **Optional advanced QA:** teams can add Playwright, pixelmatch, SSIM-style comparison, rembg, SVGO, or other tools later without making them required for basic skill use.
 
 ## Repository Layout
 
@@ -220,3 +221,7 @@ See [docs/GITHUB_SETTINGS.md](docs/GITHUB_SETTINGS.md) for the exact setup check
 ## Research Notes
 
 9Designer borrows proven patterns from public screenshot-to-code, visual editor, and visual regression workflows. See [docs/RESEARCH_NOTES.md](docs/RESEARCH_NOTES.md) for the current research log and improvement backlog.
+
+## Roadmap
+
+The current repo keeps advanced tooling optional. See [docs/ROADMAP.md](docs/ROADMAP.md) for the phased plan covering manifest/script upgrades, automated visual QA, benchmark examples, and deployment showcase work.

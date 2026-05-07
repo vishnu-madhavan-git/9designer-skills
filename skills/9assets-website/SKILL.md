@@ -61,6 +61,8 @@ Read these first when present:
 - `06-design-tokens/tokens.json`
 - Files inside `06-ready-for-builder/`
 
+Use exported tokens when available. `tokens.css` should become the source for CSS variables, and `tokens.json` may be used as a machine-readable companion when the stack supports it.
+
 Inventory every asset path and map it to a website role:
 
 - Logo and favicon
@@ -213,7 +215,7 @@ Run the smallest meaningful verification, then broaden as needed:
 - Run `npm run build`.
 - Start the dev server.
 - Use browser testing or Playwright screenshots for desktop and mobile.
-- Compare screenshots against the approved reference/template at the same viewport sizes.
+- Compare screenshots against the approved reference/template at the same viewport sizes. Optional pixelmatch or SSIM-style comparison may be used when available; manual visual comparison remains acceptable.
 - Check for broken images, console errors, missing assets, text overflow, incoherent overlap, and mobile navigation issues.
 - Check for visual drift: wrong spacing, wrong font weight/size, wrong button height, wrong card ratio, wrong background layering, wrong section order, visible asset backgrounds, and mismatched icon/social icon style.
 - Fix issues found during verification.
@@ -223,12 +225,13 @@ Screenshot comparison loop:
 1. Capture desktop screenshot, preferably at the same aspect ratio as the approved template.
 2. Capture mobile screenshot, preferably at the same width as the mobile reference.
 3. Compare against the reference visually and note mismatches.
-4. Patch CSS/components/assets.
-5. Repeat until the remaining differences are minor or blocked by missing assets/fonts.
+4. Classify each mismatch as layout, spacing, typography, color, asset, icon, interaction, or responsive behavior.
+5. Patch the specific CSS, component, token, or asset responsible.
+6. Repeat until the remaining differences are minor or blocked by missing assets/fonts.
 
 Visual QA ledger:
 
-- Before final handoff, record at least eight comparison points covering copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
+- Before final handoff, write `docs/research/VISUAL_QA_LEDGER.md` and record at least eight comparison points covering copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
 - Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
 - Inspect hover, click, menu, form, social link, tab/filter/carousel, and scroll states that are visible in the design or required by the UI.
 - If a reference dimension cannot be matched exactly, state the blocker and verify the nearest practical viewport.
@@ -247,6 +250,7 @@ Final response must include:
 - Assets generated or used
 - Main design decisions
 - Verification commands and results
+- Visual QA ledger path, visual mismatches fixed, and unresolved visual blockers
 - Local dev URL or run command
 - Remaining risks, especially missing fonts or incomplete asset coverage
 

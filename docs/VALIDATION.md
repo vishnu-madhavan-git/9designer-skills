@@ -70,3 +70,13 @@ CHANGELOG.md
 .github/PULL_REQUEST_TEMPLATE.md
 .github/CODEOWNERS
 ```
+
+## Optional Future Checks
+
+These checks are useful when the corresponding optional tooling exists, but they are not required for normal skill validation:
+
+- Run Playwright screenshot capture for desktop, tablet, and mobile website renders.
+- Compare screenshots with pixelmatch or SSIM-style tools and save diffs.
+- Validate `asset-export-manifest.json` for asset roles, responsive variants, accessibility notes, token dependencies, icon policy, and QA notes.
+- Smoke test optional background cleanup tools such as `rembg` only when they are installed.
+- Optimize traced SVGs with SVGO only when SVG assets are intentionally part of the handoff.

@@ -26,6 +26,7 @@ Design with these rules:
 - Start with composition, not component count.
 - Make the brand/product name the loudest signal in the first viewport.
 - Prefer a full-bleed or image-led hero with text placed on a calm area of the artwork.
+- Preserve the reference image's native composition, focal path, horizon, and empty-space logic before choosing any web layout pattern.
 - Keep copy short, specific, and scannable.
 - Use cardless layouts by default; use cards only when the reference image or page concept needs them.
 - Avoid hero cards, generic stat strips, logo clouds, pill clutter, fake dashboards, and generic SaaS grids unless the image clearly implies them.
@@ -46,13 +47,14 @@ Before generating or designing, internally inspect the image for:
 - Foreground, midground, and background depth
 - Lighting direction, glow, particles, shadows, and atmosphere
 - Mood and emotional tone
-- Color palette and contrast range
+- Color palette and contrast range, including primary, secondary, accent, background, surface, text, and glow/shadow color candidates in hex-style notes when practical
 - Symbols, creatures, objects, landscape elements, textures, and patterns
 - Illustration, photo, 3D, cinematic, editorial, or hand-drawn style
-- Existing title text, logo, lettering, brand mark, or typography
+- Existing title text, logo, lettering, brand mark, or typography, including serif/sans/script/display category, x-height, contrast, weight, width, spacing, and distinctive letterform personality
 - Which elements should later become transparent assets
 - Which text should remain real HTML/CSS and which text is decorative logo, wordmark, or hand-lettering
 - Which social, navigation, CTA, feature, gallery, and footer icons must later become exact generated or vector-quality assets
+- Which motifs should become design tokens, reusable assets, icons, masks, section dividers, background textures, visual effects, or motion cues
 
 Preserve strong existing identity. If the image contains a polished wordmark, logo, title, or lettering, keep it as the brand foundation. If it does not, create a short brand name that feels native to the image.
 

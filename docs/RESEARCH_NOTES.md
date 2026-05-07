@@ -28,6 +28,18 @@ This document tracks public design-to-code patterns that should influence 9Desig
 - Added guidance to classify mismatches as layout, spacing, typography, color, asset, icon, interaction, or responsive behavior.
 - Added stable screenshot guidance: fixed viewports, wait for fonts/images, and disable nonessential animations during QA where practical.
 
+## Manus Phase 1 Findings Integrated
+
+The downloaded Manus plan at `C:\Users\mrvis\Downloads\9Designer Skill Suite Improvement Plan` recommended deeper automation and tool integration. Phase 1 intentionally integrates the low-risk parts as skill and documentation guidance only:
+
+- Optional target stacks beyond the default React + TypeScript + Vite: Next.js + Tailwind, static HTML/CSS, Vue + Tailwind, Astro, or existing repo stack.
+- Optional visual QA accelerators: Playwright screenshot capture, pixelmatch, and SSIM-style comparison.
+- Optional asset cleanup accelerators: rembg, Segment Anything/SAM, Pillow, ImageMagick, Sharp, and SVGO.
+- Expanded asset manifest guidance with asset roles, responsive variants, accessibility notes, token dependencies, icon policy, and QA notes.
+- Stronger font matching workflow with ranked candidates, confidence levels, fallback stacks, and typography tuning values.
+
+All of these remain optional or roadmap items. They are not required dependencies for a normal 9Designer run.
+
 ## Future Improvements
 
 - Add an optional `target_stack` decision in prompts: React/Vite default, Next/Tailwind, static HTML/CSS, Vue/Tailwind, or existing repo stack.

@@ -128,6 +128,13 @@ Bundled scripts:
 - `scripts/create_asset_export.py`: creates the export folder and manifest.
 - `scripts/remove_background.py`: removes baked-in flat/checkerboard backgrounds and verifies alpha transparency.
 
+Optional cleanup accelerators:
+
+- `rembg` may be used for complex foreground extraction when available.
+- Segment Anything/SAM may be used for difficult object boundaries when available.
+- Pillow, ImageMagick, or Sharp may be used for resizing, alpha inspection, format conversion, or optimization when available.
+- These tools are optional. If they are unavailable, use the bundled cleanup script and regenerate failed assets on a flat neutral background.
+
 ### Step 4: Generate Each Asset Separately With Imagegen
 
 Use the image generation tool for every visual asset. Generate each requested asset as its own separate image, not one combined sheet, unless the user explicitly asks for a sheet.
@@ -178,6 +185,7 @@ Then copy the cleaned file into:
 Required cleanup behavior:
 
 - Logos, wordmarks, favicons, icons, overlays, dividers, buttons, nav, cards, forms, CTA modules, and footer modules must be cleaned before handoff.
+- Optional advanced tools such as `rembg`, Segment Anything/SAM, Pillow, ImageMagick, or Sharp may be used as escalation paths for complex edges, but they are not required dependencies.
 - Do not pass through images that show a checkerboard background. A checkerboard pattern inside the PNG means transparency failed; run cleanup or regenerate on a flat neutral background and clean again.
 - Do not pass through white/gray/pink/blue gradient backgrounds behind isolated assets.
 - Update the manifest with `background_cleaned: true`, `alpha_verified: true`, `background_removal_method`, and `background_removal_needed: false` after cleanup succeeds.
@@ -194,15 +202,20 @@ Include for each asset:
 - File path
 - Folder
 - Type: logo, icon, ui-element, background, texture, page-asset
+- Asset role: `background`, `foreground-object`, `transparent-overlay`, `icon`, `logo`, `ui-chrome`, `decorative-image-text`, `code-native-reference`, or `texture`
 - Source reference
 - Generation prompt summary
 - Intended website use
 - Notes about transparency, aspect ratio, state, and responsive use
+- Responsive variants: desktop, tablet, mobile, density-specific, or not-applicable
+- Accessibility notes: alt text, decorative empty alt, aria label, or hidden text requirements
+- Token dependencies: colors, font notes, radius, shadow, spacing, or motion tokens required by this asset
 - Background policy and whether background removal is needed before implementation
 - Cleanup fields: `background_cleanup_required`, `background_cleaned`, `alpha_verified`, `background_removal_method`, and `background_removal_needed`
 - Text policy: `code-native-text`, `decorative-image-text`, or `no-text`; for decorative image text, include the exact accessible text that the website must expose.
-- Icon policy: `official-vector`, `generated-transparent-png`, `custom-svg`, or `not-an-icon`.
+- Icon policy: `official-vector`, `generated-transparent-png`, `custom-svg`, `code-native`, or `not-an-icon`.
 - Interaction state: default, hover, active, selected, disabled, or not-applicable.
+- QA notes: visual risks, cleanup caveats, expected background, and downstream implementation warnings
 
 Also create:
 

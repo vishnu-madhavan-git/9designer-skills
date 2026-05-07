@@ -92,15 +92,17 @@ notes/                 Implementation notes and asset manifest updates
    - Keep all assets consistent with the reference images, not with unrelated previous projects.
 
 4. Identify fonts.
-   - Inspect visible text in the references and infer likely font families.
+   - Inspect visible text in the references and infer likely font families using visual traits: serif/sans/script/display class, x-height, contrast, terminals, width, weight, tracking, and distinctive letterforms.
    - If the font is a known public font, verify availability from an official source before naming it as exact.
    - If exact identification is uncertain, document a ranked list: `Exact candidate`, `Nearest free alternative`, `Fallback stack`, and `confidence`.
    - Only download or store font files when licensing permits it. Otherwise save links and CSS import guidance in `05-fonts/font-notes.md`.
+   - Document typography tuning values needed to match the prototype: size, weight, line-height, letter spacing, text transform, and responsive scale behavior.
 
 5. Write design tokens.
    - Extract colors from the references and create named tokens, not just raw swatches.
    - Include CSS variables for colors, typography, spacing, radii, shadows, borders, overlays, gradients, and motion hints.
    - Save tokens in `06-design-tokens/tokens.css` and optionally `tokens.json`.
+   - Treat `tokens.css` as the primary implementation handoff and `tokens.json` as an optional machine-readable companion.
 
 6. Build handoff sheets with imagegen.
    - Generate clean image boards for logo variants, icon library, UI components, and full asset overview using the image generation tool.

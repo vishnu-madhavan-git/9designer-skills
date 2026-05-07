@@ -36,6 +36,8 @@ General best practices never justify changing the visible design.
 
 Do not treat the first generated website as final. The final quality comes from the visual refinement loop.
 
+Advanced tools such as Playwright, pixelmatch, SSIM comparison, rembg, Segment Anything, SVGO, Sharp, or ImageMagick are optional accelerators unless the user or repository explicitly provides them. Never make a 9Designer run fail only because those optional tools are unavailable; fall back to browser screenshots, manual visual comparison, and the bundled cleanup script.
+
 ## Stage 1: Design Prototype
 
 Goal: create the approved visual direction from the single reference image.
@@ -212,6 +214,13 @@ Goal: build the real responsive website from the exported assets.
 
 Use the existing repository stack if one exists. If no stack exists or the workspace is empty, use React + TypeScript + Vite.
 
+Supported target stacks:
+
+- Default: React + TypeScript + Vite.
+- Existing repo stack: use the framework already present when the user provides a project.
+- Optional when explicitly requested or clearly better for the repo: Next.js + Tailwind, static HTML/CSS, Vue + Tailwind, or Astro.
+- Do not switch stacks just because a tool or public repo uses one. Stack choice must preserve fidelity and keep the project buildable.
+
 Required behavior:
 
 1. Read `asset-export-manifest.json`, `06-ready-for-builder/`, and the notes from Stage 2.
@@ -314,8 +323,8 @@ Verification requirements:
 - For a Vite app, run `npm install` if needed and `npm run build`.
 - Confirm `npm run dev` starts successfully for new Vite projects when practical.
 - Start the dev server and provide the local URL.
-- Use browser testing or screenshots for desktop and mobile when available.
-- Compare desktop and mobile screenshots against the approved prototype/template at matching viewport sizes.
+- Use browser testing or screenshots for desktop and mobile when available; prefer automated screenshot capture when the environment supports it.
+- Compare desktop and mobile screenshots against the approved prototype/template at matching viewport sizes. Optional pixelmatch or SSIM-style comparison may supplement, but not replace, human visual review.
 - Iterate on CSS/components/assets until the website closely matches the reference layout, typography scale, spacing, colors, and section rhythm.
 - Fix broken images, console errors, text overflow, layout overlap, and mobile navigation issues.
 - Fix visual drift such as wrong background layering, checkerboard-backed assets, wrong card ratios, wrong button heights, or incorrect font weight/size.
@@ -332,6 +341,7 @@ Verification requirements:
   6. Repeat until remaining differences are minor, intentional, or blocked by missing assets/fonts.
 - Prefer element or section screenshots for debugging when a full-page screenshot makes differences hard to isolate.
 - Keep screenshots stable by using fixed viewports, waiting for fonts/images, and disabling nonessential animations during visual QA when practical.
+- The first rendered website is a draft checkpoint, never the final. Complete at least one compare-and-repair pass unless a concrete blocker prevents screenshot capture.
 - If the workspace has graphify instructions and code files changed, run `graphify update .`.
 
 Stage 3 output:
