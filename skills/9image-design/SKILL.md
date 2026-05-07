@@ -29,6 +29,7 @@ Design with these rules:
 - Keep copy short, specific, and scannable.
 - Use cardless layouts by default; use cards only when the reference image or page concept needs them.
 - Avoid hero cards, generic stat strips, logo clouds, pill clutter, fake dashboards, and generic SaaS grids unless the image clearly implies them.
+- Avoid generic social icons, utility icons, arrows, and feature icons. Match glyph shape, fill/outline mode, optical weight, color, size, and container treatment to the reference world.
 - Do not add hero eyebrows, kickers, badges, or decorative pills unless the reference already contains that structure or the user explicitly asks.
 - Use at most two typeface directions and one dominant accent color unless the reference image has a stronger system.
 - Use motion cues to support hierarchy and atmosphere, not noise.
@@ -51,6 +52,7 @@ Before generating or designing, internally inspect the image for:
 - Existing title text, logo, lettering, brand mark, or typography
 - Which elements should later become transparent assets
 - Which text should remain real HTML/CSS and which text is decorative logo, wordmark, or hand-lettering
+- Which social, navigation, CTA, feature, gallery, and footer icons must later become exact generated or vector-quality assets
 
 Preserve strong existing identity. If the image contains a polished wordmark, logo, title, or lettering, keep it as the brand foundation. If it does not, create a short brand name that feels native to the image.
 

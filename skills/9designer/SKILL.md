@@ -11,7 +11,20 @@ description: "Complete image-to-working-website pipeline. Use when the user prov
 2. **Production Asset Export**
 3. **Working Website Build**
 
-Do not collapse these into one vague step. Each stage must produce its own outputs before the next stage starts.
+Do not collapse these into one vague step. Each stage must produce its own outputs before the next stage starts. Inside each stage, work section-by-section and asset-by-asset so Codex has time to identify every essential element instead of producing a generic approximation.
+
+## Core Fidelity Principle
+
+The reference image, approved prototype, and exported asset kit are the source of truth. The final website must feel like a careful reconstruction of that design system, not a redesign inspired by it.
+
+Use this priority order whenever there is a conflict:
+
+1. Approved visual reference and prototype.
+2. Extracted asset manifest, design tokens, and section specs.
+3. Existing project stack and component conventions.
+4. General frontend best practices.
+
+General best practices never justify changing the visible design.
 
 ## Stage 1: Design Prototype
 
@@ -50,6 +63,8 @@ Stage 1 design quality rules:
 - Keep copy short, specific, and scannable.
 - Avoid hero cards, generic card grids, stat strips, logo clouds, decorative pill clutter, and unrequested hero eyebrows/kickers/badges.
 - Make concepts readable enough to extract typography, spacing, button details, colors, and component shapes.
+- Do not use generic social icons, utility icons, arrows, or feature icons. Their metaphor, fill/outline mode, optical weight, corner style, color, size, and container treatment must match the reference world.
+- If a prototype image becomes too compressed to read, generate standalone section/detail concepts before implementation. Do not guess from tiny text or miniature icons.
 
 Default prototype set after approval:
 
@@ -121,8 +136,18 @@ Default exported assets:
 - `hero-background`
 - `section-texture`
 - `decorative-divider`
+- `social-icon-set`
 
-Also export reference-driven assets when present: decorative wordmarks, hero objects/characters, section illustrations, custom feature icons, gallery cards, CTA artwork, footer visuals, and background motifs such as clouds, waves, leaves, stars, magic effects, mountains, animals, dividers, textures, or masks.
+Also export reference-driven assets when present: decorative wordmarks, hero objects/characters, section illustrations, custom feature icons, gallery cards, CTA artwork, footer visuals, social media/community icons, navigation glyphs, carousel arrows, form icons, and background motifs such as clouds, waves, leaves, stars, magic effects, mountains, animals, dividers, textures, or masks.
+
+Asset discovery protocol:
+
+1. Create an asset inventory before generating files.
+2. List every visible logo, wordmark, favicon, social icon, nav icon, CTA icon, card icon, decorative glyph, divider, texture, image frame, section illustration, button treatment, form treatment, and footer element.
+3. For each asset, record its intended use: background, foreground object, transparent overlay, icon, logo, UI chrome, decorative image text, or code-native text.
+4. For each icon, record metaphor, platform if any, filled vs. outline, stroke width, corner style, bounding box, padding, color, hover/active state, and whether it should be SVG, transparent PNG, or code-native.
+5. For social icons, use the exact platform glyphs visible in the approved design where legally and technically practical, then match the design's container, color, radius, shadow, and spacing. Do not substitute generic lucide/social placeholders.
+6. If a social icon is stylized by the brand illustration style, generate it as a transparent PNG. If it is a standard platform mark, use a clean official/vector-quality glyph and style the surrounding UI to match the prototype.
 
 Background policy:
 
@@ -156,6 +181,20 @@ Stage 2 fidelity rules:
 - Preserve hero/media treatment. Do not add overlays or tints that are not in the approved design.
 - Keep interactive UI text and controls code-native for Stage 3 unless the text belongs inside a decorative image asset.
 - For decorative image-text assets, record the exact accessible hidden text required in Stage 3.
+- Find the closest practical web font by comparing visual traits: serif/sans/display/script, x-height, contrast, terminals, width, weight, tracking, numerals, and distinctive letterforms. Record the chosen font, fallback stack, confidence level, and visual differences in `notes/font-and-token-notes.md`.
+- When the exact font cannot be confirmed, choose the closest available web font and adjust CSS size, weight, line-height, and letter spacing to match the prototype instead of pretending the font is exact.
+
+Stage 2 notes must include:
+
+```text
+notes/asset-plan.md
+notes/asset-inventory.md
+notes/icon-inventory.md
+notes/social-icons.md
+notes/generation-prompts.md
+notes/font-and-token-notes.md
+notes/builder-handoff.md
+```
 
 ## Stage 3: Working Website Build
 
@@ -184,6 +223,27 @@ Before coding, create an implementation inventory:
 - Asset-to-component mapping and cleanup status.
 - Reference screenshot/template for each page.
 
+Then create section specs before implementation. For every major visible section, write a spec in:
+
+```text
+docs/research/components/<section-name>.spec.md
+```
+
+Each spec must include:
+
+- Target component file.
+- Source prototype/reference image.
+- DOM/content structure.
+- Exact visible copy.
+- Assets used, including layered foreground/background assets.
+- Colors, typography, spacing, radii, borders, shadows, overlays, and image treatment.
+- Icon requirements, including social icon source/style.
+- Interaction model: static, click-driven, hover-driven, scroll-driven, time-driven, or mixed.
+- Hover, active, selected, focus, open, closed, and mobile states when applicable.
+- Desktop, tablet, and mobile layout behavior.
+
+Do not start coding a section until its spec exists.
+
 Frontend implementation rules:
 
 - Use existing repo stack when present; otherwise default to React + TypeScript + Vite.
@@ -193,6 +253,10 @@ Frontend implementation rules:
 - Preserve the container model; do not add cards, wrappers, borders, glows, or panels where the concept uses open space or full-bleed composition.
 - Use exported icons/assets only when clean, and use SVG/icon components only when they faithfully match the approved icon style.
 - Use semantic HTML, accessible alt text, reusable components, and modern CSS layout. Do not hardcode everything with absolute positioning unless needed for faithful visual layering.
+- Implement all buttons, links, nav items, tabs, filters, accordions, forms, carousels, mobile menus, and social links as working UI. If a destination is unknown, use a safe local placeholder such as `#` with an accessible label and preserve the visual behavior.
+- Social links must use the matched social icon assets from Stage 2. Do not use text labels or generic icons unless the prototype explicitly shows them.
+- Use official/vector-quality SVG icons for simple UI controls when they match the approved design; otherwise use the exported transparent assets. Every icon must pass an optical review for size, baseline, padding, color, and hover/active state.
+- Keep the app componentized enough that each major section can be repaired independently. Avoid one giant `App` component or one giant CSS block when the page has multiple visual systems.
 
 Default files for a new Vite app:
 
@@ -245,8 +309,10 @@ Verification requirements:
 - Iterate on CSS/components/assets until the website closely matches the reference layout, typography scale, spacing, colors, and section rhythm.
 - Fix broken images, console errors, text overflow, layout overlap, and mobile navigation issues.
 - Fix visual drift such as wrong background layering, checkerboard-backed assets, wrong card ratios, wrong button heights, or incorrect font weight/size.
-- Keep a short visual QA ledger with at least five comparison points covering copy, layout, typography, palette, asset treatment, spacing/container model, responsive behavior, or motion.
+- Keep a visual QA ledger with at least eight comparison points covering copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
 - Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
+- Click or trigger every visible button, link, nav item, tab, filter, form, carousel control, mobile menu, and social icon. Record behavior in the QA ledger.
+- If a screenshot comparison shows a mismatch, fix the component or regenerate the relevant asset. Do not explain away fixable drift.
 - If the workspace has graphify instructions and code files changed, run `graphify update .`.
 
 Stage 3 output:

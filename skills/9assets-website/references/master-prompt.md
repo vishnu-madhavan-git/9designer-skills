@@ -17,6 +17,8 @@ First read the kit:
 - notes/builder-handoff.md
 - notes/asset-plan.md
 - notes/font-and-token-notes.md
+- notes/icon-inventory.md
+- notes/social-icons.md
 - design token files
 - 06-ready-for-builder/
 - logo, icon, UI, background, and page asset folders
@@ -30,6 +32,7 @@ Create an implementation map:
 - Asset cleanup status for every logo, icon, overlay, divider, and UI image
 - Exact visible copy, typography system, icon inventory, component families, container model, and hero/media treatment
 - Text policy: real HTML/CSS text versus decorative image text that needs hidden accessible text
+- Social icon mapping: exact platform/community glyph, source asset, container treatment, accessible label, href placeholder, and hover/active state
 - Missing assets or assumptions
 
 Before building:
@@ -68,6 +71,8 @@ Website requirements:
 - Code-native interactive controls with deliberate typography, accessible labels/states, and shared component variants
 - Real HTML/CSS text for nav, headings, paragraphs, buttons, cards, CTA, forms, and footer whenever possible
 - Hidden accessible text for decorative logo/wordmark/hand-lettered image text
+- Exact matched social icon assets or official/vector-quality glyphs; no generic social placeholders or text labels unless shown in the approved design
+- Working behavior for every visible button, link, nav item, social link, form control, tab/filter, carousel control, and mobile menu
 - Reusable components such as Header, Hero, StorySection, FeatureSection, ShowcaseSection, GallerySection, CTASection, Footer, Button, and Card when those sections exist
 - README with install, dev, build, and asset-source notes
 
@@ -80,7 +85,7 @@ Verification:
 - Compare desktop and mobile screenshots against the approved reference/template at matching viewport sizes.
 - Iterate until the website closely matches the approved template.
 - Fix broken images, console errors, text overflow, layout overlap, mobile nav issues, visual drift, wrong spacing, wrong font scale, wrong component sizing, and incorrect background layering.
-- Keep a short visual QA ledger with at least five comparison points across copy, layout, typography, palette, asset treatment, spacing/container model, responsive behavior, or motion.
+- Keep a visual QA ledger with at least eight comparison points across copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
 - Check 1440px desktop, 768px tablet, and 390px mobile when practical.
 - If graphify instructions apply after code edits, run graphify update .
 

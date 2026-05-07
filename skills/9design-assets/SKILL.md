@@ -35,6 +35,8 @@ Do not invent a new visual style. The output must follow the supplied kit exactl
 
 Identify which elements should become reusable image assets and which must remain HTML/CSS text. Normal navigation, headings, paragraphs, buttons, cards, CTA text, form labels, and footer copy should stay code-native. Generate text as an image only for a decorative logo, custom wordmark, hand-lettered title, poster, sign, packaging, or artwork where the text is part of the visual object.
 
+Identify every social media/community icon and record whether it is a standard platform glyph, a stylized brand-world glyph, or a text link. Standard platform glyphs should stay vector-quality and visually match the design treatment; stylized glyphs should be generated as clean transparent assets.
+
 Asset fidelity rules:
 
 - Match icon metaphor, stroke/fill style, optical weight, corner style, color, padding, and alignment from the approved design. Do not swap in generic nearby icons.
@@ -55,6 +57,7 @@ Default required set and background policy:
 - `logo-mark`: isolated, transparent preferred, otherwise flat neutral background
 - `favicon`: isolated square, transparent preferred, otherwise flat neutral background
 - Exactly `5` core icons unless the user specifies a different count: isolated, transparent preferred, otherwise flat neutral background
+- `social-icon-set`: exact social/community icon glyphs from the approved design, isolated and transparent or vector-quality, including matched container styling when present
 - Primary button: isolated component only, no page background
 - Secondary button: isolated component only, no page background
 - Navigation bar: isolated nav component only, no page screenshot background
@@ -136,6 +139,7 @@ Required behavior:
 - Generate `logo-mark` separately.
 - Generate `favicon` separately.
 - Generate each of the 5 core icons separately as `icon-01-*` through `icon-05-*`.
+- Generate each social/community icon separately when the approved design shows social links. Do not substitute generic icons or text labels.
 - Generate each UI element separately: buttons, nav, mobile nav, card, form input, CTA banner, footer module.
 - Generate each background or texture separately.
 - Generate logos, icons, and UI components without the screenshot/page background. They must be clean isolated implementation assets.
@@ -144,6 +148,14 @@ Required behavior:
 - Copy only cleaned and verified final files into `06-ready-for-builder/`.
 
 Do not satisfy this step by drawing SVGs manually. Optional SVG tracing can happen later, but only after the image exists.
+
+Social icon generation rules:
+
+- Do not generate social icons as text labels unless the approved design shows text labels.
+- If the icon is a known platform mark, use an official/vector-quality glyph where available and style its surrounding circle, square, stroke, fill, shadow, or texture to match the design.
+- If the approved design uses illustrated or custom social icons, generate each as its own transparent PNG.
+- Keep social icon optical size, padding, baseline, stroke/fill weight, and corner style consistent with the rest of the icon set.
+- Export hover/active variants when the prototype shows a state change.
 
 Use transparent backgrounds when possible for logos, icons, overlays, dividers, and decorative elements. If imagegen cannot reliably output transparency, use a plain flat neutral background with no texture, no gradient, no scene, no screenshot, then run background cleanup.
 
@@ -189,6 +201,8 @@ Include for each asset:
 - Background policy and whether background removal is needed before implementation
 - Cleanup fields: `background_cleanup_required`, `background_cleaned`, `alpha_verified`, `background_removal_method`, and `background_removal_needed`
 - Text policy: `code-native-text`, `decorative-image-text`, or `no-text`; for decorative image text, include the exact accessible text that the website must expose.
+- Icon policy: `official-vector`, `generated-transparent-png`, `custom-svg`, or `not-an-icon`.
+- Interaction state: default, hover, active, selected, disabled, or not-applicable.
 
 Also create:
 
@@ -196,6 +210,8 @@ Also create:
 - `notes/generation-prompts.md`
 - `notes/font-and-token-notes.md`
 - `notes/builder-handoff.md`
+- `notes/icon-inventory.md`
+- `notes/social-icons.md`
 
 The final response must include the export folder path, number of generated images, and any missing or uncertain assets.
 

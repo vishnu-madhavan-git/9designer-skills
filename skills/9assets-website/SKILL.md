@@ -72,6 +72,7 @@ Inventory every asset path and map it to a website role:
 - Cards, forms, CTA, footer, and other UI elements
 - Page-specific imagery
 - Decorative image-text assets that need accessible hidden text
+- Social media/community icons, their exact source asset or glyph, container treatment, and hover/active state
 
 Before building, inspect manifest cleanup fields:
 
@@ -80,6 +81,7 @@ Before building, inspect manifest cleanup fields:
 - If a reusable asset visibly contains a checkerboard, flat page background, or screenshot background, treat it as unclean and return to `9design-assets` cleanup or regenerate that asset.
 - Only true background assets may be full-bleed.
 - For assets marked `decorative-image-text`, add equivalent accessible hidden text in the website.
+- For social icons, use the exact matched assets or official/vector-quality glyphs recorded by the asset exporter. Do not substitute text labels or generic social icons unless the approved design shows them.
 
 ### Step 2: Plan The Real Website
 
@@ -115,12 +117,21 @@ Before coding, create a compact implementation inventory:
 - Design tokens: background, surface, text, muted text, border, accent, shadow, radius, spacing scale, and motion timing.
 - Typography system: font family or fallback, type scale, weights, line heights, tracking, label treatment, button text, and responsive behavior.
 - Icon inventory: meaning, source asset, outline vs filled, stroke width, size, color, alignment, spacing, and states.
+- Social icon inventory: platform or community, exact source file or official/vector glyph, container shape, fill/stroke treatment, size, spacing, accessible label, href placeholder, and hover/active state.
 - Component families: buttons, navigation, media frames, cards only where present, forms, tags, galleries, CTA, footer, and responsive variants.
 - Container model: full-bleed sections, bands, rails, lists, panels, cards, masks, overlays, or open whitespace.
 - Hero/media treatment: no overlay, color overlay, gradient, edge fade, mask, transparent cutout, or matching background color.
 - Text policy: which text is real HTML/CSS and which, if any, is decorative image text with hidden accessible text.
 
 Do not invent new visible above-the-fold copy, hero eyebrows/kickers, badges, pills, major carousels, pricing blocks, dashboards, forms, or tab systems unless they appear in the approved design, are in the user request, or are required for a concrete function.
+
+Create section specs before coding. For every major visible section, write:
+
+```text
+docs/research/components/<section-name>.spec.md
+```
+
+Each spec must include target component file, source prototype/reference image, exact copy, asset mapping, icon/social icon requirements, visual tokens, interaction model, hover/active/mobile states, and desktop/tablet/mobile behavior. Do not start coding a section until its spec exists.
 
 ### Step 3: Build The Website
 
@@ -153,6 +164,8 @@ Implementation requirements:
 - Use accessible alt text for meaningful images and empty alt text for purely decorative images.
 - Use visually hidden accessible text for decorative logo/wordmark/hand-lettered image text.
 - Normal website text must be real HTML/CSS text: navigation, headings, paragraphs, buttons, cards, CTA, forms, and footer.
+- Social links must use the exact matched social icon assets or official/vector-quality glyphs described in the asset kit. Do not use text labels or generic social icons unless the approved design shows them.
+- Implement every visible button, link, nav item, social icon, form control, tab, filter, carousel control, and mobile menu as working UI. Unknown destinations may use `#`, but visual states and accessible labels must be complete.
 - Do not hardcode the whole page with absolute positioning. Use modern CSS layout with grid, flexbox, `clamp()`, `minmax()`, `object-fit`, and `aspect-ratio`; reserve absolute positioning for accurate visual layering only.
 - Include a README with how to install, run, build, and understand the asset source.
 
@@ -202,7 +215,7 @@ Run the smallest meaningful verification, then broaden as needed:
 - Use browser testing or Playwright screenshots for desktop and mobile.
 - Compare screenshots against the approved reference/template at the same viewport sizes.
 - Check for broken images, console errors, missing assets, text overflow, incoherent overlap, and mobile navigation issues.
-- Check for visual drift: wrong spacing, wrong font weight/size, wrong button height, wrong card ratio, wrong background layering, wrong section order, and visible asset backgrounds.
+- Check for visual drift: wrong spacing, wrong font weight/size, wrong button height, wrong card ratio, wrong background layering, wrong section order, visible asset backgrounds, and mismatched icon/social icon style.
 - Fix issues found during verification.
 
 Screenshot comparison loop:
@@ -215,9 +228,9 @@ Screenshot comparison loop:
 
 Visual QA ledger:
 
-- Before final handoff, record at least five comparison points covering copy, layout, typography, palette, asset treatment, spacing/container model, responsive behavior, or motion.
+- Before final handoff, record at least eight comparison points covering copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
 - Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
-- Inspect hover, click, menu, form, and scroll states that are visible in the design or required by the UI.
+- Inspect hover, click, menu, form, social link, tab/filter/carousel, and scroll states that are visible in the design or required by the UI.
 - If a reference dimension cannot be matched exactly, state the blocker and verify the nearest practical viewport.
 
 If the repo has graphify instructions and code files changed, run `graphify update .`.
