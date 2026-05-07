@@ -37,6 +37,8 @@ Create an implementation map:
 
 Before coding, create `docs/research/RECONSTRUCTION_CONTRACT.md`. Lock the approved reference pages, desktop, iPad/tablet, mobile, and small-mobile viewports, required interactions, and final pass/fail gates. Do not start implementation until this contract exists.
 
+If speed matters, also create `docs/research/FAST_TRACK_PLAN.md`. Use it to scaffold routes, shared layout, tokens, asset loading, header, footer, and mobile nav early, then implement sections against the locked references. Fast mode should reduce duplicate work, not lower the final QA bar.
+
 Before building:
 - Reject any reusable asset that has a checkerboard background baked in.
 - Reject any logo, icon, or UI element with a screenshot/page background behind it.
@@ -77,6 +79,7 @@ Website requirements:
 - Working behavior for every visible button, link, nav item, social link, form control, tab/filter, carousel control, and mobile menu
 - Reusable components such as Header, Hero, StorySection, FeatureSection, ShowcaseSection, GallerySection, CTASection, Footer, Button, and Card when those sections exist
 - README with install, dev, build, and asset-source notes
+- Fast delivery path: code-native UI controls where CSS can match the design, generated assets only for visual-world elements, targeted screenshots during repair, full desktop/iPad/tablet/mobile QA before handoff.
 
 Verification:
 - Run npm install if dependencies are missing.

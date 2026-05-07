@@ -44,6 +44,8 @@ For public examples, benchmark submissions, or final quality review, use the `9a
 
 For deploy-ready work, create a reconstruction contract before coding and run production-readiness validation before final handoff. Do not call the website complete if the production build, iPad/tablet/mobile views, interactions, local assets, visual QA ledger, or benchmark score are missing.
 
+When the user asks to go fast, use fast mode: reduce duplicated design/asset passes, start the website shell as soon as the approved visual system and asset manifest are stable, run targeted QA during repair, and keep final quality gates intact.
+
 ## Stage 1: Design Prototype
 
 Goal: create the approved visual direction from the single reference image.
@@ -72,6 +74,8 @@ Required behavior:
 5. If changes are requested, revise Image 1 before continuing.
 6. After approval, generate the remaining prototype pages and boards needed for the website.
 7. Generate section/detail concepts when a full-page prototype is too compressed to implement precisely.
+
+Fast-mode note: after landing approval, generate only the additional pages/boards needed for implementation fidelity. Do not create extra decorative boards that do not inform assets, layout, responsive behavior, or QA.
 
 Stage 1 design quality rules:
 
@@ -135,6 +139,8 @@ Required behavior:
 4. Run background cleanup for every reusable non-background asset.
 5. Copy only cleaned and verified final implementation assets into `06-ready-for-builder/`.
 6. Write or update `asset-export-manifest.json` so the website build can consume the folder without guessing.
+
+Fast-mode note: prioritize P0 assets first: logo/wordmark/favicon, hero/background art, visual-world icons/social icons, textures/dividers/overlays, and page-specific imagery. Keep buttons, cards, forms, navigation, and normal copy code-native when CSS can match the approved design accurately.
 
 Default exported assets:
 
@@ -250,6 +256,8 @@ Before coding, create an implementation inventory:
 
 Also create `docs/research/RECONSTRUCTION_CONTRACT.md` using the `9assets-website` helper when available. Treat it as the locked source-of-truth map for pages, target viewports, interactions, and pass/fail gates before coding.
 
+If speed matters, also create `docs/research/FAST_TRACK_PLAN.md` using the `9assets-website` helper when available. Use it to start routes, layout, shared tokens, asset loading, header, footer, and mobile nav before every section is fully polished.
+
 Then create section specs before implementation. For every major visible section, write a spec in:
 
 ```text
@@ -284,6 +292,7 @@ Frontend implementation rules:
 - Social links must use the matched social icon assets from Stage 2. Do not use text labels or generic icons unless the prototype explicitly shows them.
 - Use official/vector-quality SVG icons for simple UI controls when they match the approved design; otherwise use the exported transparent assets. Every icon must pass an optical review for size, baseline, padding, color, and hover/active state.
 - Keep the app componentized enough that each major section can be repaired independently. Avoid one giant `App` component or one giant CSS block when the page has multiple visual systems.
+- Use a fast repair loop: patch the smallest failing token/component/asset/breakpoint, run the narrowest useful check, then run full QA only at milestone and final handoff.
 
 Default files for a new Vite app:
 

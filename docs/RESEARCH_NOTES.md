@@ -67,6 +67,13 @@ All of these remain optional or roadmap items. They are not required dependencie
 - Final QA should prefer production build or preview screenshots when practical, not only dev-server screenshots.
 - A generated website should not be called deploy-ready until validator errors are fixed and remaining warnings are explained.
 
+## Fast Development Notes
+
+- `create_fast_track_plan.py` creates a critical-path plan so the website shell, routes, tokens, asset wiring, header, footer, and mobile nav can start early.
+- Fast mode prioritizes P0 implementation assets and code-native UI controls to reduce image generation and cleanup time.
+- Targeted screenshots are preferred during repair; full desktop, iPad/tablet, mobile, and small-mobile QA remains required before final handoff.
+- Speed improvements must reduce duplicate work, not skip visual fidelity, interaction QA, build verification, or deploy-readiness evidence.
+
 ## Future Improvements
 
 - Add an optional `target_stack` decision in prompts: React/Vite default, Next/Tailwind, static HTML/CSS, Vue/Tailwind, or existing repo stack.

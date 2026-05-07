@@ -67,6 +67,7 @@ These commands must work without installing optional Playwright or pixel diff de
 ```bash
 node skills/9assets-website/scripts/capture_visual_qa.mjs --help
 node skills/9assets-website/scripts/compare_visual_qa.mjs --help
+python skills/9assets-website/scripts/create_fast_track_plan.py --website-root . --out visual-qa/test-fast-track.md
 python skills/9assets-website/scripts/create_reconstruction_contract.py --website-root . --out visual-qa/test-contract.md
 python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --out visual-qa/test-ledger.md
 python skills/9assets-website/scripts/score_visual_qa.py --ledger visual-qa/test-ledger.md --build-passed --score fidelity=4 --score asset_quality=4 --score responsive_quality=4 --score accessibility=4 --score visual_qa_completeness=4 --out visual-qa/test-score.md
@@ -76,6 +77,7 @@ python skills/9assets-website/scripts/validate_production_readiness.py --website
 Expected result:
 
 - The Node scripts print help text.
+- The fast-track script creates an implementation plan template.
 - The reconstruction contract script creates a contract template.
 - The Python script creates a ledger template.
 - The score script prints JSON and creates a score Markdown file.

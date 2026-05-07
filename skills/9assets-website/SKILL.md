@@ -17,6 +17,7 @@ Optional expanded kit step: `9design-kit` can create broader brand-system boards
 
 Bundled optional QA helpers:
 
+- `scripts/create_fast_track_plan.py`: creates `docs/research/FAST_TRACK_PLAN.md` for faster critical-path execution.
 - `scripts/create_reconstruction_contract.py`: creates `docs/research/RECONSTRUCTION_CONTRACT.md` before coding.
 - `scripts/capture_visual_qa.mjs`: captures desktop, tablet, and mobile screenshots with Playwright when Playwright is installed.
 - `scripts/compare_visual_qa.mjs`: creates pixel diff summaries and diff images when `pixelmatch` and `pngjs` are installed.
@@ -27,6 +28,8 @@ Bundled optional QA helpers:
 These helpers are optional. Do not block a website build only because Playwright, pixelmatch, or pngjs is unavailable; use manual browser screenshots and the same ledger categories instead.
 
 For public examples, benchmark submissions, or final quality review, read `references/visual-benchmark-rubric.md` before scoring the build.
+
+When the user asks for a faster process, read `references/fast-development-mode.md`. Fast mode removes duplicate work, starts the build shell earlier, and uses targeted QA during repair, but it must not skip final build, responsive QA, interaction QA, ledger, benchmark score, or production-readiness validation.
 
 ## Core Rule
 
@@ -158,6 +161,14 @@ python <9assets-website-skill-dir>/scripts/create_reconstruction_contract.py --w
 
 Use `docs/research/RECONSTRUCTION_CONTRACT.md` as a pass/fail checklist. It must lock the approved pages, desktop, iPad/tablet, mobile, small-mobile targets, interactions, and final handoff gates.
 
+If speed matters, also create a fast-track plan:
+
+```bash
+python <9assets-website-skill-dir>/scripts/create_fast_track_plan.py --website-root "."
+```
+
+Use `docs/research/FAST_TRACK_PLAN.md` to keep the critical path moving: scaffold routes, layout, tokens, asset loading, header, footer, and mobile nav early; then implement sections against the locked references.
+
 Create section specs before coding. For every major visible section, write:
 
 ```text
@@ -201,6 +212,7 @@ Implementation requirements:
 - Implement every visible button, link, nav item, social icon, form control, tab, filter, carousel control, and mobile menu as working UI. Unknown destinations may use `#`, but visual states and accessible labels must be complete.
 - Do not hardcode the whole page with absolute positioning. Use modern CSS layout with grid, flexbox, `clamp()`, `minmax()`, `object-fit`, and `aspect-ratio`; reserve absolute positioning for accurate visual layering only.
 - Include a README with how to install, run, build, and understand the asset source.
+- For faster delivery, create the app shell and shared tokens before all sections are complete. Keep the build passing as each page group lands.
 
 Use generated UI element images as visual references, but implement interactive controls as HTML/CSS unless they are intentionally decorative bitmap elements.
 
@@ -214,6 +226,7 @@ Frontend implementation rules:
 - Preserve the container model. Do not add cards, panels, borders, glows, or wrappers where the reference uses open space or full-bleed composition.
 - Use SVG/icon components only when they faithfully match the approved icon style; otherwise use the cleaned exported icon assets.
 - Respect `prefers-reduced-motion` for motion.
+- Use CSS for code-native UI chrome when it can faithfully match the design faster than generated UI images. Reserve image assets for visual-world elements, decorative typography, logos, icons, scene art, textures, overlays, and dividers.
 
 Default reusable component names for a landing-page build:
 
@@ -250,6 +263,7 @@ Run the smallest meaningful verification, then broaden as needed:
 - Check for broken images, console errors, missing assets, text overflow, incoherent overlap, and mobile navigation issues.
 - Check for visual drift: wrong spacing, wrong font weight/size, wrong button height, wrong card ratio, wrong background layering, wrong section order, visible asset backgrounds, and mismatched icon/social icon style.
 - Fix issues found during verification.
+- During repair, prefer targeted screenshots of the changed route, viewport, or section. Run the full desktop/iPad/tablet/mobile pass only after the repair queue is clear or before final handoff.
 
 Optional screenshot capture:
 

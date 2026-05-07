@@ -72,6 +72,13 @@ Default required set and background policy:
 
 Add extra assets only when the reference kit clearly requires them or the user asks.
 
+Speed-safe prioritization:
+
+- P0 assets: required for the first faithful website build. Generate or validate these first: logo/wordmark/favicon, hero/background art, visual-world icons and social icons, textures/dividers/overlays, and page-specific imagery visible in approved references.
+- P1 assets: useful for polish or repeated sections. Generate after P0 if they are visible: gallery cards, decorative objects, CTA/footer visuals, hover/active variants.
+- P2 assets: optional boards or alternates. Skip in fast mode unless the user asks or the website builder needs them to resolve ambiguity.
+- Do not generate image assets for normal HTML text, simple buttons, basic forms, or plain cards when code-native CSS can faithfully reproduce them faster.
+
 Reference-driven asset coverage:
 
 - Logo mark as transparent PNG.
