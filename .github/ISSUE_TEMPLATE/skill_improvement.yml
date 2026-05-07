@@ -1,0 +1,46 @@
+name: Skill improvement
+description: Propose a prompt, workflow, QA, or asset-handling improvement.
+title: "[Skill]: "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Skill
+      options:
+        - 9designer
+        - 9image-design
+        - 9design-assets
+        - 9design-kit
+        - 9assets-website
+        - cross-skill workflow
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What does the current workflow fail to do well?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+      description: Describe the rule, prompt change, validation, or doc update.
+    validations:
+      required: true
+  - type: textarea
+    id: examples
+    attributes:
+      label: Example references
+      description: Link public examples or describe non-private cases.
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints
+      options:
+        - label: This does not require private assets or private screenshots.
+          required: true
+        - label: This preserves the three-stage 9Designer pipeline.
+          required: true

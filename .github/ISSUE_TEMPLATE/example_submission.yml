@@ -1,0 +1,38 @@
+name: Example submission
+description: Submit a public example generated with the 9Designer skill suite.
+title: "[Example]: "
+labels: ["example"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Example summary
+      description: What reference style did this example test?
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Files
+      description: List the public-safe images, asset folders, or website screenshots.
+    validations:
+      required: true
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Prompt used
+      description: Paste the non-sensitive prompt or summarize it.
+  - type: textarea
+    id: notes
+    attributes:
+      label: What worked or failed?
+      description: Mention any visual fidelity, asset cleanup, or website build lessons.
+  - type: checkboxes
+    id: permissions
+    attributes:
+      label: Permissions
+      options:
+        - label: I have permission to share the submitted images/assets publicly.
+          required: true
+        - label: The submission does not contain secrets, private data, or copyrighted material I cannot share.
+          required: true

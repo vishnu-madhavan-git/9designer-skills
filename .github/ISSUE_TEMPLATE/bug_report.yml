@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a broken skill instruction, script issue, or documentation bug.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Do not include private reference images, secrets, tokens, or proprietary assets.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - 9designer
+        - 9image-design
+        - 9design-assets
+        - 9design-kit
+        - 9assets-website
+        - helper scripts
+        - documentation
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is broken?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction
+      description: What prompt, command, or workflow exposed the issue?
+      placeholder: |
+        1. Use $9design-assets...
+        2. Run...
+        3. Observe...
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation or logs
+      description: Paste non-sensitive validation output if available.
