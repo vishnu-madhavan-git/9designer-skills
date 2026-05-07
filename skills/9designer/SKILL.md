@@ -26,6 +26,16 @@ Use this priority order whenever there is a conflict:
 
 General best practices never justify changing the visible design.
 
+## Research-Backed Operating Model
+
+9Designer should combine the strongest patterns from public design-to-code tools:
+
+- From screenshot-to-code tools: keep explicit supported output targets, examples, troubleshooting, and repeatable setup/verification commands.
+- From visual-first editors: manage brand assets, tokens, pages, images, components, and code side by side instead of treating the website as one screenshot.
+- From visual-difference research: render the implementation, compare it to the approved design, classify visible differences, then repair the code/assets and repeat.
+
+Do not treat the first generated website as final. The final quality comes from the visual refinement loop.
+
 ## Stage 1: Design Prototype
 
 Goal: create the approved visual direction from the single reference image.
@@ -313,6 +323,15 @@ Verification requirements:
 - Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
 - Click or trigger every visible button, link, nav item, tab, filter, form, carousel control, mobile menu, and social icon. Record behavior in the QA ledger.
 - If a screenshot comparison shows a mismatch, fix the component or regenerate the relevant asset. Do not explain away fixable drift.
+- Run a visual refinement loop after the first successful build:
+  1. Capture reference and rendered screenshots at matching desktop and mobile viewports.
+  2. Compare the images and write `docs/research/VISUAL_QA_LEDGER.md`.
+  3. Classify every visible mismatch as layout, spacing, typography, color, asset, icon, interaction, or responsive behavior.
+  4. Repair the specific component, token, or asset that caused the mismatch.
+  5. Rebuild and recapture screenshots.
+  6. Repeat until remaining differences are minor, intentional, or blocked by missing assets/fonts.
+- Prefer element or section screenshots for debugging when a full-page screenshot makes differences hard to isolate.
+- Keep screenshots stable by using fixed viewports, waiting for fonts/images, and disabling nonessential animations during visual QA when practical.
 - If the workspace has graphify instructions and code files changed, run `graphify update .`.
 
 Stage 3 output:
@@ -352,5 +371,6 @@ Keep the final concise and include:
 - Website folder or key files changed
 - Sections recreated, assets generated/used, and main design decisions
 - Verification commands and results
+- Visual QA ledger location and the main mismatches fixed
 - Dev URL or run command
 - Any missing assets, uncertain fonts, or remaining risks

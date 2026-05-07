@@ -158,6 +158,7 @@ skills/
 docs/
   GETTING_STARTED.md
   EXAMPLES.md
+  RESEARCH_NOTES.md
   CONTRIBUTOR_WORKFLOW.md
   VALIDATION.md
   GITHUB_SETTINGS.md
@@ -215,3 +216,7 @@ Suggested GitHub repository settings:
 - Social preview image: `docs/media/social-preview.png`
 
 See [docs/GITHUB_SETTINGS.md](docs/GITHUB_SETTINGS.md) for the exact setup checklist.
+
+## Research Notes
+
+9Designer borrows proven patterns from public screenshot-to-code, visual editor, and visual regression workflows. See [docs/RESEARCH_NOTES.md](docs/RESEARCH_NOTES.md) for the current research log and improvement backlog.
