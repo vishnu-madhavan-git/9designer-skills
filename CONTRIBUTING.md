@@ -54,6 +54,14 @@ When changing asset export behavior, run the manifest validator against a genera
 python skills/9design-assets/scripts/validate_asset_manifest.py asset-exports/<project> --check-files --strict
 ```
 
+When changing website QA behavior, smoke test the optional helper entrypoints:
+
+```bash
+node skills/9assets-website/scripts/capture_visual_qa.mjs --help
+node skills/9assets-website/scripts/compare_visual_qa.mjs --help
+python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --out visual-qa/test-ledger.md
+```
+
 ## Pull Request Checklist
 
 Before submitting:

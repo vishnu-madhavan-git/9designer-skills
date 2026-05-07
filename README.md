@@ -208,6 +208,18 @@ python skills/9design-assets/scripts/validate_asset_manifest.py asset-exports/<p
 
 Do not pass checkerboard-backed or screenshot-backed reusable assets into `$9assets-website`.
 
+## Visual QA Helpers
+
+`$9assets-website` includes optional helpers for final website comparison:
+
+```bash
+node skills/9assets-website/scripts/capture_visual_qa.mjs --url http://localhost:5173 --out visual-qa/screenshots
+node skills/9assets-website/scripts/compare_visual_qa.mjs --reference-dir visual-qa/reference --actual-dir visual-qa/screenshots --out visual-qa/diffs
+python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --summary visual-qa/diffs/visual-qa-diff-summary.json
+```
+
+Playwright, pixelmatch, and pngjs are optional project-level tools. If they are unavailable, capture screenshots manually and still keep `docs/research/VISUAL_QA_LEDGER.md` with the same mismatch categories.
+
 ## Contributing
 
 Contributions are welcome when they improve the skill pipeline, examples, docs, validation, or generated-asset workflow.

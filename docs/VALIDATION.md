@@ -60,6 +60,30 @@ Expected result:
 - Older manifests may produce warnings without failing unless `--strict` is used.
 - New exports should include asset roles, responsive variants, accessibility notes, token dependencies, icon policy, and QA notes.
 
+## Visual QA Helper Smoke Tests
+
+These commands must work without installing optional Playwright or pixel diff dependencies:
+
+```bash
+node skills/9assets-website/scripts/capture_visual_qa.mjs --help
+node skills/9assets-website/scripts/compare_visual_qa.mjs --help
+python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --out visual-qa/test-ledger.md
+```
+
+Expected result:
+
+- The Node scripts print help text.
+- The Python script creates a ledger template.
+- No Playwright, pixelmatch, or pngjs dependency is required for these smoke tests.
+
+When optional tooling is installed in a website project, run:
+
+```bash
+node skills/9assets-website/scripts/capture_visual_qa.mjs --url http://localhost:5173 --out visual-qa/screenshots
+node skills/9assets-website/scripts/compare_visual_qa.mjs --reference-dir visual-qa/reference --actual-dir visual-qa/screenshots --out visual-qa/diffs
+python skills/9assets-website/scripts/create_visual_qa_ledger.py --website-root . --summary visual-qa/diffs/visual-qa-diff-summary.json
+```
+
 ## README Media Check
 
 Confirm README image paths exist:
@@ -95,7 +119,5 @@ CHANGELOG.md
 
 These checks are useful when the corresponding optional tooling exists, but they are not required for normal skill validation:
 
-- Run Playwright screenshot capture for desktop, tablet, and mobile website renders.
-- Compare screenshots with pixelmatch or SSIM-style tools and save diffs.
 - Smoke test optional background cleanup tools such as `rembg` only when they are installed.
 - Optimize traced SVGs with SVGO only when SVG assets are intentionally part of the handoff.

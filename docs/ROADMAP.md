@@ -36,6 +36,10 @@ Acceptance:
 - Add optional pixelmatch or SSIM-style diff generation.
 - Generate or update `docs/research/VISUAL_QA_LEDGER.md` from comparison outputs when practical.
 
+Status:
+
+- Implemented with optional Playwright screenshot capture, optional pixelmatch/pngjs diffs, and a dependency-free visual QA ledger generator.
+
 Acceptance:
 
 - Manual visual QA remains supported.

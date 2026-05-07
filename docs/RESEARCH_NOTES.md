@@ -47,6 +47,13 @@ All of these remain optional or roadmap items. They are not required dependencie
 - `remove_background.py` keeps `rembg` optional, reports whether it was attempted, and gives fallback guidance when edge-connected cleanup is used.
 - `create_asset_kit.py` now creates starter `tokens.css`, optional `tokens.json`, and manifest guidance notes for design-kit handoff consistency.
 
+## Phase 3 Visual QA Notes
+
+- `capture_visual_qa.mjs` uses optional Playwright to capture stable desktop, tablet, and mobile screenshots after fonts/images settle and animations are reduced.
+- `compare_visual_qa.mjs` uses optional `pixelmatch` and `pngjs` to create diff PNGs and mismatch summaries when approved reference screenshots are available.
+- `create_visual_qa_ledger.py` creates the required visual QA ledger without dependencies, so manual screenshot comparison remains fully supported.
+- Automated mismatch ratios are treated as review signals. They do not replace human judgment about layout, spacing, typography, color, asset, icon, interaction, or responsive behavior.
+
 ## Future Improvements
 
 - Add an optional `target_stack` decision in prompts: React/Vite default, Next/Tailwind, static HTML/CSS, Vue/Tailwind, or existing repo stack.

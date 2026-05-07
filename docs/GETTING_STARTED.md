@@ -73,7 +73,7 @@ A good 9Designer run should produce:
 - An asset manifest that explains cleanup status and intended use.
 - Manifest validation that catches missing roles, responsive variants, accessibility notes, icon policy, token dependencies, and QA notes before website build.
 - A real responsive frontend site with local assets.
-- Build and visual QA results.
+- Build results plus a visual QA ledger backed by manual screenshots, optional Playwright captures, or optional pixel diffs.
 
 ## 5. Common Mistakes
 

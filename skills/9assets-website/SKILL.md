@@ -15,6 +15,14 @@ Pipeline order:
 
 Optional expanded kit step: `9design-kit` can create broader brand-system boards between design and assets when needed.
 
+Bundled optional QA helpers:
+
+- `scripts/capture_visual_qa.mjs`: captures desktop, tablet, and mobile screenshots with Playwright when Playwright is installed.
+- `scripts/compare_visual_qa.mjs`: creates pixel diff summaries and diff images when `pixelmatch` and `pngjs` are installed.
+- `scripts/create_visual_qa_ledger.py`: creates `docs/research/VISUAL_QA_LEDGER.md` with or without automated summaries.
+
+These helpers are optional. Do not block a website build only because Playwright, pixelmatch, or pngjs is unavailable; use manual browser screenshots and the same ledger categories instead.
+
 ## Core Rule
 
 Treat the exported asset kit as the production source of truth. Do not redesign the brand, regenerate the concept, replace the imagery with stock assets, or fall back to generic sections. Build the website using the supplied assets, manifest, tokens, and reference notes.
@@ -228,6 +236,24 @@ Run the smallest meaningful verification, then broaden as needed:
 - Check for visual drift: wrong spacing, wrong font weight/size, wrong button height, wrong card ratio, wrong background layering, wrong section order, visible asset backgrounds, and mismatched icon/social icon style.
 - Fix issues found during verification.
 
+Optional screenshot capture:
+
+```bash
+node <9assets-website-skill-dir>/scripts/capture_visual_qa.mjs --url "http://localhost:5173" --out visual-qa/screenshots
+```
+
+Optional pixel diff when reference PNGs are available and dependencies are installed:
+
+```bash
+node <9assets-website-skill-dir>/scripts/compare_visual_qa.mjs --reference-dir visual-qa/reference --actual-dir visual-qa/screenshots --out visual-qa/diffs
+```
+
+Ledger generation, with or without automated summaries:
+
+```bash
+python <9assets-website-skill-dir>/scripts/create_visual_qa_ledger.py --website-root "." --asset-export "<asset-export-folder>" --summary "visual-qa/diffs/visual-qa-diff-summary.json"
+```
+
 Screenshot comparison loop:
 
 1. Capture desktop screenshot, preferably at the same aspect ratio as the approved template.
@@ -243,6 +269,7 @@ Visual QA ledger:
 - Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
 - Inspect hover, click, menu, form, social link, tab/filter/carousel, and scroll states that are visible in the design or required by the UI.
 - If a reference dimension cannot be matched exactly, state the blocker and verify the nearest practical viewport.
+- If automated diff artifacts exist, link the screenshot and diff files in the ledger, but still summarize the human-visible mismatch and repair decision.
 
 If the repo has graphify instructions and code files changed, run `graphify update .`.
 

@@ -38,6 +38,8 @@ Do not treat the first generated website as final. The final quality comes from 
 
 Advanced tools such as Playwright, pixelmatch, SSIM comparison, rembg, Segment Anything, SVGO, Sharp, or ImageMagick are optional accelerators unless the user or repository explicitly provides them. Never make a 9Designer run fail only because those optional tools are unavailable; fall back to browser screenshots, manual visual comparison, and the bundled cleanup script.
 
+When the local 9Designer skill scripts are available, prefer the bundled helpers for repeatable QA: `9assets-website/scripts/capture_visual_qa.mjs`, `9assets-website/scripts/compare_visual_qa.mjs`, and `9assets-website/scripts/create_visual_qa_ledger.py`. These helpers remain optional wrappers around the same manual comparison process.
+
 ## Stage 1: Design Prototype
 
 Goal: create the approved visual direction from the single reference image.
@@ -325,6 +327,7 @@ Verification requirements:
 - Start the dev server and provide the local URL.
 - Use browser testing or screenshots for desktop and mobile when available; prefer automated screenshot capture when the environment supports it.
 - Compare desktop and mobile screenshots against the approved prototype/template at matching viewport sizes. Optional pixelmatch or SSIM-style comparison may supplement, but not replace, human visual review.
+- Use the optional `9assets-website` QA helper scripts for screenshot capture, diff summaries, and ledger generation when they are available in the installed skills folder.
 - Iterate on CSS/components/assets until the website closely matches the reference layout, typography scale, spacing, colors, and section rhythm.
 - Fix broken images, console errors, text overflow, layout overlap, and mobile navigation issues.
 - Fix visual drift such as wrong background layering, checkerboard-backed assets, wrong card ratios, wrong button heights, or incorrect font weight/size.

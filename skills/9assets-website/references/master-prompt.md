@@ -82,6 +82,7 @@ Verification:
 - Run npm run build.
 - Start the dev server.
 - Test desktop and mobile views with browser testing or screenshots.
+- Use the optional 9assets-website visual QA helper scripts when available: Playwright screenshot capture, pixel diff comparison, and visual QA ledger generation.
 - Compare desktop and mobile screenshots against the approved reference/template at matching viewport sizes.
 - Iterate until the website closely matches the approved template.
 - Fix broken images, console errors, text overflow, layout overlap, mobile nav issues, visual drift, wrong spacing, wrong font scale, wrong component sizing, and incorrect background layering.
