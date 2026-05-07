@@ -127,6 +127,7 @@ Bundled scripts:
 
 - `scripts/create_asset_export.py`: creates the export folder and manifest.
 - `scripts/remove_background.py`: removes baked-in flat/checkerboard backgrounds and verifies alpha transparency.
+- `scripts/validate_asset_manifest.py`: validates the manifest shape and flags missing Phase 2 fields before website handoff.
 
 Optional cleanup accelerators:
 
@@ -134,6 +135,7 @@ Optional cleanup accelerators:
 - Segment Anything/SAM may be used for difficult object boundaries when available.
 - Pillow, ImageMagick, or Sharp may be used for resizing, alpha inspection, format conversion, or optimization when available.
 - These tools are optional. If they are unavailable, use the bundled cleanup script and regenerate failed assets on a flat neutral background.
+- When `remove_background.py --mode auto` cannot use optional `rembg`, it should fall back cleanly and report fallback guidance instead of blocking the workflow.
 
 ### Step 4: Generate Each Asset Separately With Imagegen
 
@@ -225,6 +227,14 @@ Also create:
 - `notes/builder-handoff.md`
 - `notes/icon-inventory.md`
 - `notes/social-icons.md`
+
+Before handoff, run the manifest validator:
+
+```bash
+python <skill-dir>/scripts/validate_asset_manifest.py "<asset-export-folder>" --check-files
+```
+
+Use `--strict` for new exports that should include every Phase 2 manifest field. Older manifests may produce warnings instead of failures so existing kits remain readable.
 
 The final response must include the export folder path, number of generated images, and any missing or uncertain assets.
 

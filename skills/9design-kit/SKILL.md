@@ -56,6 +56,8 @@ Use `scripts/create_asset_kit.py` to scaffold the folder:
 python <skill-dir>/scripts/create_asset_kit.py --name "<project name>" --root "<workspace>"
 ```
 
+The scaffold creates a Phase 2 manifest shell plus starter `tokens.css`, optional `tokens.json`, and manifest guidance notes. Keep those files updated as assets, fonts, tokens, accessibility rules, and QA notes become known.
+
 Save all generated and authored assets into this structure:
 
 ```text

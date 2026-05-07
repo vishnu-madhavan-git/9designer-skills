@@ -48,6 +48,12 @@ Also run:
 git diff --check
 ```
 
+When changing asset export behavior, run the manifest validator against a generated or fixture export:
+
+```bash
+python skills/9design-assets/scripts/validate_asset_manifest.py asset-exports/<project> --check-files --strict
+```
+
 ## Pull Request Checklist
 
 Before submitting:

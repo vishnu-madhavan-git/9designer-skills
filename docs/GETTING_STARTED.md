@@ -71,6 +71,7 @@ A good 9Designer run should produce:
 - Clean separate assets, not one giant screenshot.
 - Transparent logos, icons, dividers, and overlays where needed.
 - An asset manifest that explains cleanup status and intended use.
+- Manifest validation that catches missing roles, responsive variants, accessibility notes, icon policy, token dependencies, and QA notes before website build.
 - A real responsive frontend site with local assets.
 - Build and visual QA results.
 

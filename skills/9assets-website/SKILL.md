@@ -63,6 +63,14 @@ Read these first when present:
 
 Use exported tokens when available. `tokens.css` should become the source for CSS variables, and `tokens.json` may be used as a machine-readable companion when the stack supports it.
 
+When the 9design-assets validator is available, run it before implementation:
+
+```bash
+python <9design-assets-skill-dir>/scripts/validate_asset_manifest.py "<asset-export-folder>" --check-files
+```
+
+Warnings from older manifests do not block the build, but missing cleanup fields, missing role/accessibility/icon policy notes, or missing ready files must be recorded as risks before coding.
+
 Inventory every asset path and map it to a website role:
 
 - Logo and favicon

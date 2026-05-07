@@ -20,6 +20,10 @@ Acceptance:
 - Extend generated manifests with asset roles, responsive variants, accessibility notes, token dependencies, icon policy, and QA notes.
 - Add optional `rembg` support to background cleanup without replacing the bundled fallback behavior.
 
+Status:
+
+- Implemented with a dependency-free manifest validator, richer scaffolded manifests, and clearer optional `rembg` fallback reporting.
+
 Acceptance:
 
 - Existing manifests remain readable.

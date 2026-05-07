@@ -33,6 +33,7 @@ DEFAULT_ASSETS = [
     ("icon-03-action", "icon", "02-icons", "Core icon 3", "transparent-preferred"),
     ("icon-04-navigation", "icon", "02-icons", "Core icon 4", "transparent-preferred"),
     ("icon-05-accent", "icon", "02-icons", "Core icon 5", "transparent-preferred"),
+    ("social-icon-set", "icon", "02-icons", "Matched social/community icon treatment", "transparent-preferred"),
     ("button-primary", "ui-element", "03-ui-elements", "Primary button image", "isolated-component"),
     ("button-secondary", "ui-element", "03-ui-elements", "Secondary button image", "isolated-component"),
     ("nav-desktop", "ui-element", "03-ui-elements", "Desktop navigation image", "isolated-component"),
@@ -52,6 +53,81 @@ def slugify(value: str) -> str:
     value = re.sub(r"[^a-z0-9]+", "-", value)
     value = re.sub(r"-{2,}", "-", value).strip("-")
     return value or "asset-export"
+
+
+def asset_role(asset_type: str, background_policy: str) -> str:
+    if asset_type == "logo":
+        return "logo"
+    if asset_type == "icon":
+        return "icon"
+    if asset_type == "background":
+        return "background"
+    if asset_type == "texture":
+        return "texture"
+    if asset_type == "overlay":
+        return "transparent-overlay"
+    if background_policy in {"isolated-component", "component-internal-background"}:
+        return "ui-chrome"
+    return "foreground-object"
+
+
+def responsive_variants(asset_type: str, asset_id: str) -> list[str]:
+    if asset_type in {"background", "texture"}:
+        return ["desktop", "tablet", "mobile"]
+    if asset_id in {"nav-desktop", "nav-mobile", "cta-banner", "footer-module", "card-default"}:
+        return ["desktop", "tablet", "mobile"]
+    if asset_type == "logo":
+        return ["desktop", "mobile"]
+    return ["not-applicable"]
+
+
+def accessibility_notes(asset_type: str, asset_id: str) -> dict:
+    if asset_type == "logo":
+        return {
+            "alt_text": "Fill with brand name from the approved design.",
+            "decorative": False,
+            "aria_label": "",
+            "hidden_text_required": asset_id == "logo-wordmark",
+        }
+    if asset_type == "icon":
+        return {
+            "alt_text": "",
+            "decorative": False,
+            "aria_label": "Fill with the icon meaning or platform name.",
+            "hidden_text_required": False,
+        }
+    if asset_type in {"background", "texture", "overlay"}:
+        return {
+            "alt_text": "",
+            "decorative": True,
+            "aria_label": "",
+            "hidden_text_required": False,
+        }
+    return {
+        "alt_text": "",
+        "decorative": True,
+        "aria_label": "",
+        "hidden_text_required": False,
+    }
+
+
+def token_dependencies(asset_type: str, asset_id: str) -> list[str]:
+    dependencies = ["colors"]
+    if asset_type in {"logo", "icon"}:
+        dependencies.extend(["icon-size", "optical-padding"])
+    if asset_type == "ui-element" or asset_id in {"cta-banner", "footer-module"}:
+        dependencies.extend(["typography", "radius", "shadow", "spacing"])
+    if asset_type in {"background", "texture", "overlay"}:
+        dependencies.extend(["gradient", "texture", "opacity"])
+    return dependencies
+
+
+def icon_policy(asset_type: str, asset_id: str) -> str:
+    if asset_id == "social-icon-set":
+        return "generated-transparent-png"
+    if asset_type == "icon":
+        return "generated-transparent-png"
+    return "not-an-icon"
 
 
 def write_if_missing(path: Path, content: str) -> None:
@@ -117,11 +193,17 @@ def main() -> int:
                 "id": asset_id,
                 "type": asset_type,
                 "folder": folder,
+                "path": f"{folder}/{asset_id}.png",
                 "expected_file": f"{asset_id}.png",
                 "clean_file": f"{asset_id}.png",
                 "ready_file": f"06-ready-for-builder/{asset_id}.png",
                 "status": "pending-imagegen",
                 "use": description,
+                "asset_role": asset_role(asset_type, background_policy),
+                "responsive_variants": responsive_variants(asset_type, asset_id),
+                "accessibility": accessibility_notes(asset_type, asset_id),
+                "token_dependencies": token_dependencies(asset_type, asset_id),
+                "icon_policy": icon_policy(asset_type, asset_id),
                 "background_policy": background_policy,
                 "alpha_required": alpha_required,
                 "background_cleanup_required": alpha_required,
@@ -131,11 +213,16 @@ def main() -> int:
                 "background_removal_method": "",
                 "source_reference": source_record,
                 "prompt_summary": "",
+                "text_policy": "no-text",
+                "accessible_text": "",
+                "interaction_state": "not-applicable",
+                "qa_notes": [],
                 "notes": "",
             }
         )
 
     manifest = {
+        "manifest_schema_version": "2.0",
         "project": args.name,
         "created_at": datetime.now().isoformat(timespec="seconds"),
         "export_dir": str(export_dir),
@@ -156,7 +243,7 @@ def main() -> int:
 
     write_if_missing(
         export_dir / "notes" / "asset-plan.md",
-        "# Asset Plan\n\nGenerate each listed asset as its own imagegen output. For every asset with `background_cleanup_required: true`, run `remove_background.py` and verify `alpha_verified: true` before copying it into `06-ready-for-builder/`. Update `asset-export-manifest.json` after each asset is saved and cleaned.\n",
+        "# Asset Plan\n\nGenerate each listed asset as its own imagegen output. For every asset with `background_cleanup_required: true`, run `remove_background.py` and verify `alpha_verified: true` before copying it into `06-ready-for-builder/`. Update `asset-export-manifest.json` after each asset is saved and cleaned. Run `validate_asset_manifest.py` before website handoff so missing roles, responsive variants, accessibility notes, token dependencies, icon policy, and QA notes are visible.\n",
     )
     write_if_missing(
         export_dir / "notes" / "generation-prompts.md",
@@ -169,6 +256,14 @@ def main() -> int:
     write_if_missing(
         export_dir / "notes" / "builder-handoff.md",
         "# Builder Handoff\n\nUse `06-ready-for-builder/` and `asset-export-manifest.json` as input for the website-building skill.\n",
+    )
+    write_if_missing(
+        export_dir / "notes" / "icon-inventory.md",
+        "# Icon Inventory\n\nRecord each core icon, its meaning, source reference, optical size, stroke/fill treatment, color, background cleanup status, and implementation notes.\n",
+    )
+    write_if_missing(
+        export_dir / "notes" / "social-icons.md",
+        "# Social Icons\n\nRecord each platform/community icon, source glyph or generated asset, container treatment, hover/active state, accessible label, and whether it is `official-vector`, `generated-transparent-png`, `custom-svg`, or `code-native`.\n",
     )
 
     print(json.dumps({"asset_export": str(export_dir), "source_kit": source_record}, indent=2))

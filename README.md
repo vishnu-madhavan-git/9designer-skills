@@ -183,13 +183,27 @@ Use it after image generation for logos, icons, overlays, dividers, and reusable
 python skills/9design-assets/scripts/remove_background.py --input generated.png --output cleaned.png --mode auto
 ```
 
+`--mode auto` preserves existing alpha, uses optional `rembg` when installed, then falls back to bundled edge-connected cleanup with clear guidance.
+
 The exporter manifest tracks:
 
 ```text
+asset_role
+responsive_variants
+accessibility
+token_dependencies
+icon_policy
+qa_notes
 background_cleanup_required
 background_cleaned
 alpha_verified
 background_removal_needed
+```
+
+Validate an export folder before website handoff:
+
+```bash
+python skills/9design-assets/scripts/validate_asset_manifest.py asset-exports/<project> --check-files
 ```
 
 Do not pass checkerboard-backed or screenshot-backed reusable assets into `$9assets-website`.

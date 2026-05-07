@@ -60,15 +60,19 @@ def has_meaningful_alpha(image) -> bool:
     return bool(extrema and extrema[0] < 250)
 
 
-def try_rembg(input_path: Path, output_path: Path) -> bool:
+def try_rembg(input_path: Path, output_path: Path) -> tuple[bool, str]:
     try:
         from rembg import remove
-    except ImportError:
-        return False
+    except ImportError as exc:
+        return False, f"Optional rembg is not installed: {exc.name or 'rembg'}"
 
-    data = input_path.read_bytes()
-    output_path.write_bytes(remove(data))
-    return True
+    try:
+        data = input_path.read_bytes()
+        output_path.write_bytes(remove(data))
+    except Exception as exc:  # pragma: no cover - depends on optional rembg runtime
+        return False, f"Optional rembg failed: {exc}"
+
+    return True, "Optional rembg removed the background."
 
 
 def edge_connected_cleanup(image, tolerance: int):
@@ -159,18 +163,34 @@ def main() -> int:
     method = "existing-alpha"
     removed = 0
     bg_colors: list[tuple[int, int, int]] = []
+    rembg_attempted = False
+    rembg_note = ""
 
     if has_meaningful_alpha(image):
         image.save(output_path)
-    elif args.mode in {"auto", "rembg"} and try_rembg(input_path, output_path):
-        method = "rembg"
-        image = Image.open(output_path).convert("RGBA")
     else:
-        method = "edge-connected"
-        image, removed, bg_colors = edge_connected_cleanup(image, args.tolerance)
-        image.save(output_path)
+        rembg_ok = False
+        if args.mode in {"auto", "rembg"}:
+            rembg_attempted = True
+            rembg_ok, rembg_note = try_rembg(input_path, output_path)
+
+        if rembg_ok:
+            method = "rembg"
+            image = Image.open(output_path).convert("RGBA")
+        else:
+            method = "edge-connected"
+            image, removed, bg_colors = edge_connected_cleanup(image, args.tolerance)
+            image.save(output_path)
 
     stats = alpha_stats(image)
+    fallback_guidance = []
+    if rembg_attempted and method != "rembg":
+        fallback_guidance.append(
+            "rembg is optional and was not used. The script fell back to edge-connected cleanup."
+        )
+        fallback_guidance.append(
+            "For complex foregrounds, install rembg or regenerate the asset on a flat neutral background and rerun cleanup."
+        )
     result = {
         "input": str(input_path),
         "output": str(output_path),
@@ -178,6 +198,12 @@ def main() -> int:
         "removed_pixels": removed,
         "background_colors": bg_colors,
         "alpha_verified": stats["alpha_min"] == 0 and stats["transparent_pixels"] > 0,
+        "optional_tools": {
+            "rembg_attempted": rembg_attempted,
+            "rembg_used": method == "rembg",
+            "rembg_note": rembg_note,
+        },
+        "fallback_guidance": fallback_guidance,
         **stats,
     }
     print(json.dumps(result, indent=2))

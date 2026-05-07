@@ -40,10 +40,16 @@ The downloaded Manus plan at `C:\Users\mrvis\Downloads\9Designer Skill Suite Imp
 
 All of these remain optional or roadmap items. They are not required dependencies for a normal 9Designer run.
 
+## Phase 2 Script Notes
+
+- `create_asset_export.py` now scaffolds richer Phase 2 asset records so downstream builders can read role, responsive behavior, accessibility, token, icon, text, state, and QA intent without guessing.
+- `validate_asset_manifest.py` provides a dependency-free check for export folders and keeps older manifests readable by reporting missing Phase 2 fields as warnings unless strict mode is requested.
+- `remove_background.py` keeps `rembg` optional, reports whether it was attempted, and gives fallback guidance when edge-connected cleanup is used.
+- `create_asset_kit.py` now creates starter `tokens.css`, optional `tokens.json`, and manifest guidance notes for design-kit handoff consistency.
+
 ## Future Improvements
 
 - Add an optional `target_stack` decision in prompts: React/Vite default, Next/Tailwind, static HTML/CSS, Vue/Tailwind, or existing repo stack.
-- Add a tiny validation helper that checks for required asset manifest fields and missing media files.
 - Add a sample visual QA ledger from a completed website build.
 - Add optional benchmark examples with before/reference/render/diff images.
 - Add a repo-level gallery index for community-submitted examples.

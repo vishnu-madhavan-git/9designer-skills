@@ -66,15 +66,22 @@ def main() -> int:
             copied_refs.append(str(dest))
 
     manifest = {
+        "manifest_schema_version": "2.0",
         "project": args.name,
         "created_at": datetime.now().isoformat(timespec="seconds"),
         "asset_kit": str(kit_dir),
         "references": copied_refs,
         "assets": [],
         "fonts": [],
-        "design_tokens": {},
+        "design_tokens": {
+            "css": "06-design-tokens/tokens.css",
+            "json": "06-design-tokens/tokens.json",
+            "token_dependencies": [],
+        },
+        "qa_notes": [],
         "notes": [
-            "Update this manifest as assets are generated, authored, optimized, and moved into ready-for-build."
+            "Update this manifest as assets are generated, authored, optimized, and moved into ready-for-build.",
+            "For each asset, record asset_role, responsive_variants, accessibility, token_dependencies, icon_policy, and qa_notes before website handoff.",
         ],
     }
 
@@ -87,12 +94,20 @@ def main() -> int:
         ":root {\n  /* Fill from extracted reference-image design system. */\n}\n",
     )
     write_if_missing(
+        kit_dir / "06-design-tokens" / "tokens.json",
+        "{\n  \"colors\": {},\n  \"typography\": {},\n  \"spacing\": {},\n  \"radii\": {},\n  \"shadows\": {},\n  \"motion\": {}\n}\n",
+    )
+    write_if_missing(
         kit_dir / "05-fonts" / "font-notes.md",
         "# Font Notes\n\n- Exact candidate:\n- Nearest free alternative:\n- Fallback stack:\n- Confidence:\n- Source/licensing notes:\n",
     )
     write_if_missing(
         kit_dir / "notes" / "implementation-notes.md",
         "# Implementation Notes\n\n- Asset source images:\n- Visual rules:\n- Component notes:\n- Open questions:\n",
+    )
+    write_if_missing(
+        kit_dir / "notes" / "manifest-guidance.md",
+        "# Manifest Guidance\n\nBefore website handoff, each reusable asset should include `asset_role`, `responsive_variants`, `accessibility`, `token_dependencies`, `icon_policy`, and `qa_notes`. Use the 9design-assets manifest validator when this kit is exported into an `asset-exports/` folder.\n",
     )
 
     print(json.dumps({"asset_kit": str(kit_dir), "references": copied_refs}, indent=2))
