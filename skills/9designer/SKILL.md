@@ -827,6 +827,78 @@ PAGE: 404.html
 
 ---
 
+## Step 7 -- Fidelity Verification (per page, mandatory)
+
+After building each HTML page, compare the output against the imagegen visual for that page.
+This is not optional. Every gap found must be fixed before moving to the next page.
+
+**Section-by-section fidelity check:**
+
+For each section in the page, answer these questions by reading the imagegen visual
+and the built HTML side by side:
+
+```
+NAV:
+  [ ] Logo mark matches imagegen (icon shape, color, size)?
+      -- If logo SVG doesn't match: redraw SVG paths to match the imagegen mark exactly
+      -- Common fix: logo too wide, icon not recognizable, text sizing wrong
+  [ ] Logo stacking matches (side-by-side vs stacked icon+text)?
+  [ ] Nav link count and labels match?
+  [ ] CTA button style (filled/outlined/color) matches?
+  [ ] Nav position matches (top/left/bottom/floating)?
+
+HERO:
+  [ ] Hero height matches (banner/half/full/super-tall)?
+  [ ] Content position matches (bottom-left/centered/split)?
+  [ ] Headline text size matches (not too small, not overflowing)?
+  [ ] Hero image/illustration is in the correct slot (full-bleed/right-col/absolute)?
+  [ ] CTA buttons are positioned correctly below the headline?
+  [ ] Eyebrow label is present and styled correctly?
+  [ ] LEFT MARGIN: hero content has proper container padding, not flush to edge?
+      -- Critical bug: if hero-content has width:100% it overrides the container
+      -- Fix: ensure .hero-content does NOT set width:100%
+
+EACH SECTION:
+  [ ] Background color matches imagegen?
+  [ ] Layout matches (2-col/3-col/centered/grid)?
+  [ ] Section images are in the correct position and ratio?
+  [ ] Card style (border/no border/dark/light) matches?
+  [ ] Icons match Lucide names shown in imagegen?
+  [ ] Typography weight and size looks proportionally correct?
+
+FOOTER:
+  [ ] Column count matches?
+  [ ] Logo appears in footer at correct size?
+  [ ] Social icons match platforms shown?
+```
+
+**Common fidelity gaps and fixes:**
+
+| Gap | Cause | Fix |
+|---|---|---|
+| Hero text flush to edge | .hero-content has width:100% | Remove width:100% from that rule |
+| Logo wrong shape | SVG paths are blobs, not the mark | Redraw SVG to match imagegen mark |
+| Logo too wide in nav | viewBox aspect ratio too landscape | Tighten viewBox, reduce mark area |
+| Wrong section background | Hardcoded hex instead of token | Use --clr-surface vs --clr-bg correctly |
+| Card borders missing | Card style not matched | Add border: 1px solid var(--clr-border) |
+| Image wrong ratio | aspect-ratio not set | Add aspect-ratio from blueprint spec |
+| Section not matching | Section added extra content | Strip back to what imagegen shows |
+
+**Logo SVG fidelity rules:**
+- The logo SVG must visually match the mark shown in the imagegen at nav size (40px height)
+- Test: render the SVG in isolation at height:40px -- is the mark recognizable?
+- If the mark is an organic shape (animal, object), use smooth bezier curves
+- If the mark looks like a blob, redo the paths
+- viewBox should have an aspect ratio matching the intended render (roughly 3:1 for icon+text logos)
+- Never use letter-spacing so large that text elements overflow the viewBox
+- Always test that text fits inside viewBox at the specified font size + letter-spacing
+
+**After fidelity check:**
+If any section fails, fix it immediately. Do not continue to the next page with known gaps.
+Once all sections pass, move to the next page.
+
+---
+
 ## Rules That Cannot Be Broken
 
 1. Blueprint is written BEFORE imagegen is called. No exceptions.
