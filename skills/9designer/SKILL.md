@@ -1,512 +1,669 @@
 ---
 name: 9designer
-description: "Codex-native image-to-website pipeline. Give any reference image -- a Pinterest pin, screenshot, photo, anything -- and 9designer invents a brand, generates a full landing page visual for confirmation, then builds the complete website (all pages, assets, tokens) once you say go."
+description: "Codex-native image-to-website pipeline. Give any reference image and 9designer writes a complete structured blueprint (brand, colors, fonts, grid, every section spec, every asset slot with exact dimensions and positions), renders that blueprint as an imagegen visual for confirmation, then builds the entire working website directly from the blueprint. The imagegen is a visual proof of the blueprint -- the blueprint drives everything."
 ---
 
 # 9Designer
 
-Give any image. Get a complete website.
+Give any image. 9Designer writes a precise blueprint. Renders it as a visual. You confirm. It builds the complete working website -- every page, every asset, every interaction -- exactly to spec.
 
-9Designer reads any reference image, invents a fitting brand and context, generates a full visual mockup of the landing page for your approval, then builds the entire site once confirmed.
-
----
-
-## The Workflow
-
-```
-[USER] gives any image
-       |
-[STEP 1] Codex analyzes the image
-         - Invents brand name, tagline, category
-         - Extracts color palette, typography style, layout structure
-         - Identifies tone, imagery style, section patterns
-       |
-[STEP 2] Codex generates ONE imagegen visual
-         - Full landing page mockup: nav to footer
-         - All sections visible, real content, real layout
-         - Exact colors, font styles, illustration direction
-       |
-[PAUSE] Codex presents the visual + brief summary
-        "Here is [BRAND NAME] -- a [CATEGORY] landing page.
-         Say GO to build all pages."
-       |
-[USER] says go / yes / build / next / looks good
-       |
-[STEP 3] Codex generates all image assets
-         - Logo (SVG + PNG)
-         - Hero image / illustration
-         - Section images, icons, favicons
-       |
-[STEP 4] Codex builds all pages
-         - index.html (landing page matching the confirmed visual exactly)
-         - All inner pages (features, pricing, about, contact, etc.)
-         - 404.html
-         - tokens.css, tokens.json, tailwind.config.js
-         - sitemap.xml, robots.txt
-       |
-[DONE] Deploy-ready folder delivered
-```
+The blueprint is the contract. The imagegen is the preview. The code is the output.
+Nothing is guessed. Nothing is improvised.
 
 ---
 
-## Step 1 -- Analyze the Image
+## The Architecture
 
-When the user provides any image, extract:
-
-**Brand**
-- Invent a name that fits the aesthetic and category (do not copy names from the image)
-- Write a 1-line tagline
-- Identify category: SaaS / gaming / clothing / food / agency / portfolio / tech / finance / health / other
-
-**Visual System**
-- Dominant colors: extract 4-6 hex codes, name each role (primary, accent, bg, text, surface, border)
-- Typography style: serif editorial / bold condensed / clean sans / mono / display
-- Layout type: full-bleed hero / split hero / centered / asymmetric
-- Imagery style: photography / illustration / 3D render / abstract / geometric / gradient
-
-**Sections**
-- List every section visible or implied: nav, hero, social proof, features, dashboard/preview, pricing, CTA, footer
-- Note layout per section: full-width / 2-col / 3-col / grid / centered
-
-**Tone**
-- Pick one: aggressive / playful / minimal / luxury / editorial / technical / warm / bold
+```
+[USER] gives any reference image
+       |
+[STEP 1] ANALYZE
+         Read the image. Extract design intent:
+         brand direction, category, tone, color palette,
+         layout style, imagery type, section patterns.
+         (30 seconds. No output yet.)
+       |
+[STEP 2] WRITE THE BLUEPRINT
+         Produce the complete structured specification document.
+         Every value locked before imagegen runs:
+         - Brand identity (name, tagline, category)
+         - Exact color tokens (hex codes + roles)
+         - Exact typography (font names, weights, sizes per breakpoint)
+         - Grid system (columns, gaps, container width)
+         - Every section with layout spec, content, dimensions
+         - Every asset slot (type, ratio, position, description)
+         - Every interactive element (behavior, JS pattern)
+         - All pages to be built
+       |
+[STEP 3] GENERATE IMAGEGEN FROM BLUEPRINT
+         Translate the blueprint into one imagegen prompt.
+         The prompt is a visual description of the blueprint --
+         nothing added, nothing invented. Every element in
+         the image was already defined in the blueprint.
+       |
+[PAUSE] PRESENT TO USER
+        Show: imagegen visual + blueprint summary card
+        "Here is [BRAND]. Blueprint is locked. Say GO to build."
+       |
+[USER] says: go / yes / build / next / looks good / proceed
+       |
+[STEP 4] GENERATE ALL ASSETS FROM BLUEPRINT
+         Use asset slots defined in blueprint.
+         Each imagegen call uses the exact prompt, ratio,
+         and style spec written in the blueprint asset list.
+       |
+[STEP 5] BUILD ALL PAGES FROM BLUEPRINT
+         tokens.css is already written in the blueprint.
+         Every section is already specced.
+         Every asset is already named, sized, and positioned.
+         Code is a direct translation of blueprint to HTML/CSS/JS.
+         No decisions made during build -- all decisions already made.
+       |
+[DONE] Deploy-ready website delivered.
+```
 
 ---
 
-## Step 2 -- Generate the Landing Page Visual
+## Step 1 -- Analyze
 
-Build ONE imagegen prompt using everything from Step 1. This prompt generates the full visual confirmation the user approves before any code is written.
+Read the reference image silently. Extract:
 
-**Prompt structure:**
-```
-A full-length [CATEGORY] website landing page for a brand called [NAME].
-[TAGLINE] -- [ONE LINE ON WHAT THE BRAND DOES].
-Vertical scroll layout showing all sections top to bottom:
+- Visual category (SaaS / gaming / fashion / food / agency / portfolio / tech / etc.)
+- Dominant tone (aggressive / minimal / luxury / editorial / playful / technical / warm)
+- Color temperature (dark / light / colorful / monochrome)
+- Layout style (full-bleed / split / centered / asymmetric / editorial)
+- Imagery style (photography / illustration / 3D / abstract / gradient / mixed)
+- Section count and types visible or implied
 
-NAV: [nav description -- logo position, link style, CTA button]
-HERO: [hero layout -- bg type, headline style, subtext, CTA buttons, imagery]
-[SECTION 2 LABEL]: [layout + content description]
-[SECTION 3 LABEL]: [layout + content description]
-[SECTION N LABEL]: [layout + content description]
-FOOTER: [footer layout -- logo, columns, social icons]
-
-Aesthetic: [tone]. Brand colors: [list hex codes].
-Typography: [font style description -- weight, size contrast, character].
-[IMAGERY NOTE: illustration style / photography style / 3D etc].
-Clean professional website mockup, full-page vertical view,
-high detail, sharp, production-ready design.
-```
-
-Generate the image. Do not write any code before the user confirms.
+Do not output anything yet. Carry this into Step 2.
 
 ---
 
-## Step 3 -- PAUSE POINT
+## Step 2 -- Write the Blueprint
 
-After generating the visual, present:
+This is the most important step. Write the complete blueprint document before anything else.
+The blueprint is structured, precise, and complete. Every value is decided here.
+Nothing gets decided during build.
+
+Output the blueprint in this exact format:
+
+```
+========================================
+BLUEPRINT: [BRAND NAME]
+========================================
+
+BRAND
+  name:      [invented brand name fitting the aesthetic]
+  tagline:   [1-line brand tagline]
+  category:  [SaaS / gaming / clothing / food / agency / etc.]
+  tone:      [one word: aggressive / minimal / luxury / editorial / technical / warm / bold]
+  domain:    [brand-name.com]
+
+----------------------------------------
+COLORS
+----------------------------------------
+  --clr-primary:     #[hex]   [role: main brand color]
+  --clr-accent:      #[hex]   [role: highlight, CTAs]
+  --clr-bg:          #[hex]   [role: page background]
+  --clr-surface:     #[hex]   [role: cards, panels]
+  --clr-surface-2:   #[hex]   [role: elevated surface, borders]
+  --clr-text:        #[hex]   [role: primary text]
+  --clr-text-muted:  #[hex]   [role: secondary text, captions]
+  --clr-border:      #[hex]   [role: dividers, outlines]
+
+----------------------------------------
+TYPOGRAPHY
+----------------------------------------
+  display-font:  [Font Name], [weight], [style]  -- Google Fonts
+  heading-font:  [Font Name], [weight]            -- Google Fonts
+  body-font:     [Font Name], [weight]            -- Google Fonts
+  mono-font:     [Font Name], [weight]            -- Google Fonts (if numbers/code used)
+
+  Desktop scale:
+    hero-text:    [px] / line-height [ratio] / letter-spacing [em]
+    h1:           [px] / line-height [ratio]
+    h2:           [px] / line-height [ratio]
+    h3:           [px] / line-height [ratio]
+    body:         [px] / line-height [ratio]
+    small:        [px]
+    label:        [px] / letter-spacing [em] / uppercase [yes/no]
+
+  Mobile scale (375px):
+    hero-text:    [px]
+    h1:           [px]
+    h2:           [px]
+    h3:           [px]
+    body:         [px]
+
+----------------------------------------
+GRID
+----------------------------------------
+  container:      max-width [px], padding 0 [px] desktop / 0 [px] mobile
+  columns:        [12 / 6 / custom]
+  column-gap:     [px]
+  row-gap:        [px]
+  section-padding: [px] vertical desktop / [px] vertical mobile
+
+----------------------------------------
+SECTIONS
+----------------------------------------
+
+[1] NAV
+  layout:         horizontal, space-between, sticky top
+  height:         [px]
+  bg:             [color / transparent --> blur-on-scroll]
+  logo:           left, height [px], [SVG wordmark / icon + text]
+  links:          center / right, [N] items, [font], [size]px, color [hex]
+  cta-button:     [label], [filled/outlined], bg [hex], text [hex], h [px], padding [px px], radius [px]
+  mobile:         hamburger below [px]px, menu slides in from [top/right]
+
+[2] HERO
+  layout:         [split [%/% left/right] / centered / full-bleed]
+  height:         [100vh / [px]px / auto]
+  bg:             [color / gradient: [from] --> [to], [angle]deg / image full-bleed]
+  content-col:    [% width if split]
+  image-col:      [% width if split]
+
+  headline:
+    text:         "[HEADLINE TEXT]"
+    font:         [display-font], [weight], [size]px desktop / [size]px mobile
+    color:        [hex]
+    position:     [left-aligned / centered / bottom-left overlay]
+    transform:    [uppercase / none]
+    max-width:    [px]
+
+  subtext:
+    text:         "[SUBTEXT]"
+    font:         [body-font], [weight], [size]px
+    color:        [hex]
+    max-width:    [px]
+    margin-top:   [px]
+
+  cta-primary:
+    label:        "[LABEL]"
+    bg:           [hex], hover: [hex]
+    text:         [hex]
+    height:       [px]
+    padding:      [px] [px]
+    border-radius:[px]
+    margin-top:   [px]
+
+  cta-secondary:
+    label:        "[LABEL]"
+    style:        [outlined / ghost / text-link]
+    border-color: [hex]
+    text:         [hex]
+    margin-left:  [px]
+
+  hero-asset:
+    slot-name:    hero-illustration (or hero-bg or hero-photo)
+    type:         [illustration / photograph / 3D render / abstract]
+    placement:    [right-column / absolute-right / full-bleed-bg / bottom-right]
+    aspect-ratio: [16/9 / 4/3 / 1/1 / 3/4]
+    width:        [% of container or px]
+    object-fit:   [cover / contain]
+    imagegen-description: "[exact visual description for asset generation]"
+
+[3] [SECTION NAME]
+  label:          "[SECTION LABEL]" (small uppercase tag above headline)
+  layout:         [full-width / 2-col [%/%] / 3-col equal / grid [cols x rows] / centered]
+  bg:             [hex]
+  padding:        [px] vertical
+  headline:       "[TEXT]", [font], [size]px, [color]
+  body:           "[TEXT]", [font], [size]px, [color]
+  asset-slot:     [slot-name], [type], [ratio], [position in layout]
+  components:     [list: card / stat / badge / avatar / icon-row / etc.]
+  
+  [For each card/component in this section:]
+  card:
+    width:        [px or fraction]
+    bg:           [hex]
+    radius:       [px]
+    padding:      [px]
+    border:       [px solid hex / none]
+    icon:         [Lucide icon name / custom SVG slot-name]
+    headline:     [size]px, [font], [weight]
+    body:         [size]px, [color]
+    cta:          [label / none]
+
+[4...N] [repeat for every section]
+
+[N] FOOTER
+  layout:         [full-width, columns]
+  bg:             [hex]
+  padding:        [px] top / [px] bottom
+  logo:           left column, height [px]
+  tagline:        [size]px below logo
+  columns:        [N] link columns, [label], [N] links each
+  social-icons:   [platform list], [size]px, color [hex]
+  legal:          copyright text, [size]px, [color]
+  border-top:     [px solid hex / none]
+
+----------------------------------------
+ASSET LIST
+----------------------------------------
+  [Every asset that will be generated via imagegen or Lucide.]
+  Format: slot-name | type | ratio | dimensions | position-in-layout | imagegen-prompt
+
+  hero-illustration | illustration | 4/3 | 600px wide | right column, vertically centered |
+    "[Detailed imagegen prompt. Style, subject, colors, mood, format.]"
+
+  logo-main | SVG wordmark | 1/1 | 160x40px | nav top-left and footer |
+    "[Logo description: style, letterforms, mark, colors, transparent bg]"
+
+  favicon | PNG icon | 1/1 | 64x64px | browser tab |
+    "[Simplified logo mark, square, bold, readable at small size]"
+
+  [section-img-1] | [type] | [ratio] | [size] | [position] |
+    "[imagegen prompt]"
+
+  [repeat for every image asset in the design]
+
+  Lucide icons used:
+    [section] -- [icon-name]: [usage]
+    [section] -- [icon-name]: [usage]
+
+----------------------------------------
+INTERACTIVE ELEMENTS
+----------------------------------------
+  hamburger-menu:  below [px]px, toggle .nav-open on <body>, slides from top/right
+  scroll-reveal:   .reveal class, IntersectionObserver threshold 0.15, translateY 24px --> 0, 0.5s ease
+  pricing-toggle:  monthly/yearly, swaps [data-monthly]/[data-yearly] attributes
+  dark-mode:       [yes / no], localStorage key "theme", class "dark" on <html>
+  smooth-scroll:   all nav anchor links
+  form-validation: [which page], required fields, email format, loading state, success message
+  [other components from visual: tabs / accordion / carousel / counter / etc.]
+
+----------------------------------------
+PAGES TO BUILD
+----------------------------------------
+  index.html       -- landing page (this blueprint)
+  features.html    -- [brief description of page purpose]
+  pricing.html     -- [brief description]
+  about.html       -- [brief description]
+  contact.html     -- [brief description]
+  404.html         -- on-brand error page
+  [additional pages if visible in reference]
+
+========================================
+BLUEPRINT COMPLETE
+========================================
+```
+
+This document is the single source of truth. Every decision is made here. Nothing changes during build.
+
+---
+
+## Step 3 -- Generate Imagegen Visual FROM Blueprint
+
+Translate the blueprint into one imagegen prompt. The visual must reflect what is written
+in the blueprint -- every section, every layout, every color, every asset slot.
+
+Build the prompt by reading the blueprint top to bottom:
+
+```
+A full-length [CATEGORY] website landing page for a brand called [BRAND NAME].
+"[TAGLINE]"
+
+Vertical scroll layout showing all sections in this exact order:
+
+[1] NAV: [exact nav description from blueprint]
+[2] HERO: [exact hero spec from blueprint -- layout %, headline text, cta positions, image slot]
+[3] [SECTION NAME]: [exact section spec]
+[4] [SECTION NAME]: [exact section spec]
+...
+[N] FOOTER: [exact footer spec]
+
+Exact colors: primary [hex], accent [hex], bg [hex], surface [hex], text [hex].
+Typography: [display-font] [weight] for headlines, [body-font] for body text.
+Imagery: [imagery style description].
+Tone: [tone]. Layout precision: [grid and spacing description].
+Clean professional website mockup, full vertical page view,
+all sections visible, high detail, sharp, pixel-perfect design reference.
+```
+
+Generate the image. Do not proceed to PAUSE until the image is generated.
+
+---
+
+## Step 4 -- PAUSE POINT
+
+Present the visual and a compressed blueprint summary:
 
 ```
 +----------------------------------------------------------+
-|  DESIGN READY FOR REVIEW                                 |
+|  BLUEPRINT LOCKED -- VISUAL READY FOR REVIEW             |
 +----------------------------------------------------------+
-|  Brand:     [NAME]                                       |
-|  Category:  [CATEGORY]                                   |
-|  Tagline:   [TAGLINE]                                    |
-|  Tone:      [TONE]                                       |
+|  Brand:     [NAME] -- [TAGLINE]                          |
+|  Category:  [CATEGORY]  |  Tone: [TONE]                  |
 |  Colors:    [PRIMARY] [ACCENT] [BG] [TEXT]               |
-|  Pages:     index, [list all pages], 404                 |
+|  Fonts:     [DISPLAY FONT] + [BODY FONT]                 |
+|  Sections:  [N] sections -- [list names]                 |
+|  Assets:    [N] images to generate + [N] Lucide icons    |
+|  Pages:     [list all pages]                             |
 +----------------------------------------------------------+
-|  Say GO to build. Tell me what to change if needed.     |
+|  The blueprint is locked. This visual is built from it.  |
+|  Say GO to generate all assets and build the website.    |
+|  Tell me what to change if anything looks off.           |
 +----------------------------------------------------------+
 ```
 
-Wait for the user. Do not proceed until confirmed.
+Wait for the user. Do not generate assets or write code before confirmation.
 
-Valid signals to continue: go / yes / build / next / looks good / perfect / do it / proceed
+Valid signals: go / yes / build / next / looks good / perfect / do it / proceed
+
+If the user requests a change -- update the blueprint first, then re-generate the imagegen visual.
+Never re-generate the visual without updating the blueprint. They must stay in sync.
 
 ---
 
-## Step 3b -- Visual Map (extract from confirmed visual)
+## Step 5 -- Generate All Assets FROM Blueprint
 
-Before generating any asset or writing any code, read the confirmed imagegen visual
-and document the exact element map. This map is the contract everything is built against.
-
-```
-VISUAL MAP
-----------
-Sections (in order):
-  1. nav
-  2. hero
-  3. [section name]
-  ...
-  N. footer
-
-Asset slots:
-  hero-bg:          [full-bleed / right-col / floating] -- [description]
-  feature-img-1:    [position in section] -- [description]
-  gallery-1 to N:   [grid position] -- [description]
-  logo:             [nav top-left / centered]
-
-Text overlays:
-  hero-headline:    [position: centered / bottom-left / top-left]
-  hero-sub:         [position relative to headline]
-
-Buttons / CTAs:
-  primary-cta:      [label] [position in hero]
-  secondary-cta:    [label] [position]
-  nav-cta:          [label] [style: filled / outlined]
-
-Toggles detected:
-  pricing-toggle:   [yes / no]
-  dark-mode:        [yes / no]
-  tabs/accordion:   [yes / no -- which section]
-
-Interactive components:
-  [list every interactive element visible in the confirmed visual]
-```
-
-Do not skip this step. Every asset slot must be named before any imagegen call is made.
-
----
-
-## Step 4 -- Generate All Assets (after GO)
-
-Before writing a single line of HTML, generate all image assets via imagegen.
+Read the ASSET LIST section of the blueprint. Generate each asset in order using the
+exact imagegen prompt written in the blueprint. Do not modify prompts during generation.
 
 Generate in this order:
+1. logo-main (SVG wordmark -- used in nav and footer)
+2. favicon (simplified mark)
+3. hero-illustration or hero-photo (largest, most important asset)
+4. All section images (in section order)
+5. Gallery images (in grid order: gallery-1, gallery-2, ... gallery-N)
 
-1. **Logo** -- brand mark + wordmark, on transparent background, vector clean
-2. **Favicon** -- simplified logo mark, 32x32 appropriate
-3. **Hero image / illustration** -- matches hero section from confirmed visual
-4. **Section images** -- any photography, illustrations, or background images used in sections
-5. **Icons** -- if custom icons needed beyond Lucide/standard libraries
+After each generation, verify against blueprint spec:
+- Correct aspect ratio
+- Colors match blueprint palette
+- Style consistent with other generated assets
 
-Each imagegen prompt must reference the confirmed visual's exact style, colors, and tone. Assets must look like they belong to the same brand.
-
-**Asset generation checklist -- verify before writing any HTML:**
+Asset generation checklist:
 ```
-[ ] Logo generated: SVG + PNG, transparent background
-[ ] Favicon generated: simplified mark, square crop
-[ ] Hero image/illustration generated: matches hero slot in visual map
-[ ] All section images generated: count matches visual map asset slots
-[ ] Gallery images generated: all same aspect ratio, consistent style
-[ ] All assets visually match brand tone and color palette
+[ ] logo-main generated: SVG, transparent bg, matches brand identity
+[ ] favicon generated: simplified mark, square, bold
+[ ] hero asset generated: correct ratio, correct style, dominant colors match
+[ ] all section assets generated: count matches ASSET LIST
+[ ] all gallery images generated: same ratio, consistent visual style
+[ ] all assets visually belong to the same brand system
 ```
 
-Do not proceed to Step 5 until all boxes are checked.
+Do not proceed to Step 6 until all assets are checked.
 
 ---
 
-## Step 5 -- Build All Pages
+## Step 6 -- Build All Pages FROM Blueprint
 
-Build in this order. Complete each file fully before moving to the next.
+Build in this order. Complete each file fully before starting the next.
 
-### Design Tokens First
+### 6a -- tokens.css (first file, always)
 
-Generate `tokens.css` before any HTML:
+The color and typography values come directly from the blueprint COLORS and TYPOGRAPHY sections.
+Do not invent values. Transcribe from blueprint.
 
 ```css
 :root {
-  /* Colors */
-  --clr-primary:    [hex];
-  --clr-accent:     [hex];
-  --clr-bg:         [hex];
-  --clr-surface:    [hex];
-  --clr-text:       [hex];
-  --clr-text-muted: [hex];
-  --clr-border:     [hex];
+  /* From blueprint COLORS */
+  --clr-primary:    [exact hex from blueprint];
+  --clr-accent:     [exact hex from blueprint];
+  --clr-bg:         [exact hex from blueprint];
+  --clr-surface:    [exact hex from blueprint];
+  --clr-surface-2:  [exact hex from blueprint];
+  --clr-text:       [exact hex from blueprint];
+  --clr-text-muted: [exact hex from blueprint];
+  --clr-border:     [exact hex from blueprint];
 
-  /* Typography */
-  --font-display: '[Font Name]', sans-serif;
-  --font-body:    '[Font Name]', sans-serif;
+  /* From blueprint TYPOGRAPHY */
+  --font-display:  '[display-font]', sans-serif;
+  --font-heading:  '[heading-font]', sans-serif;
+  --font-body:     '[body-font]', sans-serif;
+  --font-mono:     '[mono-font]', monospace;
 
-  /* Typescale (Perfect Fourth 1.333) */
-  --text-xs:   0.75rem;
-  --text-sm:   1rem;
-  --text-base: 1.333rem;
-  --text-lg:   1.777rem;
-  --text-xl:   2.369rem;
-  --text-2xl:  3.157rem;
-  --text-3xl:  4.209rem;
-  --text-4xl:  5.61rem;
+  /* From blueprint TYPOGRAPHY desktop scale */
+  --text-hero:  [px from blueprint];
+  --text-h1:    [px from blueprint];
+  --text-h2:    [px from blueprint];
+  --text-h3:    [px from blueprint];
+  --text-body:  [px from blueprint];
+  --text-sm:    [px from blueprint];
+  --text-label: [px from blueprint];
+
+  /* From blueprint GRID */
+  --container:     [px from blueprint];
+  --section-pad-v: [px from blueprint];
+  --col-gap:       [px from blueprint];
 
   /* Spacing (8px grid) */
-  --space-1:  8px;
-  --space-2:  16px;
-  --space-3:  24px;
-  --space-4:  32px;
-  --space-6:  48px;
-  --space-8:  64px;
-  --space-12: 96px;
-  --space-16: 128px;
+  --sp-1: 8px;  --sp-2: 16px; --sp-3: 24px; --sp-4: 32px;
+  --sp-6: 48px; --sp-8: 64px; --sp-12: 96px; --sp-16: 128px;
 
   /* Radii */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
+  --radius-sm: 4px; --radius-md: 8px;
+  --radius-lg: 16px; --radius-full: 9999px;
+}
+
+/* Mobile scale -- from blueprint TYPOGRAPHY mobile scale */
+@media (max-width: 767px) {
+  :root {
+    --text-hero: [mobile px from blueprint];
+    --text-h1:   [mobile px from blueprint];
+    --text-h2:   [mobile px from blueprint];
+    --text-h3:   [mobile px from blueprint];
+  }
 }
 ```
 
-Also generate `tokens.json` (Style Dictionary format) and `tailwind.config.js`.
+Also write tokens.json (Style Dictionary format) and tailwind.config.js from the same values.
 
-### Pages
+### 6b -- index.html
 
-Build each page as a complete standalone HTML file:
+Build section by section, following blueprint SECTIONS in exact order.
+For each section, read the blueprint spec and implement it directly.
 
-**index.html** -- landing page, exact match to confirmed visual
-- Nav with all links, CTA button
-- Every section in the confirmed order
-- All generated assets embedded
-- Scroll animations (IntersectionObserver, CSS transitions)
-- Mobile hamburger menu
+**Asset placement rules (from blueprint ASSET LIST):**
 
-**[feature/product].html** -- expanded features or product detail
-**pricing.html** -- pricing tiers, toggle monthly/yearly
-**about.html** -- brand story, team if applicable
-**contact.html** -- contact form, locations if applicable
-**404.html** -- on-brand error page
+| Placement type | CSS implementation |
+|---|---|
+| full-bleed-bg | background-image: url(); background-size: cover; background-position: center |
+| right-column | grid column 2; width 100%; height auto; object-fit: contain |
+| absolute-right | position: absolute; right: 0; top: 50%; transform: translateY(-50%) |
+| inline-card | width 100%; aspect-ratio: [from blueprint]; object-fit: cover |
+| gallery-grid | CSS grid; grid-template-columns: repeat([N], 1fr); aspect-ratio: [from blueprint] |
 
-### Asset placement rules (from visual map)
+All images get:
+- `alt="[descriptive text matching imagegen description]"` -- never blank
+- `loading="lazy"` on all below-fold images
+- `width` and `height` attributes matching blueprint dimensions (prevents layout shift)
 
-Hero image:
-- Full-bleed bg: `background-image` on section, `background-size: cover`, `background-position: center`
-- Right-col illustration: CSS grid column 2, `max-width: 100%`, `height: auto`
-- Floating/layered: `position: absolute` inside `position: relative` hero, `z-index` layered
+**Interactive elements -- all from blueprint INTERACTIVE ELEMENTS section:**
 
-Section images:
-- Match exact grid position from visual map
-- Set `aspect-ratio` CSS to prevent layout shift: `aspect-ratio: 16/9` or `4/3` or `1/1`
-- All below-fold images: `loading="lazy"`
-
-Gallery images:
-- CSS grid with explicit column count: `grid-template-columns: repeat(N, 1fr)`
-- Responsive: 1-col mobile, 2-col tablet, N-col desktop
-- Consistent aspect-ratio across all cells
-
-Logo:
-- Nav: `height: 36px; width: auto`
-- Footer: `height: 28px; width: auto; opacity: 0.85`
-
-### Required in every page
-
-- `<link rel="canonical">` and full Open Graph meta tags
-- Skip-to-main link for accessibility
-- Dark mode support via `prefers-color-scheme`
-- Responsive: 375px / 768px / 1024px / 1440px
-- No horizontal scroll at any breakpoint
-- All images have descriptive `alt` text
-
-### Interactive elements (must be functional, not decorative)
-
-**Hamburger menu:**
+Hamburger:
 ```javascript
-const burger = document.querySelector('.burger');
-const nav = document.querySelector('.nav-menu');
+const burger = document.querySelector('[data-burger]');
+const menu = document.querySelector('[data-nav-menu]');
 burger.addEventListener('click', () => {
-  nav.classList.toggle('open');
-  burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+  const open = menu.classList.toggle('is-open');
+  burger.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
 });
 ```
+
+Scroll reveal:
+```javascript
+const io = new IntersectionObserver(
+  entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('revealed')),
+  { threshold: 0.15 }
+);
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+```
 ```css
-.nav-menu { display: none; }
-.nav-menu.open { display: flex; flex-direction: column; }
-@media (min-width: 768px) { .nav-menu { display: flex; } .burger { display: none; } }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .5s ease, transform .5s ease; }
+.reveal.revealed { opacity: 1; transform: none; }
 ```
 
-**Pricing toggle (monthly/yearly):**
+Pricing toggle (if in blueprint):
 ```javascript
-const toggle = document.querySelector('.pricing-toggle');
-const prices = document.querySelectorAll('[data-monthly][data-yearly]');
-toggle.addEventListener('change', () => {
-  const isYearly = toggle.checked;
-  prices.forEach(el => {
-    el.textContent = isYearly ? el.dataset.yearly : el.dataset.monthly;
+const toggle = document.querySelector('[data-pricing-toggle]');
+document.querySelectorAll('[data-monthly]').forEach(el => {
+  toggle.addEventListener('change', () => {
+    el.textContent = toggle.checked ? el.dataset.yearly : el.dataset.monthly;
   });
 });
 ```
 
-**Dark mode:**
+Dark mode (if in blueprint):
 ```javascript
 const root = document.documentElement;
-const saved = localStorage.getItem('theme');
-if (saved) root.classList.add(saved);
-document.querySelector('.theme-toggle')?.addEventListener('click', () => {
+const saved = localStorage.getItem('theme') || 'light';
+root.classList.add(saved);
+document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
   root.classList.toggle('dark');
   localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
 });
 ```
 
-**Form validation:**
+Form (if in blueprint):
 ```javascript
-document.querySelector('form')?.addEventListener('submit', (e) => {
+document.querySelector('[data-form]')?.addEventListener('submit', e => {
   e.preventDefault();
-  const email = e.target.querySelector('[type="email"]');
-  if (!email.value.includes('@')) {
-    email.setCustomValidity('Enter a valid email');
-    email.reportValidity();
-    return;
+  const btn = e.target.querySelector('[type=submit]');
+  const email = e.target.querySelector('[type=email]');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    email.setCustomValidity('Enter a valid email'); email.reportValidity(); return;
   }
-  e.target.querySelector('[type="submit"]').textContent = 'Sending...';
+  btn.textContent = 'Sending...'; btn.disabled = true;
   setTimeout(() => {
-    e.target.innerHTML = '<p class="success">You\'re in. Check your inbox.</p>';
+    e.target.innerHTML = '<p class="form-success">You\'re in. Check your inbox.</p>';
   }, 1200);
 });
 ```
 
 **index.html build checklist -- verify before moving to next page:**
 ```
-[ ] All sections present in order matching visual map
-[ ] All assets placed in correct slots (no placeholder divs)
-[ ] All alt="" attributes filled with descriptive text
-[ ] Nav: all links present, CTA button styled
-[ ] Hamburger: JS toggle works, menu opens/closes
-[ ] Smooth scroll: anchor links scroll correctly
-[ ] All CTA buttons have valid href or onclick
-[ ] Pricing toggle: swaps prices correctly (if present)
-[ ] Dark mode: persists on reload via localStorage (if present)
-[ ] Forms: validation + loading + success state
-[ ] Scroll reveal: IntersectionObserver applied to .reveal elements
-[ ] No hardcoded hex -- all colors via tokens.css variables
-[ ] Google Fonts CDN loaded in <head>
-[ ] Open Graph meta tags complete
-[ ] canonical link present
+[ ] All sections present in blueprint order
+[ ] All asset slots filled with generated images (no placeholder divs)
+[ ] All alt attributes: descriptive, not blank
+[ ] All colors from tokens.css variables (zero hardcoded hex)
+[ ] Google Fonts CDN in <head> for all fonts in blueprint
+[ ] Nav: all links, CTA button, hamburger trigger
+[ ] Hamburger: JS implemented, aria-expanded, body scroll lock
+[ ] Smooth scroll: all anchor links have scroll-behavior
+[ ] All CTA buttons: valid href or data attribute
+[ ] Pricing toggle: JS implemented if in blueprint
+[ ] Dark mode: JS + CSS if in blueprint
+[ ] Form: validation + loading + success if in blueprint
+[ ] Scroll reveal: .reveal on all content elements
+[ ] Open Graph meta tags: title, description, image, url
+[ ] canonical <link> in <head>
+[ ] viewport meta tag present
+[ ] No horizontal scroll (check all section widths)
 ```
 
-**Responsive checklist -- run mentally for every page:**
+**Responsive checklist -- verify for every page:**
 ```
 375px mobile:
-[ ] Hamburger visible, desktop nav hidden
-[ ] Hero single column, headline readable (min 28px)
-[ ] All sections stack vertically
-[ ] No element overflows horizontally
-[ ] Buttons/links min 44px tall
-[ ] Font sizes min 14px
+  [ ] Hamburger visible, desktop nav hidden
+  [ ] Hero: single column, font >= blueprint mobile scale
+  [ ] All grids: collapsed to 1 column
+  [ ] No element wider than viewport
+  [ ] All buttons and links: min-height 44px (tap targets)
+  [ ] No font smaller than 14px
 
 768px tablet:
-[ ] Nav hamburger or compact links
-[ ] 2-col grids active where appropriate
-[ ] Hero image visible alongside text
-[ ] Feature/pricing cards in 2-col grid
+  [ ] Nav: hamburger or compact
+  [ ] 2-col grids active where blueprint specifies
+  [ ] Hero image visible alongside text
+  [ ] Cards: 2-per-row
 
 1024px laptop:
-[ ] Full horizontal nav
-[ ] 3-col grids active
-[ ] Containers properly bounded
+  [ ] Full nav visible
+  [ ] 3-col grids active where blueprint specifies
+  [ ] Container bounded, not full-bleed
 
 1440px desktop:
-[ ] Max-width container (1200px or 1280px) centered
-[ ] No content edge-to-edge without padding
-[ ] Layout matches confirmed visual proportions
+  [ ] Container max-width from blueprint enforced
+  [ ] No content stretching beyond container
+  [ ] Layout matches blueprint section specs
 ```
 
-### Scroll animations (standard pattern)
+### 6c -- Inner Pages (same blueprint-first process)
 
-```javascript
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('visible');
-  });
-}, { threshold: 0.15 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+For each inner page in the blueprint PAGES list:
+
+**1. Write the inner page blueprint:**
+
+Extend the main blueprint with page-specific sections. Same brand, same tokens, same nav.
+Add the page-specific content spec:
+
+features.html blueprint addition:
+```
+PAGE: features.html
+Sections:
+  PAGE-HERO: headline "[Features headline]", subtext, muted bg matching --clr-surface
+  FEATURES-ALTERNATING: rows alternating dark/light bg, image left + text right then flip
+    each row: asset-slot | [ratio] | description
+  COMPARISON-TABLE: columns [Brand], [Comp A], [Comp B]; rows = feature list; checkmarks/X
+  DEMO-PREVIEW: full-width screenshot or UI mockup, caption below, border radius [px]
+  PAGE-CTA: same full-width CTA banner as landing page
 ```
 
-```css
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
-.reveal.visible { opacity: 1; transform: none; }
+pricing.html blueprint addition:
 ```
+PAGE: pricing.html
+Sections:
+  PAGE-HERO: "Choose Your [X]" headline, monthly/yearly toggle above cards
+  PRICING-CARDS: 3-col, card specs:
+    tier-1: [name], $[price]/mo, [N] features, [CTA label], bg --clr-surface
+    tier-2: [name HIGHLIGHTED], $[price]/mo, [N] features, [CTA label], bg --clr-primary
+    tier-3: [name], $[price]/mo, [N] features, [CTA label], bg --clr-surface
+  FAQ: accordion, [N] questions, one open at a time
+  PAGE-CTA: same CTA banner
+```
+
+about.html blueprint addition:
+```
+PAGE: about.html
+Sections:
+  PAGE-HERO: mission statement headline, full-bleed or muted bg
+  STORY: 2-col 50/50, text left, image right, asset-slot: about-photo | 4/3
+  VALUES: 3-col cards, icon + headline + body each
+  TEAM: grid [N]-col, each card: photo (asset-slot: team-[N] | 1/1) + name + role
+  TIMELINE: [horizontal/vertical], [N] milestones
+```
+
+contact.html blueprint addition:
+```
+PAGE: contact.html
+Sections:
+  PAGE-HERO: minimal, "Get in Touch" headline
+  CONTACT-SPLIT: 2-col 55/45
+    left: form (name, email, message, submit)
+    right: contact details, address, hours, social links
+  MAP: full-width, 400px height, --clr-surface bg, map icon centered
+```
+
+404.html blueprint addition:
+```
+PAGE: 404.html
+  centered, 100vh
+  "404" display text [display-font], [large size]px, --clr-primary
+  headline: "Page not found."
+  subtext: "[friendly brand-voice message]"
+  cta: "Back to Home" --> index.html, filled primary button
+  bg: --clr-bg or brand gradient
+```
+
+**2. Generate imagegen visual for that page FROM its blueprint**
+**3. Build HTML from page blueprint**
+**4. Run build checklist and responsive checklist**
 
 ---
 
-## Step 5b -- Inner Pages (imagegen-first for every page)
-
-When the user asks for inner pages after confirming the landing page, OR when building
-all pages automatically after GO -- every inner page follows the same visual-first process.
-
-For EACH inner page:
-
-**1. Generate imagegen prompt for that page:**
-
-Use the same brand name, colors, nav style, and typography from the confirmed landing page.
-Describe the page-specific content and layout. Example templates:
-
-features.html:
-```
-Full features/product page for [BRAND], [TAGLINE].
-Same nav as landing page. Page-specific sections:
-HERO: page hero with headline "[Feature headline]", subtext, muted bg
-FEATURES GRID: alternating dark/light rows, feature cards with icons left and text right
-COMPARISON TABLE: feature matrix vs competitors, checkmarks/crosses
-DEMO PREVIEW: screenshot or UI mockup with caption
-CTA: full-width CTA banner matching landing page style
-FOOTER: identical to landing page footer
-Brand colors: [palette]. Typography: [style]. Same aesthetic as confirmed landing page.
-Clean professional website page mockup, full-page vertical view.
-```
-
-pricing.html:
-```
-Pricing page for [BRAND], [TAGLINE].
-Same nav as landing page. Sections:
-HEADER: "Choose Your Plan" headline, monthly/yearly toggle
-PRICING CARDS: 3 tiers side by side -- [Free/Starter], [Pro highlighted], [Enterprise]
-Each card: price, billing period, feature list with checkmarks, CTA button
-FAQ ACCORDION: 5-6 common pricing questions, expandable
-CTA BANNER: bottom full-width CTA
-FOOTER: identical to landing page
-Brand colors: [palette]. Highlighted card uses accent color.
-```
-
-about.html:
-```
-About page for [BRAND], [TAGLINE].
-Same nav as landing page. Sections:
-MISSION HERO: bold statement headline, muted full-width bg
-STORY SECTION: 2-col -- paragraph text left, brand image right
-VALUES GRID: 3-col icon + title + text cards
-TEAM GRID: 3-4 team member cards with photo, name, role
-TIMELINE: horizontal or vertical milestone list
-FOOTER: identical to landing page
-Brand colors: [palette]. Warm, human tone.
-```
-
-contact.html:
-```
-Contact page for [BRAND].
-Same nav as landing page. Sections:
-CONTACT HERO: minimal headline, subtext
-SPLIT LAYOUT: form left (name, email, message, submit), contact info right (email, address, hours)
-MAP PLACEHOLDER: full-width map area (dark surface color bg with map icon)
-SOCIAL LINKS: row of social icons
-FOOTER: identical to landing page
-Brand colors: [palette].
-```
-
-404.html:
-```
-On-brand 404 error page for [BRAND].
-Centered layout, full viewport height.
-Large "404" display text in brand font.
-Short friendly message: "Page not found. Let's get you back."
-"Go Home" CTA button in brand primary color.
-Subtle background using brand colors (gradient or texture).
-Brand colors: [palette].
-```
-
-**2. Generate the page visual**
-**3. Extract element map for that page (same format as Step 3b)**
-**4. Build HTML to exactly match the generated visual**
-**5. Run the index.html checklist adapted for that page**
-**6. Run the responsive checklist**
-
----
-
-## Step 6 -- File Delivery
+## Step 7 -- File Delivery
 
 ```
 [brand-name]/
   index.html
-  [all inner pages].html
+  features.html
+  pricing.html
+  about.html
+  contact.html
   404.html
   tokens.css
   tokens.json
@@ -518,28 +675,22 @@ Brand colors: [palette].
     logo.png
     favicon.png
     hero.[ext]
-    [all generated images]
+    [all generated images named by slot-name from blueprint]
   icons/
-    [any custom SVG icons]
+    [any custom SVG icons not covered by Lucide]
 ```
 
 ---
 
-## Quality Rules
+## Rules That Cannot Be Broken
 
-- Every color comes from tokens.css -- no hardcoded hex in HTML
-- Every font comes from Google Fonts CDN -- no system font guessing
-- Every icon comes from Lucide CDN or is a generated SVG -- no emoji as icons
-- Every image is either generated by imagegen or sourced with a real URL -- no placeholder divs
-- Spacing uses only the 8px grid values from tokens.css
-- All interactive elements have :hover and :focus states
-- Lighthouse score target: Performance 90+, Accessibility 90+, SEO 100
-
----
-
-## What This Skill Does NOT Do
-
-- Backend, auth, databases -- static only
-- Custom CMS -- use content.json as the data layer
-- E-commerce checkout -- layout only, no payment processing
-- Pixel-perfect clone of the reference image -- the confirmed imagegen visual is the spec, not the original image
+1. Blueprint is written BEFORE imagegen is called. No exceptions.
+2. Imagegen is called BEFORE any HTML is written. No exceptions.
+3. All code values come from the blueprint. If a value is not in the blueprint, add it to the blueprint first, then use it.
+4. No hardcoded hex in HTML or CSS -- always use tokens.css variables.
+5. No placeholder divs -- every image slot is filled with a generated asset.
+6. No blank alt attributes on visible images.
+7. No emoji or decorative characters used as icons -- Lucide or generated SVG only.
+8. Every interactive element in the blueprint must be functionally implemented -- not mocked.
+9. Every inner page gets its own imagegen visual generated before its HTML is written.
+10. Blueprint and imagegen visual must always be in sync -- if visual changes, blueprint changes first.
