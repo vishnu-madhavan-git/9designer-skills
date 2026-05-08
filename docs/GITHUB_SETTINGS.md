@@ -5,7 +5,7 @@ Use this checklist after pushing the public repo polish.
 ## Repository Description
 
 ```text
-Image-to-website Codex skill pipeline: design prototypes, generated assets, and working frontend builds from one reference image.
+Blueprint-first image-to-website Codex skill: turn a reference image into a locked blueprint, imagegen preview, generated assets, and deploy-ready website.
 ```
 
 ## Topics
@@ -21,6 +21,8 @@ frontend
 react
 vite
 ai-design
+blueprint-first
+visual-qa
 ```
 
 ## Social Preview

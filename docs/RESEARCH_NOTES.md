@@ -2,6 +2,20 @@
 
 This document tracks public design-to-code patterns that should influence 9Designer.
 
+## Current Source Of Truth
+
+The active repo workflow is the blueprint-first `$9designer` skill in `skills/9designer/SKILL.md`.
+
+Key contract:
+
+- The complete blueprint is written before `imagegen`.
+- The `imagegen` preview is a visual proof of that blueprint.
+- User confirmation is required before asset generation and code.
+- Assets, tokens, pages, and interactions are generated from the locked blueprint.
+- If the visual direction changes, the blueprint changes first.
+
+The modular skills and optional v5 reference files support this contract. They should not introduce a parallel workflow where implementation choices are improvised after approval.
+
 ## Repositories Reviewed
 
 | Project | Public signal | Useful pattern for 9Designer |
@@ -76,6 +90,8 @@ All of these remain optional or roadmap items. They are not required dependencie
 
 ## Future Improvements
 
+- Add example blueprint files to the public benchmark gallery.
+- Add a lightweight blueprint completeness checker before website build.
 - Add an optional `target_stack` decision in prompts: React/Vite default, Next/Tailwind, static HTML/CSS, Vue/Tailwind, or existing repo stack.
 - Add a complete rendered website benchmark with a full visual QA ledger.
 - Add optional benchmark examples with before/reference/render/diff images.

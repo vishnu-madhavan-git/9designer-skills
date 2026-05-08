@@ -107,6 +107,21 @@ ls docs/media/demo-asset-overview.png
 ls docs/media/social-preview.png
 ```
 
+## Blueprint Source Check
+
+Confirm the published `$9designer` skill still exposes the blueprint-first contract:
+
+```powershell
+Select-String -Path "skills\9designer\SKILL.md" -Pattern "BLUEPRINT|PAUSE POINT|imagegen|tokens.json|tailwind.config"
+Get-ChildItem -LiteralPath "skills\9designer\references" -Filter "v5-*.md"
+```
+
+Expected result:
+
+- Blueprint markers exist in `skills/9designer/SKILL.md`.
+- The optional v5 reference files exist.
+- The installed local skill should match the repo copy when publishing from this repo.
+
 ## Community File Check
 
 Confirm these files exist:
@@ -125,13 +140,12 @@ CHANGELOG.md
 .github/CODEOWNERS
 ```
 
-## v5.0 Marker Check
+## Optional v5 Reference Check
 
-Confirm v5.0 content was merged correctly into the 9designer skill and references:
+Confirm optional v5 reference notes are available:
 
 ```powershell
 # Windows
-Select-String -Path "skills\9designer\SKILL.md" -Pattern "Two-Turn Workflow|v5.0|PAUSE POINT|tokens.json|tailwind.config|pixel diff|shadcn"
 Select-String -Path "skills\9designer\references\v5-workflow.md" -Pattern "PAUSE POINT|Subagent Dispatch"
 Select-String -Path "skills\9designer\references\v5-image-analysis.md" -Pattern "Radix|typescale|Perfect Fourth"
 Select-String -Path "skills\9designer\references\v5-token-exports.md" -Pattern "Style Dictionary|tailwind.config"
@@ -141,11 +155,10 @@ Select-String -Path "skills\9designer\references\v5-optional-integrations.md" -P
 
 ```bash
 # macOS/Linux
-grep -n "Two-Turn Workflow\|v5.0\|PAUSE POINT\|tokens.json\|tailwind.config\|pixel diff\|shadcn" skills/9designer/SKILL.md
 ls skills/9designer/references/
 ```
 
-Expected: all patterns match, and four reference files exist in `skills/9designer/references/`.
+Expected: all reference patterns match. These files are optional accelerators, not a second source of truth.
 
 ## Optional Future Checks
 

@@ -2,6 +2,8 @@
 
 Dreaming is the first public example set for 9Designer. It demonstrates the intended visual direction for an atmospheric, editorial, surreal image-to-website pipeline.
 
+This is a seed benchmark from the earlier visual-output flow. It remains useful as public demo material, but new benchmark submissions should include the current blueprint-first `$9designer` artifacts.
+
 Status: **seed benchmark**
 
 Current coverage: design prototype boards, brand kit board, UI component board, responsive preview board, and asset overview.
@@ -31,14 +33,16 @@ Pending for complete benchmark status: rendered working website screenshots and 
 
 ## Pipeline Notes
 
-The example follows the standard 9Designer flow:
+The current standard 9Designer flow is:
 
-1. `9image-design`: create the approved landing-page concept and design boards.
-2. `9design-assets`: export individual logos, icons, UI elements, textures, and backgrounds.
-3. `9assets-website`: build the real website from local assets.
-4. Visual QA: capture screenshots, compare against references, write ledger, score benchmark.
+1. `$9designer`: analyze the reference and write the complete blueprint.
+2. `$9designer`: generate one `imagegen` preview from the blueprint.
+3. User confirmation: approve the preview or request blueprint changes.
+4. `$9designer`: generate individual logos, icons, UI elements, textures, backgrounds, and page assets from blueprint slots.
+5. `$9designer`: build the real website from the same blueprint and local assets.
+6. Visual QA: capture screenshots, compare against references, write ledger, score benchmark.
 
-The public media currently shows the design/prototype side of the pipeline. A complete benchmark should add rendered website screenshots and a final QA score once a deployable site is generated from this kit.
+The public media currently shows the design/prototype side of the older pipeline. A complete benchmark should add the blueprint, generated preview, rendered website screenshots, and a final QA score once a deployable site is generated from this kit.
 
 ## Current Score
 

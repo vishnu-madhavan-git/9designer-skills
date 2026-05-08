@@ -2,6 +2,8 @@
 
 Use this workflow for changes to skills, docs, examples, and helper scripts.
 
+The source of truth is `skills/9designer/SKILL.md`. Keep docs, helper skills, examples, and scripts aligned with that blueprint-first workflow.
+
 ## 1. Choose A Small Scope
 
 Good scopes:
@@ -59,7 +61,8 @@ In the PR:
 Maintainers should verify:
 
 - Skill metadata is valid.
-- Instructions remain stage-based and decision-complete.
+- Instructions preserve the blueprint-first contract.
+- `imagegen` previews are generated from the blueprint, not used as an unrelated second design source.
 - New rules do not conflict with existing rules.
 - Public docs match current skill names and folder paths.
 - Example images are useful and not private.

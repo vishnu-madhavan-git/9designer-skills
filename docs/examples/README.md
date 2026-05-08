@@ -2,6 +2,8 @@
 
 This gallery keeps public-safe examples that show how 9Designer should be evaluated. Examples are not just showcase images; they are quality references for improving the skills.
 
+The current benchmark format follows the blueprint-first `$9designer` workflow: reference image, complete blueprint, `imagegen` preview, confirmation, generated assets, working website, and visual QA evidence.
+
 ## Examples
 
 | Example | Status | What it tests |
@@ -13,8 +15,10 @@ This gallery keeps public-safe examples that show how 9Designer should be evalua
 A complete benchmark should include:
 
 - Public-safe source/reference notes.
-- Prototype or approved design images.
-- Production asset overview.
+- Complete blueprint used as the build contract.
+- `imagegen` preview generated from that blueprint.
+- Confirmation or approval notes.
+- Production asset overview generated from named blueprint slots.
 - Rendered website screenshots for desktop, tablet, and mobile.
 - `VISUAL_QA_LEDGER.md` or summary of the same comparison categories.
 - `VISUAL_BENCHMARK_SCORE.md` or a score table using the rubric.

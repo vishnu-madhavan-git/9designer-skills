@@ -2,6 +2,8 @@
 
 Thanks for helping improve 9Designer. This repo is an installable Codex skill pack, so the best contributions make the workflow clearer, stricter, easier to validate, or better demonstrated.
 
+The current source of truth is `skills/9designer/SKILL.md`. Contributions should preserve its blueprint-first contract: write the blueprint first, generate the `imagegen` preview from the blueprint, pause for confirmation, then generate assets and build the website from the locked blueprint.
+
 ## What To Contribute
 
 Useful contributions include:
@@ -83,8 +85,9 @@ Before submitting:
 Skill changes should preserve these principles:
 
 - The reference image is the source of truth.
-- The first landing page is approval-gated.
-- Assets are generated separately and cleaned before website build.
+- The blueprint is written before `imagegen` and before code.
+- The `imagegen` preview is approval-gated before asset generation or website build.
+- Assets are generated separately from named blueprint slots and cleaned before website build.
 - Normal website text stays code-native.
 - Icons and social icons must match the approved design.
 - Working websites must be verified against screenshots and interactions.
@@ -95,6 +98,6 @@ Maintainers should check:
 
 - Skill metadata is valid.
 - Instructions are specific, not vague.
-- New rules do not contradict existing stage boundaries.
+- New rules do not contradict the blueprint-first source of truth.
 - Docs and examples match the current skill names.
 - Validation commands pass.

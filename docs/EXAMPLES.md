@@ -1,19 +1,24 @@
 # Examples
 
-This page shows how a completed 9Designer run is organized.
+This page shows how 9Designer examples should be organized.
 
 For benchmark scoring and public-safe submissions, see the [benchmark gallery](examples/README.md).
 
 ## Dreaming Example
 
-The Dreaming example started from a visual reference with atmospheric, editorial, surreal styling. The output demonstrates the intended flow:
+The Dreaming example started from a visual reference with atmospheric, editorial, surreal styling. It predates the current blueprint-first wording, but it remains the public visual benchmark seed for the repo.
 
-1. Full landing page prototype.
-2. Inner page and design-system boards.
-3. Production asset export.
-4. Website-ready asset folder.
+Future examples should include the current source-of-truth flow:
 
-## Prototype Outputs
+1. Reference image.
+2. Complete blueprint.
+3. `imagegen` preview generated from the blueprint.
+4. User confirmation.
+5. Production asset export from named blueprint slots.
+6. Working website build from the same blueprint.
+7. Visual QA ledger and benchmark score.
+
+## Visual Outputs
 
 | Output | Preview |
 | --- | --- |
@@ -31,21 +36,32 @@ The Dreaming example started from a visual reference with atmospheric, editorial
 ```text
 Use $9designer with this reference image.
 
-Build the first landing-page prototype only. Preserve the image mood, typography, color, lighting, composition, and motifs. Wait for my approval before generating the remaining pages, production assets, or working website.
+Write the complete website blueprint first. Include brand direction, exact color tokens, typography, grid, every section, every page, every asset slot, and every interactive behavior.
+
+Then generate one imagegen preview from that blueprint and pause. Do not build the website until I say GO.
 ```
 
 After approval:
 
 ```text
-Continue the 9Designer pipeline. Export clean separate assets, run background cleanup where needed, write the asset manifest, then build the working responsive website from those assets.
+GO
+```
+
+Expected continuation:
+
+```text
+Generate every asset from the blueprint asset list, clean transparent assets where needed, write the asset manifest, then build the complete responsive website directly from the blueprint.
 ```
 
 ## Example Acceptance Criteria
 
+- The blueprint exists before any generated preview or code.
 - The design feels native to the original image.
 - The hero composition follows the image focal point.
-- Icons and social icons match the design world.
+- Colors, fonts, layout, and section rhythm match the blueprint.
+- Icons and social icons match the design world or use verified official marks.
 - Logos and foreground motifs have clean transparency.
 - Normal site copy is real HTML/CSS text.
+- Every specified interaction works.
 - The final website passes build verification.
-- Desktop, tablet, and mobile screenshots are checked.
+- Desktop, tablet, mobile, and small-mobile screenshots are checked.

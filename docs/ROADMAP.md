@@ -2,11 +2,31 @@
 
 This roadmap keeps 9Designer practical for current Codex use while leaving a clear path toward deeper automation. New tools remain optional until they are validated in real runs.
 
+## Current Source Of Truth
+
+The current public workflow is the blueprint-first `$9designer` skill in [`../skills/9designer/SKILL.md`](../skills/9designer/SKILL.md).
+
+Status:
+
+- Blueprint is written before `imagegen`.
+- `imagegen` preview is generated from the blueprint.
+- User confirmation is required before build.
+- Assets are generated from blueprint asset slots.
+- Website pages, tokens, layouts, and interactions are built from the blueprint.
+- Repair loops are expected after the first rendered website.
+
+All docs and future tooling should support this contract.
+
 ## Phase 1: Skill And Docs Upgrades
 
 - Strengthen prompt rules for reference analysis, asset export, font matching, stack selection, and visual QA.
 - Mark Playwright, pixelmatch, SSIM, rembg, SAM, SVGO, Sharp, Pillow, and ImageMagick as optional accelerators.
 - Expand documentation for research findings, validation, and future tooling.
+
+Status:
+
+- Implemented.
+- Repo docs now frame the blueprint-first `$9designer` skill as the primary workflow.
 
 Acceptance:
 
@@ -73,3 +93,14 @@ Acceptance:
 - Deployment docs do not change the core install flow.
 - Public examples have clear source, asset, and license notes.
 - The repo remains focused on installable Codex skills.
+
+## Phase 6: Blueprint Evaluation
+
+- Add example blueprint files for public benchmarks.
+- Add a lightweight checker that verifies required blueprint fields exist before build.
+- Add review guidance for comparing blueprint, preview, assets, and final website.
+
+Acceptance:
+
+- The checker does not add required external dependencies.
+- Contributors can submit a reference image, blueprint, preview, final screenshots, and QA ledger in one repeatable format.

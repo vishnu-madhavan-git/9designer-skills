@@ -1,6 +1,8 @@
 # Getting Started
 
-9Designer is a Codex skill suite. Install the skill folders, then call the skill by name in Codex with a reference image.
+9Designer is a Codex skill suite. Install the skill folders, attach a reference image, then call `$9designer` by name.
+
+The current source of truth is the blueprint-first workflow in [`../skills/9designer/SKILL.md`](../skills/9designer/SKILL.md).
 
 ## 1. Install The Skills
 
@@ -26,26 +28,42 @@ Project-local destination:
 <project>/.agents/skills/
 ```
 
-## 2. Use The All-In-One Skill
+## 2. Run The Primary Workflow
 
 Attach a reference image and say:
 
 ```text
 Use $9designer with this reference image.
-Create the first landing-page prototype, wait for approval, then export production assets and build the working website.
+
+Write the complete website blueprint first. Generate one imagegen preview from that blueprint and pause for my confirmation.
+
+When I say GO, generate every asset from the blueprint asset list and build the complete responsive website directly from the blueprint.
 ```
 
-The skill runs three stages:
+The skill runs this sequence:
 
-1. `Design Prototype`
-2. `Production Asset Export`
-3. `Working Website Build`
+1. Analyze the reference image and any user-provided category.
+2. Write the complete structured blueprint.
+3. Generate an `imagegen` visual from the blueprint.
+4. Pause for confirmation.
+5. Generate all assets from named blueprint slots.
+6. Build all pages from the blueprint.
+7. Run desktop, tablet, mobile, and small-mobile QA.
+8. Repair mismatches before final handoff.
 
-The first landing page is approval-gated by default. Approve it before the skill continues into deeper pages, assets, or website implementation.
+## 3. Confirm Or Revise
 
-## 3. Use The Modular Pipeline
+If the preview is correct, say:
 
-Use this when you want more control:
+```text
+GO
+```
+
+If it needs changes, describe the changes. The skill should update the blueprint first, then regenerate the preview from the updated blueprint. Do not let the preview and blueprint drift apart.
+
+## 4. Use The Modular Helpers
+
+Use this only when you intentionally want to split the workflow:
 
 ```text
 Use $9image-design with this reference image.
@@ -63,22 +81,26 @@ Then build:
 Use $9assets-website with this asset export folder.
 ```
 
-## 4. What Good Output Looks Like
+## 5. What Good Output Looks Like
 
 A good 9Designer run should produce:
 
-- A landing-page prototype faithful to the reference image.
+- A complete blueprint with brand, colors, typography, grid, sections, pages, asset slots, interactions, and responsive behavior.
+- One `imagegen` visual that is clearly derived from the blueprint.
 - Clean separate assets, not one giant screenshot.
 - Transparent logos, icons, dividers, and overlays where needed.
 - An asset manifest that explains cleanup status and intended use.
-- Manifest validation that catches missing roles, responsive variants, accessibility notes, icon policy, token dependencies, and QA notes before website build.
+- `tokens.css`, optional `tokens.json`, and optional `tailwind.config.js` derived from blueprint values.
 - A real responsive frontend site with local assets.
-- Build results plus a visual QA ledger backed by manual screenshots, optional Playwright captures, or optional pixel diffs.
+- Functional buttons, forms, menus, filters, toggles, and page links when specified.
+- Build results plus a visual QA ledger backed by screenshots, manual comparison, optional Playwright captures, or optional pixel diffs.
 
-## 5. Common Mistakes
+## 6. Common Mistakes
 
-- Do not skip the first landing-page approval.
+- Do not code before the blueprint and preview are confirmed.
+- Do not regenerate the preview without updating the blueprint first.
 - Do not pass checkerboard-backed PNGs into website implementation.
 - Do not replace custom icons with generic placeholders.
 - Do not use image-generated paragraph text for normal website copy.
 - Do not build the final website as a pasted screenshot.
+- Do not call a site deploy-ready until responsive QA and build verification are complete.
