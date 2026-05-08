@@ -1,17 +1,39 @@
 ---
 name: 9designer
-description: "Complete image-to-working-website pipeline. Use when the user provides a single reference image and wants the full process handled as one skill: design prototype, production asset export, and working website build. This skill must execute the three stages clearly, wait for approval after the first landing-page prototype unless explicitly overridden, generate clean separate image assets, then build and verify a real responsive website."
+description: "Complete image-to-working-website pipeline. Use when the user provides a single reference image and wants the full process handled as one skill: design prototype, production asset export, and working website build. Runs in two turns -- analyze and present first, then build after user confirmation. Generates real image assets (logos, hero, icons, photos) before coding. Exports design tokens in CSS, Style Dictionary JSON, and Tailwind config formats. Optional pixel-diff QA, generative backgrounds, 3D integration, and Figma/Penpot sync when those tools are available."
 ---
 
 # 9Designer
 
 9Designer turns one reference image into a complete working website through three required stages:
 
-1. **Design Prototype**
-2. **Production Asset Export**
-3. **Working Website Build**
+1. **Design Prototype** (Stage 1 -- Turn 1)
+2. **Production Asset Export** (Stage 2 -- Turn 1, after approval)
+3. **Working Website Build** (Stage 3 -- Turn 2)
 
 Do not collapse these into one vague step. Each stage must produce its own outputs before the next stage starts. Inside each stage, work section-by-section and asset-by-asset so Codex has time to identify every essential element instead of producing a generic approximation.
+
+## Two-Turn Workflow
+
+9Designer always runs in two turns:
+
+```
+TURN 1 -- Analyze, Design & Present
+  Stage 1: Analyze reference image, generate landing-page prototype
+  Stage 2: Plan and export production assets
+  [PAUSE]  PAUSE -- Present design brief and asset plan to user, wait for confirmation
+
+TURN 2 -- Build & Verify (after user says go / yes / next / build)
+  Generate all image assets (logos, hero, icons, photos) before writing HTML
+  Stage 3: Full website implementation using generated assets
+  Visual QA loop: screenshot comparison, pixel diff, responsive checks
+  Deploy-ready file delivery
+```
+
+Never skip the pause. Never write website code until the user confirms. Any positive signal counts: "go", "yes", "next", "build", "looks good", "proceed", "do it", "fire".
+
+For detailed v5.0 workflow templates, design brief format, and PAUSE POINT presentation guide, see:
+`references/v5-workflow.md`
 
 ## Core Fidelity Principle
 
@@ -65,6 +87,14 @@ Before generating, define internally:
 - Content plan: hero, support/story, detail/showcase, final CTA.
 - Interaction thesis: 2-3 motion or interaction cues for the eventual website.
 
+**v5.0 additions -- perform these during Stage 1 analysis:**
+
+- OCR text extraction: read all visible text from the reference verbatim (headlines, nav labels, CTA copy, pricing, testimonials). Use extracted text in the build; never paraphrase when real text is visible.
+- Color system: extract every visible color as a hex value. Generate a 12-step accessible scale per brand color (lightest tint  darkest shade, WCAG-verified). See `references/v5-image-analysis.md`.
+- Typography: identify font personality and size hierarchy. Compute the nearest named typescale ratio (Perfect Fourth 1.333, Golden Ratio 1.618, Major Third 1.25) and generate a full semantic scale (`--text-xs` through `--text-4xl`). See `references/v5-image-analysis.md`.
+- Aesthetic direction: commit to one bold aesthetic direction beyond pixel-cloning (brutally minimal, maximalist, retro-futuristic, editorial, luxury, etc.). Elevate the reference rather than copying it generically.
+- Flags: note whether generative backgrounds (particles, noise, flow fields) or 3D product visualization is implied. These activate optional p5.js or Three.js paths in Stage 3.
+
 Required behavior:
 
 1. Generate only the first full landing-page prototype image first.
@@ -106,6 +136,7 @@ Stage 1 output:
 - Approved prototype image direction
 - Prototype/reference images for the site
 - Stable brand decisions: name, logo direction, palette, typography mood, icon style, copy tone, section rhythm, and visual motifs
+- Extracted OCR text, color tokens, typescale, and aesthetic direction flags
 
 ## Stage 2: Production Asset Export
 
@@ -130,6 +161,21 @@ Required structure:
 notes/
 asset-export-manifest.json
 ```
+
+**v5.0 image generation pipeline -- generate all assets before writing any HTML:**
+
+Use Codex image generation for every visual asset. Generate each one with a targeted prompt:
+
+- Logo: "Minimal [industry] logo, [aesthetic direction], text '[Brand Name]', [primary color], transparent background, clean lines, scalable"
+- Favicon: brand initial, simple icon, or emoji matching the brand personality
+- Hero image: "[Industry-appropriate visual], [extracted color palette], [aesthetic direction], 1440800px"
+- Feature/section images: one targeted prompt per section that needs imagery
+- Team/people photos: "Professional headshot, natural lighting, [brand bg color], friendly, 400400px"
+- Pattern/texture: "Subtle repeating pattern, [brand colors], seamless tile, low opacity"
+
+Save every generated image into the correct folder. Run background cleanup for every reusable non-background asset. Copy only cleaned and verified final assets into `06-ready-for-builder/`.
+
+Asset catalog: write or update `asset-export-manifest.json` so the website build can consume the folder without guessing.
 
 Required behavior:
 
@@ -233,6 +279,10 @@ Supported target stacks:
 - Optional when explicitly requested or clearly better for the repo: Next.js + Tailwind, static HTML/CSS, Vue + Tailwind, or Astro.
 - Do not switch stacks just because a tool or public repo uses one. Stack choice must preserve fidelity and keep the project buildable.
 
+**v5.0 complexity gate -- assess before choosing stack:**
+
+Count complex interactive components (tabs, modals, carousels, data tables, filter systems, infinite scroll, drag-and-drop). If 3 or more are needed, prefer React + Tailwind + shadcn/ui for the interactive layer; shadcn/ui provides 40+ accessible components pre-built.
+
 Required behavior:
 
 1. Read `asset-export-manifest.json`, `06-ready-for-builder/`, and the notes from Stage 2.
@@ -245,6 +295,23 @@ Required behavior:
 8. Strictly clone the approved template layout instead of creating an inspired redesign.
 9. Use real HTML/CSS text for navigation, headings, paragraphs, buttons, cards, CTA, forms, and footer whenever possible.
 10. Use accessible hidden text for decorative image-based logos, wordmarks, or hand-lettered titles.
+
+**v5.0 token export files -- always generate alongside the website:**
+
+- `tokens.css` -- all CSS custom properties documented (colors, typography, spacing, radii, shadows, z-index, transitions)
+- `tokens.json` -- Style Dictionary format for cross-platform portability (iOS, Android, Tailwind, SCSS). See `references/v5-token-exports.md` for format.
+- `tailwind.config.js` -- full token mapping from extracted design system. See `references/v5-token-exports.md` for format.
+- `content.json` -- all page text in one editable file, separated from markup
+- `sitemap.xml` -- SEO sitemap stub
+- `404.html` -- matching error page in the same design system, brand-voice headline
+
+**v5.0 optional enhancements (activate only when detected in Stage 1 flags):**
+
+- Generative backgrounds: if the ` GENERATIVE BACKGROUND DETECTED` flag was set, inject a p5.js canvas (particle field, flow field, or noise mesh) behind the hero section. CDN: `https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js`. Max 200 particles. Pause when tab hidden. See `references/v5-optional-integrations.md`.
+- 3D assets: if the ` 3D OPPORTUNITY DETECTED` flag was set and the user confirms, source a CC-licensed model from Sketchfab, inject Three.js + GLTFLoader, performance budget < 200K triangles, mobile fallback to static image. See `references/v5-optional-integrations.md`.
+- Figma / Penpot sync: if Figma MCP or Penpot MCP is available, export design tokens as design tool variables and create component frames. See `references/v5-optional-integrations.md`. Skip gracefully when MCPs are not configured.
+- Design system map: generate `design-system-map.html` -- a D3 force-directed graph showing pages  sections  components  tokens. See `references/v5-optional-integrations.md`.
+- Subagent dispatch: if the site has 5 or more pages or 8 or more major sections, consider dispatching parallel subagents for OCR/analysis, HTML structure, CSS, JavaScript, and Playwright QA. See `references/v5-workflow.md`.
 
 Before coding, create an implementation inventory:
 
@@ -341,7 +408,8 @@ Verification requirements:
 - Confirm `npm run dev` starts successfully for new Vite projects when practical.
 - Start the dev server and provide the local URL.
 - Use browser testing or screenshots for desktop and mobile when available; prefer automated screenshot capture when the environment supports it.
-- Compare desktop and mobile screenshots against the approved prototype/template at matching viewport sizes. Optional pixelmatch or SSIM-style comparison may supplement, but not replace, human visual review.
+- Compare desktop and mobile screenshots against the approved prototype/template at matching viewport sizes.
+- **v5.0 pixel diff (optional):** when Playwright is available, inject the pixelmatch algorithm via `browser_evaluate` to compute a numeric pixel similarity score between the reference and rendered screenshots. Target >= 90% similarity. Identify which quadrant (nav, hero, features, footer) differs most and target repairs there. Fall back to manual visual comparison when Playwright is not available. See `references/v5-pixel-diff.md` for the injection pattern.
 - Use the optional `9assets-website` QA helper scripts for screenshot capture, diff summaries, and ledger generation when they are available in the installed skills folder.
 - For final benchmark-grade work, create a visual benchmark score with the `9assets-website` rubric or `score_visual_qa.py` helper after the QA ledger is complete.
 - Iterate on CSS/components/assets until the website closely matches the reference layout, typography scale, spacing, colors, and section rhythm.
@@ -370,7 +438,10 @@ Stage 3 output:
 - Complete working website project
 - Local assets copied into `public/assets/`
 - Verified build
+- `tokens.css`, `tokens.json`, `tailwind.config.js`, `content.json`, `sitemap.xml`, `404.html`
 - Dev server URL or run command
+- Visual QA ledger
+- Optional: pixel diff score, design system map, Figma/Penpot sync confirmation
 
 ## Execution Checkpoints
 
@@ -404,6 +475,8 @@ Keep the final concise and include:
 - Verification commands and results
 - Visual QA ledger location and the main mismatches fixed
 - Visual benchmark score summary when scoring was run
+- Pixel diff similarity score when Playwright was available
+- Token export files generated (tokens.css, tokens.json, tailwind.config.js)
 - Production-readiness validator result
 - Dev URL or run command
 - Any missing assets, uncertain fonts, or remaining risks

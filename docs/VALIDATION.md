@@ -125,6 +125,28 @@ CHANGELOG.md
 .github/CODEOWNERS
 ```
 
+## v5.0 Marker Check
+
+Confirm v5.0 content was merged correctly into the 9designer skill and references:
+
+```powershell
+# Windows
+Select-String -Path "skills\9designer\SKILL.md" -Pattern "Two-Turn Workflow|v5.0|PAUSE POINT|tokens.json|tailwind.config|pixel diff|shadcn"
+Select-String -Path "skills\9designer\references\v5-workflow.md" -Pattern "PAUSE POINT|Subagent Dispatch"
+Select-String -Path "skills\9designer\references\v5-image-analysis.md" -Pattern "Radix|typescale|Perfect Fourth"
+Select-String -Path "skills\9designer\references\v5-token-exports.md" -Pattern "Style Dictionary|tailwind.config"
+Select-String -Path "skills\9designer\references\v5-pixel-diff.md" -Pattern "pixelmatch|quadrant|similarity"
+Select-String -Path "skills\9designer\references\v5-optional-integrations.md" -Pattern "p5.js|Three.js|Figma MCP|Penpot"
+```
+
+```bash
+# macOS/Linux
+grep -n "Two-Turn Workflow\|v5.0\|PAUSE POINT\|tokens.json\|tailwind.config\|pixel diff\|shadcn" skills/9designer/SKILL.md
+ls skills/9designer/references/
+```
+
+Expected: all patterns match, and four reference files exist in `skills/9designer/references/`.
+
 ## Optional Future Checks
 
 These checks are useful when the corresponding optional tooling exists, but they are not required for normal skill validation:
