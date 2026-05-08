@@ -1,482 +1,545 @@
 ---
 name: 9designer
-description: "Complete image-to-working-website pipeline. Use when the user provides a single reference image and wants the full process handled as one skill: design prototype, production asset export, and working website build. Runs in two turns -- analyze and present first, then build after user confirmation. Generates real image assets (logos, hero, icons, photos) before coding. Exports design tokens in CSS, Style Dictionary JSON, and Tailwind config formats. Optional pixel-diff QA, generative backgrounds, 3D integration, and Figma/Penpot sync when those tools are available."
+description: "Codex-native image-to-website pipeline. Give any reference image -- a Pinterest pin, screenshot, photo, anything -- and 9designer invents a brand, generates a full landing page visual for confirmation, then builds the complete website (all pages, assets, tokens) once you say go."
 ---
 
 # 9Designer
 
-9Designer turns one reference image into a complete working website through three required stages:
+Give any image. Get a complete website.
 
-1. **Design Prototype** (Stage 1 -- Turn 1)
-2. **Production Asset Export** (Stage 2 -- Turn 1, after approval)
-3. **Working Website Build** (Stage 3 -- Turn 2)
+9Designer reads any reference image, invents a fitting brand and context, generates a full visual mockup of the landing page for your approval, then builds the entire site once confirmed.
 
-Do not collapse these into one vague step. Each stage must produce its own outputs before the next stage starts. Inside each stage, work section-by-section and asset-by-asset so Codex has time to identify every essential element instead of producing a generic approximation.
+---
 
-## Two-Turn Workflow
-
-9Designer always runs in two turns:
+## The Workflow
 
 ```
-TURN 1 -- Analyze, Design & Present
-  Stage 1: Analyze reference image, generate landing-page prototype
-  Stage 2: Plan and export production assets
-  [PAUSE]  PAUSE -- Present design brief and asset plan to user, wait for confirmation
-
-TURN 2 -- Build & Verify (after user says go / yes / next / build)
-  Generate all image assets (logos, hero, icons, photos) before writing HTML
-  Stage 3: Full website implementation using generated assets
-  Visual QA loop: screenshot comparison, pixel diff, responsive checks
-  Deploy-ready file delivery
+[USER] gives any image
+       |
+[STEP 1] Codex analyzes the image
+         - Invents brand name, tagline, category
+         - Extracts color palette, typography style, layout structure
+         - Identifies tone, imagery style, section patterns
+       |
+[STEP 2] Codex generates ONE imagegen visual
+         - Full landing page mockup: nav to footer
+         - All sections visible, real content, real layout
+         - Exact colors, font styles, illustration direction
+       |
+[PAUSE] Codex presents the visual + brief summary
+        "Here is [BRAND NAME] -- a [CATEGORY] landing page.
+         Say GO to build all pages."
+       |
+[USER] says go / yes / build / next / looks good
+       |
+[STEP 3] Codex generates all image assets
+         - Logo (SVG + PNG)
+         - Hero image / illustration
+         - Section images, icons, favicons
+       |
+[STEP 4] Codex builds all pages
+         - index.html (landing page matching the confirmed visual exactly)
+         - All inner pages (features, pricing, about, contact, etc.)
+         - 404.html
+         - tokens.css, tokens.json, tailwind.config.js
+         - sitemap.xml, robots.txt
+       |
+[DONE] Deploy-ready folder delivered
 ```
 
-Never skip the pause. Never write website code until the user confirms. Any positive signal counts: "go", "yes", "next", "build", "looks good", "proceed", "do it", "fire".
+---
 
-For detailed v5.0 workflow templates, design brief format, and PAUSE POINT presentation guide, see:
-`references/v5-workflow.md`
+## Step 1 -- Analyze the Image
 
-## Core Fidelity Principle
+When the user provides any image, extract:
 
-The reference image, approved prototype, and exported asset kit are the source of truth. The final website must feel like a careful reconstruction of that design system, not a redesign inspired by it.
+**Brand**
+- Invent a name that fits the aesthetic and category (do not copy names from the image)
+- Write a 1-line tagline
+- Identify category: SaaS / gaming / clothing / food / agency / portfolio / tech / finance / health / other
 
-Use this priority order whenever there is a conflict:
+**Visual System**
+- Dominant colors: extract 4-6 hex codes, name each role (primary, accent, bg, text, surface, border)
+- Typography style: serif editorial / bold condensed / clean sans / mono / display
+- Layout type: full-bleed hero / split hero / centered / asymmetric
+- Imagery style: photography / illustration / 3D render / abstract / geometric / gradient
 
-1. Approved visual reference and prototype.
-2. Extracted asset manifest, design tokens, and section specs.
-3. Existing project stack and component conventions.
-4. General frontend best practices.
+**Sections**
+- List every section visible or implied: nav, hero, social proof, features, dashboard/preview, pricing, CTA, footer
+- Note layout per section: full-width / 2-col / 3-col / grid / centered
 
-General best practices never justify changing the visible design.
+**Tone**
+- Pick one: aggressive / playful / minimal / luxury / editorial / technical / warm / bold
 
-## Research-Backed Operating Model
+---
 
-9Designer should combine the strongest patterns from public design-to-code tools:
+## Step 2 -- Generate the Landing Page Visual
 
-- From screenshot-to-code tools: keep explicit supported output targets, examples, troubleshooting, and repeatable setup/verification commands.
-- From visual-first editors: manage brand assets, tokens, pages, images, components, and code side by side instead of treating the website as one screenshot.
-- From visual-difference research: render the implementation, compare it to the approved design, classify visible differences, then repair the code/assets and repeat.
+Build ONE imagegen prompt using everything from Step 1. This prompt generates the full visual confirmation the user approves before any code is written.
 
-Do not treat the first generated website as final. The final quality comes from the visual refinement loop.
+**Prompt structure:**
+```
+A full-length [CATEGORY] website landing page for a brand called [NAME].
+[TAGLINE] -- [ONE LINE ON WHAT THE BRAND DOES].
+Vertical scroll layout showing all sections top to bottom:
 
-Advanced tools such as Playwright, pixelmatch, SSIM comparison, rembg, Segment Anything, SVGO, Sharp, or ImageMagick are optional accelerators unless the user or repository explicitly provides them. Never make a 9Designer run fail only because those optional tools are unavailable; fall back to browser screenshots, manual visual comparison, and the bundled cleanup script.
+NAV: [nav description -- logo position, link style, CTA button]
+HERO: [hero layout -- bg type, headline style, subtext, CTA buttons, imagery]
+[SECTION 2 LABEL]: [layout + content description]
+[SECTION 3 LABEL]: [layout + content description]
+[SECTION N LABEL]: [layout + content description]
+FOOTER: [footer layout -- logo, columns, social icons]
 
-When the local 9Designer skill scripts are available, prefer the bundled helpers for repeatable QA: `9assets-website/scripts/capture_visual_qa.mjs`, `9assets-website/scripts/compare_visual_qa.mjs`, and `9assets-website/scripts/create_visual_qa_ledger.py`. These helpers remain optional wrappers around the same manual comparison process.
-
-For public examples, benchmark submissions, or final quality review, use the `9assets-website` visual benchmark rubric and scoring helper. The final build should be judged across reference fidelity, asset quality, responsive quality, accessibility, build reliability, and visual QA completeness.
-
-For deploy-ready work, create a reconstruction contract before coding and run production-readiness validation before final handoff. Do not call the website complete if the production build, iPad/tablet/mobile views, interactions, local assets, visual QA ledger, or benchmark score are missing.
-
-When the user asks to go fast, use fast mode: reduce duplicated design/asset passes, start the website shell as soon as the approved visual system and asset manifest are stable, run targeted QA during repair, and keep final quality gates intact.
-
-## Stage 1: Design Prototype
-
-Goal: create the approved visual direction from the single reference image.
-
-Use the reference image as the creative source of truth. Internally analyze:
-
-- Main subject, focal point, empty space, movement, horizon, and depth
-- Lighting, mood, color palette, texture, atmosphere, and visual style
-- Existing logo, wordmark, lettering, typography, symbols, motifs, objects, and patterns
-- Best hero text placement based on the image composition
-- Which visual elements need transparent backgrounds
-- Which text should be HTML/CSS and which text is decorative image-based typography
-
-Before generating, define internally:
-
-- Visual thesis: mood, material, and energy.
-- Content plan: hero, support/story, detail/showcase, final CTA.
-- Interaction thesis: 2-3 motion or interaction cues for the eventual website.
-
-**v5.0 additions -- perform these during Stage 1 analysis:**
-
-- OCR text extraction: read all visible text from the reference verbatim (headlines, nav labels, CTA copy, pricing, testimonials). Use extracted text in the build; never paraphrase when real text is visible.
-- Color system: extract every visible color as a hex value. Generate a 12-step accessible scale per brand color (lightest tint  darkest shade, WCAG-verified). See `references/v5-image-analysis.md`.
-- Typography: identify font personality and size hierarchy. Compute the nearest named typescale ratio (Perfect Fourth 1.333, Golden Ratio 1.618, Major Third 1.25) and generate a full semantic scale (`--text-xs` through `--text-4xl`). See `references/v5-image-analysis.md`.
-- Aesthetic direction: commit to one bold aesthetic direction beyond pixel-cloning (brutally minimal, maximalist, retro-futuristic, editorial, luxury, etc.). Elevate the reference rather than copying it generically.
-- Flags: note whether generative backgrounds (particles, noise, flow fields) or 3D product visualization is implied. These activate optional p5.js or Three.js paths in Stage 3.
-
-Required behavior:
-
-1. Generate only the first full landing-page prototype image first.
-2. The first landing page must include navigation, hero, intro/story, highlight, features, visual showcase, CTA, and footer.
-3. Keep the artwork as the dominant visual and avoid generic SaaS/corporate templates.
-4. Stop after Image 1 and wait for user approval or requested changes, unless the user explicitly overrides this approval gate.
-5. If changes are requested, revise Image 1 before continuing.
-6. After approval, generate the remaining prototype pages and boards needed for the website.
-7. Generate section/detail concepts when a full-page prototype is too compressed to implement precisely.
-
-Fast-mode note: after landing approval, generate only the additional pages/boards needed for implementation fidelity. Do not create extra decorative boards that do not inform assets, layout, responsive behavior, or QA.
-
-Stage 1 design quality rules:
-
-- Start with composition, not component count.
-- Prefer image-led/full-bleed heroes and cardless section layouts unless the reference demands otherwise.
-- Keep brand/product name dominant in the first viewport.
-- Keep copy short, specific, and scannable.
-- Avoid hero cards, generic card grids, stat strips, logo clouds, decorative pill clutter, and unrequested hero eyebrows/kickers/badges.
-- Make concepts readable enough to extract typography, spacing, button details, colors, and component shapes.
-- Do not use generic social icons, utility icons, arrows, or feature icons. Their metaphor, fill/outline mode, optical weight, corner style, color, size, and container treatment must match the reference world.
-- If a prototype image becomes too compressed to read, generate standalone section/detail concepts before implementation. Do not guess from tiny text or miniature icons.
-
-Default prototype set after approval:
-
-- Landing page
-- About/story page
-- World/gallery page
-- Feature/experience page
-- Detail page
-- Contact/signup page
-- Brand kit/design system board
-- UI component library board
-- Copy/content system board
-- Responsive website preview board
-
-Stage 1 output:
-
-- Approved prototype image direction
-- Prototype/reference images for the site
-- Stable brand decisions: name, logo direction, palette, typography mood, icon style, copy tone, section rhythm, and visual motifs
-- Extracted OCR text, color tokens, typescale, and aesthetic direction flags
-
-## Stage 2: Production Asset Export
-
-Goal: turn the approved prototype images into clean separate image assets for implementation.
-
-Create an output folder in the workspace:
-
-```text
-asset-exports/<project-slug>-YYYYMMDD-HHMM/
+Aesthetic: [tone]. Brand colors: [list hex codes].
+Typography: [font style description -- weight, size contrast, character].
+[IMAGERY NOTE: illustration style / photography style / 3D etc].
+Clean professional website mockup, full-page vertical view,
+high detail, sharp, production-ready design.
 ```
 
-Required structure:
+Generate the image. Do not write any code before the user confirms.
 
-```text
-00-source-kit/
-01-logos/
-02-icons/
-03-ui-elements/
-04-backgrounds/
-05-page-assets/
-06-ready-for-builder/
-notes/
-asset-export-manifest.json
+---
+
+## Step 3 -- PAUSE POINT
+
+After generating the visual, present:
+
+```
++----------------------------------------------------------+
+|  DESIGN READY FOR REVIEW                                 |
++----------------------------------------------------------+
+|  Brand:     [NAME]                                       |
+|  Category:  [CATEGORY]                                   |
+|  Tagline:   [TAGLINE]                                    |
+|  Tone:      [TONE]                                       |
+|  Colors:    [PRIMARY] [ACCENT] [BG] [TEXT]               |
+|  Pages:     index, [list all pages], 404                 |
++----------------------------------------------------------+
+|  Say GO to build. Tell me what to change if needed.     |
++----------------------------------------------------------+
 ```
 
-**v5.0 image generation pipeline -- generate all assets before writing any HTML:**
+Wait for the user. Do not proceed until confirmed.
 
-Use Codex image generation for every visual asset. Generate each one with a targeted prompt:
+Valid signals to continue: go / yes / build / next / looks good / perfect / do it / proceed
 
-- Logo: "Minimal [industry] logo, [aesthetic direction], text '[Brand Name]', [primary color], transparent background, clean lines, scalable"
-- Favicon: brand initial, simple icon, or emoji matching the brand personality
-- Hero image: "[Industry-appropriate visual], [extracted color palette], [aesthetic direction], 1440800px"
-- Feature/section images: one targeted prompt per section that needs imagery
-- Team/people photos: "Professional headshot, natural lighting, [brand bg color], friendly, 400400px"
-- Pattern/texture: "Subtle repeating pattern, [brand colors], seamless tile, low opacity"
+---
 
-Save every generated image into the correct folder. Run background cleanup for every reusable non-background asset. Copy only cleaned and verified final assets into `06-ready-for-builder/`.
+## Step 3b -- Visual Map (extract from confirmed visual)
 
-Asset catalog: write or update `asset-export-manifest.json` so the website build can consume the folder without guessing.
+Before generating any asset or writing any code, read the confirmed imagegen visual
+and document the exact element map. This map is the contract everything is built against.
 
-Required behavior:
+```
+VISUAL MAP
+----------
+Sections (in order):
+  1. nav
+  2. hero
+  3. [section name]
+  ...
+  N. footer
 
-1. Use image generation for every visual asset.
-2. Generate each asset separately. Do not create one giant sheet as the only output.
-3. Save every generated image into the correct folder.
-4. Run background cleanup for every reusable non-background asset.
-5. Copy only cleaned and verified final implementation assets into `06-ready-for-builder/`.
-6. Write or update `asset-export-manifest.json` so the website build can consume the folder without guessing.
+Asset slots:
+  hero-bg:          [full-bleed / right-col / floating] -- [description]
+  feature-img-1:    [position in section] -- [description]
+  gallery-1 to N:   [grid position] -- [description]
+  logo:             [nav top-left / centered]
 
-Fast-mode note: prioritize P0 assets first: logo/wordmark/favicon, hero/background art, visual-world icons/social icons, textures/dividers/overlays, and page-specific imagery. Keep buttons, cards, forms, navigation, and normal copy code-native when CSS can match the approved design accurately.
+Text overlays:
+  hero-headline:    [position: centered / bottom-left / top-left]
+  hero-sub:         [position relative to headline]
 
-Default exported assets:
+Buttons / CTAs:
+  primary-cta:      [label] [position in hero]
+  secondary-cta:    [label] [position]
+  nav-cta:          [label] [style: filled / outlined]
 
-- `logo-primary`
-- `logo-wordmark`
-- `logo-mark`
-- `favicon`
-- Exactly 5 core icons by default
-- `button-primary`
-- `button-secondary`
-- `nav-desktop`
-- `nav-mobile`
-- `card-default`
-- `form-input`
-- `cta-banner`
-- `footer-module`
-- `hero-background`
-- `section-texture`
-- `decorative-divider`
-- `social-icon-set`
+Toggles detected:
+  pricing-toggle:   [yes / no]
+  dark-mode:        [yes / no]
+  tabs/accordion:   [yes / no -- which section]
 
-Also export reference-driven assets when present: decorative wordmarks, hero objects/characters, section illustrations, custom feature icons, gallery cards, CTA artwork, footer visuals, social media/community icons, navigation glyphs, carousel arrows, form icons, and background motifs such as clouds, waves, leaves, stars, magic effects, mountains, animals, dividers, textures, or masks.
-
-Asset discovery protocol:
-
-1. Create an asset inventory before generating files.
-2. List every visible logo, wordmark, favicon, social icon, nav icon, CTA icon, card icon, decorative glyph, divider, texture, image frame, section illustration, button treatment, form treatment, and footer element.
-3. For each asset, record its intended use: background, foreground object, transparent overlay, icon, logo, UI chrome, decorative image text, or code-native text.
-4. For each icon, record metaphor, platform if any, filled vs. outline, stroke width, corner style, bounding box, padding, color, hover/active state, and whether it should be SVG, transparent PNG, or code-native.
-5. For social icons, use the exact platform glyphs visible in the approved design where legally and technically practical, then match the design's container, color, radius, shadow, and spacing. Do not substitute generic lucide/social placeholders.
-6. If a social icon is stylized by the brand illustration style, generate it as a transparent PNG. If it is a standard platform mark, use a clean official/vector-quality glyph and style the surrounding UI to match the prototype.
-
-Background policy:
-
-- Logos, icons, overlays, dividers, and decorative elements: transparent preferred.
-- If transparency is not reliable, use a perfectly flat neutral background, run background cleanup, and verify alpha before handoff.
-- Buttons, nav, cards, forms, and reusable UI elements: isolated component only, no screenshot/page background.
-- CTA and footer modules may include their internal component background, but not the full page screenshot background.
-- Only true background assets such as `hero-background`, `section-texture`, or background patterns may be full-bleed.
-
-Background cleanup requirements:
-
-- Use the `9design-assets` cleanup behavior for all logos, wordmarks, favicons, icons, overlays, dividers, buttons, nav, cards, forms, CTA modules, and footer modules.
-- Never accept a baked-in checkerboard pattern as transparency.
-- Manifest entries for reusable assets must include `background_cleaned: true`, `alpha_verified: true`, and `background_removal_needed: false` before Stage 3 starts.
-- If cleanup fails, regenerate the asset on a flat neutral background and clean it again.
-
-Stage 2 output:
-
-- Clean implementation-ready asset folder
-- Separate generated image assets
-- `asset-export-manifest.json`
-- `notes/asset-plan.md`
-- `notes/generation-prompts.md`
-- `notes/font-and-token-notes.md`
-- `notes/builder-handoff.md`
-
-Stage 2 fidelity rules:
-
-- Match icon metaphor, stroke/fill, optical weight, radius, color, padding, and alignment from the approved design.
-- Match actual colors; do not warm, cool, mute, or "improve" the palette.
-- Preserve hero/media treatment. Do not add overlays or tints that are not in the approved design.
-- Keep interactive UI text and controls code-native for Stage 3 unless the text belongs inside a decorative image asset.
-- For decorative image-text assets, record the exact accessible hidden text required in Stage 3.
-- Find the closest practical web font by comparing visual traits: serif/sans/display/script, x-height, contrast, terminals, width, weight, tracking, numerals, and distinctive letterforms. Record the chosen font, fallback stack, confidence level, and visual differences in `notes/font-and-token-notes.md`.
-- When the exact font cannot be confirmed, choose the closest available web font and adjust CSS size, weight, line-height, and letter spacing to match the prototype instead of pretending the font is exact.
-
-Stage 2 notes must include:
-
-```text
-notes/asset-plan.md
-notes/asset-inventory.md
-notes/icon-inventory.md
-notes/social-icons.md
-notes/generation-prompts.md
-notes/font-and-token-notes.md
-notes/builder-handoff.md
+Interactive components:
+  [list every interactive element visible in the confirmed visual]
 ```
 
-## Stage 3: Working Website Build
+Do not skip this step. Every asset slot must be named before any imagegen call is made.
 
-Goal: build the real responsive website from the exported assets.
+---
 
-Use the existing repository stack if one exists. If no stack exists or the workspace is empty, use React + TypeScript + Vite.
+## Step 4 -- Generate All Assets (after GO)
 
-Supported target stacks:
+Before writing a single line of HTML, generate all image assets via imagegen.
 
-- Default: React + TypeScript + Vite.
-- Existing repo stack: use the framework already present when the user provides a project.
-- Optional when explicitly requested or clearly better for the repo: Next.js + Tailwind, static HTML/CSS, Vue + Tailwind, or Astro.
-- Do not switch stacks just because a tool or public repo uses one. Stack choice must preserve fidelity and keep the project buildable.
+Generate in this order:
 
-**v5.0 complexity gate -- assess before choosing stack:**
+1. **Logo** -- brand mark + wordmark, on transparent background, vector clean
+2. **Favicon** -- simplified logo mark, 32x32 appropriate
+3. **Hero image / illustration** -- matches hero section from confirmed visual
+4. **Section images** -- any photography, illustrations, or background images used in sections
+5. **Icons** -- if custom icons needed beyond Lucide/standard libraries
 
-Count complex interactive components (tabs, modals, carousels, data tables, filter systems, infinite scroll, drag-and-drop). If 3 or more are needed, prefer React + Tailwind + shadcn/ui for the interactive layer; shadcn/ui provides 40+ accessible components pre-built.
+Each imagegen prompt must reference the confirmed visual's exact style, colors, and tone. Assets must look like they belong to the same brand.
 
-Required behavior:
-
-1. Read `asset-export-manifest.json`, `06-ready-for-builder/`, and the notes from Stage 2.
-2. Verify reusable assets are cleaned: no checkerboards, no screenshot backgrounds, and alpha verified where required.
-3. Copy final assets into the website project under `public/assets/`.
-4. Build a real website, not a screenshot background.
-5. Implement responsive pages, navigation, sections, cards, forms, CTAs, footer, and visual styling using HTML/CSS/React components.
-6. Use CSS variables for colors, typography, spacing, radii, borders, shadows, overlays, and textures.
-7. Preserve the approved brand direction and avoid redesigning.
-8. Strictly clone the approved template layout instead of creating an inspired redesign.
-9. Use real HTML/CSS text for navigation, headings, paragraphs, buttons, cards, CTA, forms, and footer whenever possible.
-10. Use accessible hidden text for decorative image-based logos, wordmarks, or hand-lettered titles.
-
-**v5.0 token export files -- always generate alongside the website:**
-
-- `tokens.css` -- all CSS custom properties documented (colors, typography, spacing, radii, shadows, z-index, transitions)
-- `tokens.json` -- Style Dictionary format for cross-platform portability (iOS, Android, Tailwind, SCSS). See `references/v5-token-exports.md` for format.
-- `tailwind.config.js` -- full token mapping from extracted design system. See `references/v5-token-exports.md` for format.
-- `content.json` -- all page text in one editable file, separated from markup
-- `sitemap.xml` -- SEO sitemap stub
-- `404.html` -- matching error page in the same design system, brand-voice headline
-
-**v5.0 optional enhancements (activate only when detected in Stage 1 flags):**
-
-- Generative backgrounds: if the ` GENERATIVE BACKGROUND DETECTED` flag was set, inject a p5.js canvas (particle field, flow field, or noise mesh) behind the hero section. CDN: `https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js`. Max 200 particles. Pause when tab hidden. See `references/v5-optional-integrations.md`.
-- 3D assets: if the ` 3D OPPORTUNITY DETECTED` flag was set and the user confirms, source a CC-licensed model from Sketchfab, inject Three.js + GLTFLoader, performance budget < 200K triangles, mobile fallback to static image. See `references/v5-optional-integrations.md`.
-- Figma / Penpot sync: if Figma MCP or Penpot MCP is available, export design tokens as design tool variables and create component frames. See `references/v5-optional-integrations.md`. Skip gracefully when MCPs are not configured.
-- Design system map: generate `design-system-map.html` -- a D3 force-directed graph showing pages  sections  components  tokens. See `references/v5-optional-integrations.md`.
-- Subagent dispatch: if the site has 5 or more pages or 8 or more major sections, consider dispatching parallel subagents for OCR/analysis, HTML structure, CSS, JavaScript, and Playwright QA. See `references/v5-workflow.md`.
-
-Before coding, create an implementation inventory:
-
-- Exact visible copy, nav items, CTA labels, headings, labels, captions, and footer text.
-- Design tokens for color, type, spacing, radii, borders, shadows, overlays, and motion.
-- Typography system, icon inventory, component families, container model, and hero/media treatment.
-- Asset-to-component mapping and cleanup status.
-- Reference screenshot/template for each page.
-
-Also create `docs/research/RECONSTRUCTION_CONTRACT.md` using the `9assets-website` helper when available. Treat it as the locked source-of-truth map for pages, target viewports, interactions, and pass/fail gates before coding.
-
-If speed matters, also create `docs/research/FAST_TRACK_PLAN.md` using the `9assets-website` helper when available. Use it to start routes, layout, shared tokens, asset loading, header, footer, and mobile nav before every section is fully polished.
-
-Then create section specs before implementation. For every major visible section, write a spec in:
-
-```text
-docs/research/components/<section-name>.spec.md
+**Asset generation checklist -- verify before writing any HTML:**
+```
+[ ] Logo generated: SVG + PNG, transparent background
+[ ] Favicon generated: simplified mark, square crop
+[ ] Hero image/illustration generated: matches hero slot in visual map
+[ ] All section images generated: count matches visual map asset slots
+[ ] Gallery images generated: all same aspect ratio, consistent style
+[ ] All assets visually match brand tone and color palette
 ```
 
-Each spec must include:
+Do not proceed to Step 5 until all boxes are checked.
 
-- Target component file.
-- Source prototype/reference image.
-- DOM/content structure.
-- Exact visible copy.
-- Assets used, including layered foreground/background assets.
-- Colors, typography, spacing, radii, borders, shadows, overlays, and image treatment.
-- Icon requirements, including social icon source/style.
-- Interaction model: static, click-driven, hover-driven, scroll-driven, time-driven, or mixed.
-- Hover, active, selected, focus, open, closed, and mobile states when applicable.
-- Desktop, tablet, and mobile layout behavior.
+---
 
-Do not start coding a section until its spec exists.
+## Step 5 -- Build All Pages
 
-Frontend implementation rules:
+Build in this order. Complete each file fully before moving to the next.
 
-- Use existing repo stack when present; otherwise default to React + TypeScript + Vite.
-- Build small focused components, shared primitives, page sections, and shared tokens/styles.
-- Implement repeated elements through shared components or variants.
-- Keep interactive controls code-native, accessible, and deliberately typed.
-- Preserve the container model; do not add cards, wrappers, borders, glows, or panels where the concept uses open space or full-bleed composition.
-- Use exported icons/assets only when clean, and use SVG/icon components only when they faithfully match the approved icon style.
-- Use semantic HTML, accessible alt text, reusable components, and modern CSS layout. Do not hardcode everything with absolute positioning unless needed for faithful visual layering.
-- Implement all buttons, links, nav items, tabs, filters, accordions, forms, carousels, mobile menus, and social links as working UI. If a destination is unknown, use a safe local placeholder such as `#` with an accessible label and preserve the visual behavior.
-- Social links must use the matched social icon assets from Stage 2. Do not use text labels or generic icons unless the prototype explicitly shows them.
-- Use official/vector-quality SVG icons for simple UI controls when they match the approved design; otherwise use the exported transparent assets. Every icon must pass an optical review for size, baseline, padding, color, and hover/active state.
-- Keep the app componentized enough that each major section can be repaired independently. Avoid one giant `App` component or one giant CSS block when the page has multiple visual systems.
-- Use a fast repair loop: patch the smallest failing token/component/asset/breakpoint, run the narrowest useful check, then run full QA only at milestone and final handoff.
+### Design Tokens First
 
-Default files for a new Vite app:
+Generate `tokens.css` before any HTML:
 
-```text
-package.json
-index.html
-src/main.tsx
-src/App.tsx
-src/pages/*
-src/components/*
-src/styles/*
-public/assets/*
-README.md
+```css
+:root {
+  /* Colors */
+  --clr-primary:    [hex];
+  --clr-accent:     [hex];
+  --clr-bg:         [hex];
+  --clr-surface:    [hex];
+  --clr-text:       [hex];
+  --clr-text-muted: [hex];
+  --clr-border:     [hex];
+
+  /* Typography */
+  --font-display: '[Font Name]', sans-serif;
+  --font-body:    '[Font Name]', sans-serif;
+
+  /* Typescale (Perfect Fourth 1.333) */
+  --text-xs:   0.75rem;
+  --text-sm:   1rem;
+  --text-base: 1.333rem;
+  --text-lg:   1.777rem;
+  --text-xl:   2.369rem;
+  --text-2xl:  3.157rem;
+  --text-3xl:  4.209rem;
+  --text-4xl:  5.61rem;
+
+  /* Spacing (8px grid) */
+  --space-1:  8px;
+  --space-2:  16px;
+  --space-3:  24px;
+  --space-4:  32px;
+  --space-6:  48px;
+  --space-8:  64px;
+  --space-12: 96px;
+  --space-16: 128px;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+}
 ```
 
-Default reusable components for a landing-page build:
+Also generate `tokens.json` (Style Dictionary format) and `tailwind.config.js`.
 
-```text
-Header
-Hero
-StorySection
-FeatureSection
-ShowcaseSection
-GallerySection
-CTASection
-Footer
-Button
-Card
+### Pages
+
+Build each page as a complete standalone HTML file:
+
+**index.html** -- landing page, exact match to confirmed visual
+- Nav with all links, CTA button
+- Every section in the confirmed order
+- All generated assets embedded
+- Scroll animations (IntersectionObserver, CSS transitions)
+- Mobile hamburger menu
+
+**[feature/product].html** -- expanded features or product detail
+**pricing.html** -- pricing tiers, toggle monthly/yearly
+**about.html** -- brand story, team if applicable
+**contact.html** -- contact form, locations if applicable
+**404.html** -- on-brand error page
+
+### Asset placement rules (from visual map)
+
+Hero image:
+- Full-bleed bg: `background-image` on section, `background-size: cover`, `background-position: center`
+- Right-col illustration: CSS grid column 2, `max-width: 100%`, `height: auto`
+- Floating/layered: `position: absolute` inside `position: relative` hero, `z-index` layered
+
+Section images:
+- Match exact grid position from visual map
+- Set `aspect-ratio` CSS to prevent layout shift: `aspect-ratio: 16/9` or `4/3` or `1/1`
+- All below-fold images: `loading="lazy"`
+
+Gallery images:
+- CSS grid with explicit column count: `grid-template-columns: repeat(N, 1fr)`
+- Responsive: 1-col mobile, 2-col tablet, N-col desktop
+- Consistent aspect-ratio across all cells
+
+Logo:
+- Nav: `height: 36px; width: auto`
+- Footer: `height: 28px; width: auto; opacity: 0.85`
+
+### Required in every page
+
+- `<link rel="canonical">` and full Open Graph meta tags
+- Skip-to-main link for accessibility
+- Dark mode support via `prefers-color-scheme`
+- Responsive: 375px / 768px / 1024px / 1440px
+- No horizontal scroll at any breakpoint
+- All images have descriptive `alt` text
+
+### Interactive elements (must be functional, not decorative)
+
+**Hamburger menu:**
+```javascript
+const burger = document.querySelector('.burger');
+const nav = document.querySelector('.nav-menu');
+burger.addEventListener('click', () => {
+  nav.classList.toggle('open');
+  burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+});
+```
+```css
+.nav-menu { display: none; }
+.nav-menu.open { display: flex; flex-direction: column; }
+@media (min-width: 768px) { .nav-menu { display: flex; } .burger { display: none; } }
 ```
 
-Use only the components supported by the approved design.
+**Pricing toggle (monthly/yearly):**
+```javascript
+const toggle = document.querySelector('.pricing-toggle');
+const prices = document.querySelectorAll('[data-monthly][data-yearly]');
+toggle.addEventListener('change', () => {
+  const isYearly = toggle.checked;
+  prices.forEach(el => {
+    el.textContent = isYearly ? el.dataset.yearly : el.dataset.monthly;
+  });
+});
+```
 
-Default pages when supported by the prototype:
+**Dark mode:**
+```javascript
+const root = document.documentElement;
+const saved = localStorage.getItem('theme');
+if (saved) root.classList.add(saved);
+document.querySelector('.theme-toggle')?.addEventListener('click', () => {
+  root.classList.toggle('dark');
+  localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+});
+```
 
-- Home
-- About/story
-- Gallery/world
-- Feature/experience
-- Detail
-- Contact/signup
+**Form validation:**
+```javascript
+document.querySelector('form')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = e.target.querySelector('[type="email"]');
+  if (!email.value.includes('@')) {
+    email.setCustomValidity('Enter a valid email');
+    email.reportValidity();
+    return;
+  }
+  e.target.querySelector('[type="submit"]').textContent = 'Sending...';
+  setTimeout(() => {
+    e.target.innerHTML = '<p class="success">You\'re in. Check your inbox.</p>';
+  }, 1200);
+});
+```
 
-Verification requirements:
+**index.html build checklist -- verify before moving to next page:**
+```
+[ ] All sections present in order matching visual map
+[ ] All assets placed in correct slots (no placeholder divs)
+[ ] All alt="" attributes filled with descriptive text
+[ ] Nav: all links present, CTA button styled
+[ ] Hamburger: JS toggle works, menu opens/closes
+[ ] Smooth scroll: anchor links scroll correctly
+[ ] All CTA buttons have valid href or onclick
+[ ] Pricing toggle: swaps prices correctly (if present)
+[ ] Dark mode: persists on reload via localStorage (if present)
+[ ] Forms: validation + loading + success state
+[ ] Scroll reveal: IntersectionObserver applied to .reveal elements
+[ ] No hardcoded hex -- all colors via tokens.css variables
+[ ] Google Fonts CDN loaded in <head>
+[ ] Open Graph meta tags complete
+[ ] canonical link present
+```
 
-- Run the smallest meaningful verification for the stack.
-- For a Vite app, run `npm install` if needed and `npm run build`.
-- Confirm `npm run dev` starts successfully for new Vite projects when practical.
-- Start the dev server and provide the local URL.
-- Use browser testing or screenshots for desktop and mobile when available; prefer automated screenshot capture when the environment supports it.
-- Compare desktop and mobile screenshots against the approved prototype/template at matching viewport sizes.
-- **v5.0 pixel diff (optional):** when Playwright is available, inject the pixelmatch algorithm via `browser_evaluate` to compute a numeric pixel similarity score between the reference and rendered screenshots. Target >= 90% similarity. Identify which quadrant (nav, hero, features, footer) differs most and target repairs there. Fall back to manual visual comparison when Playwright is not available. See `references/v5-pixel-diff.md` for the injection pattern.
-- Use the optional `9assets-website` QA helper scripts for screenshot capture, diff summaries, and ledger generation when they are available in the installed skills folder.
-- For final benchmark-grade work, create a visual benchmark score with the `9assets-website` rubric or `score_visual_qa.py` helper after the QA ledger is complete.
-- Iterate on CSS/components/assets until the website closely matches the reference layout, typography scale, spacing, colors, and section rhythm.
-- Fix broken images, console errors, text overflow, layout overlap, and mobile navigation issues.
-- Fix visual drift such as wrong background layering, checkerboard-backed assets, wrong card ratios, wrong button heights, or incorrect font weight/size.
-- Keep a visual QA ledger with at least eight comparison points covering copy, layout, typography, palette, asset treatment, icon/social icon fidelity, spacing/container model, responsive behavior, interactions, or motion.
-- Check desktop around 1440px, tablet around 768px, and mobile around 390px when practical.
-- Check iPad/tablet explicitly: around 1024px x 1366px and 768px x 1024px when practical.
-- Click or trigger every visible button, link, nav item, tab, filter, form, carousel control, mobile menu, and social icon. Record behavior in the QA ledger.
-- If a screenshot comparison shows a mismatch, fix the component or regenerate the relevant asset. Do not explain away fixable drift.
-- Run a visual refinement loop after the first successful build:
-  1. Capture reference and rendered screenshots at matching desktop and mobile viewports.
-  2. Compare the images and write `docs/research/VISUAL_QA_LEDGER.md`.
-  3. Classify every visible mismatch as layout, spacing, typography, color, asset, icon, interaction, or responsive behavior.
-  4. Repair the specific component, token, or asset that caused the mismatch.
-  5. Rebuild and recapture screenshots.
-  6. Repeat until remaining differences are minor, intentional, or blocked by missing assets/fonts.
-- Prefer element or section screenshots for debugging when a full-page screenshot makes differences hard to isolate.
-- Keep screenshots stable by using fixed viewports, waiting for fonts/images, and disabling nonessential animations during visual QA when practical.
-- The first rendered website is a draft checkpoint, never the final. Complete at least one compare-and-repair pass unless a concrete blocker prevents screenshot capture.
-- Run the `9assets-website` production-readiness validator when available. Fix errors before final handoff; explain any warnings that remain.
-- If the workspace has graphify instructions and code files changed, run `graphify update .`.
+**Responsive checklist -- run mentally for every page:**
+```
+375px mobile:
+[ ] Hamburger visible, desktop nav hidden
+[ ] Hero single column, headline readable (min 28px)
+[ ] All sections stack vertically
+[ ] No element overflows horizontally
+[ ] Buttons/links min 44px tall
+[ ] Font sizes min 14px
 
-Stage 3 output:
+768px tablet:
+[ ] Nav hamburger or compact links
+[ ] 2-col grids active where appropriate
+[ ] Hero image visible alongside text
+[ ] Feature/pricing cards in 2-col grid
 
-- Complete working website project
-- Local assets copied into `public/assets/`
-- Verified build
-- `tokens.css`, `tokens.json`, `tailwind.config.js`, `content.json`, `sitemap.xml`, `404.html`
-- Dev server URL or run command
-- Visual QA ledger
-- Optional: pixel diff score, design system map, Figma/Penpot sync confirmation
+1024px laptop:
+[ ] Full horizontal nav
+[ ] 3-col grids active
+[ ] Containers properly bounded
 
-## Execution Checkpoints
+1440px desktop:
+[ ] Max-width container (1200px or 1280px) centered
+[ ] No content edge-to-edge without padding
+[ ] Layout matches confirmed visual proportions
+```
 
-Use these checkpoint labels in progress updates and final summaries:
+### Scroll animations (standard pattern)
 
-- `Stage 1 Complete: Design Prototype`
-- `Stage 2 Complete: Production Asset Export`
-- `Stage 3 Complete: Working Website Build`
+```javascript
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+```
 
-Do not mark a stage complete until its required output exists.
+```css
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+```
 
-## Relationship To Smaller Skills
+---
 
-This skill combines the optimized flow of the existing smaller skills. When useful, follow their behavior:
+## Step 5b -- Inner Pages (imagegen-first for every page)
 
-- Stage 1 follows `9image-design`.
-- Stage 2 follows `9design-assets`.
-- Stage 3 follows `9assets-website`.
+When the user asks for inner pages after confirming the landing page, OR when building
+all pages automatically after GO -- every inner page follows the same visual-first process.
 
-`9design-kit` remains optional for expanded brand-system boards, but it is not required in the normal 9Designer pipeline.
+For EACH inner page:
 
-## Final Response
+**1. Generate imagegen prompt for that page:**
 
-Keep the final concise and include:
+Use the same brand name, colors, nav style, and typography from the confirmed landing page.
+Describe the page-specific content and layout. Example templates:
 
-- Stages completed
-- Prototype images generated or approval status
-- Asset export folder path
-- Website folder or key files changed
-- Sections recreated, assets generated/used, and main design decisions
-- Verification commands and results
-- Visual QA ledger location and the main mismatches fixed
-- Visual benchmark score summary when scoring was run
-- Pixel diff similarity score when Playwright was available
-- Token export files generated (tokens.css, tokens.json, tailwind.config.js)
-- Production-readiness validator result
-- Dev URL or run command
-- Any missing assets, uncertain fonts, or remaining risks
+features.html:
+```
+Full features/product page for [BRAND], [TAGLINE].
+Same nav as landing page. Page-specific sections:
+HERO: page hero with headline "[Feature headline]", subtext, muted bg
+FEATURES GRID: alternating dark/light rows, feature cards with icons left and text right
+COMPARISON TABLE: feature matrix vs competitors, checkmarks/crosses
+DEMO PREVIEW: screenshot or UI mockup with caption
+CTA: full-width CTA banner matching landing page style
+FOOTER: identical to landing page footer
+Brand colors: [palette]. Typography: [style]. Same aesthetic as confirmed landing page.
+Clean professional website page mockup, full-page vertical view.
+```
+
+pricing.html:
+```
+Pricing page for [BRAND], [TAGLINE].
+Same nav as landing page. Sections:
+HEADER: "Choose Your Plan" headline, monthly/yearly toggle
+PRICING CARDS: 3 tiers side by side -- [Free/Starter], [Pro highlighted], [Enterprise]
+Each card: price, billing period, feature list with checkmarks, CTA button
+FAQ ACCORDION: 5-6 common pricing questions, expandable
+CTA BANNER: bottom full-width CTA
+FOOTER: identical to landing page
+Brand colors: [palette]. Highlighted card uses accent color.
+```
+
+about.html:
+```
+About page for [BRAND], [TAGLINE].
+Same nav as landing page. Sections:
+MISSION HERO: bold statement headline, muted full-width bg
+STORY SECTION: 2-col -- paragraph text left, brand image right
+VALUES GRID: 3-col icon + title + text cards
+TEAM GRID: 3-4 team member cards with photo, name, role
+TIMELINE: horizontal or vertical milestone list
+FOOTER: identical to landing page
+Brand colors: [palette]. Warm, human tone.
+```
+
+contact.html:
+```
+Contact page for [BRAND].
+Same nav as landing page. Sections:
+CONTACT HERO: minimal headline, subtext
+SPLIT LAYOUT: form left (name, email, message, submit), contact info right (email, address, hours)
+MAP PLACEHOLDER: full-width map area (dark surface color bg with map icon)
+SOCIAL LINKS: row of social icons
+FOOTER: identical to landing page
+Brand colors: [palette].
+```
+
+404.html:
+```
+On-brand 404 error page for [BRAND].
+Centered layout, full viewport height.
+Large "404" display text in brand font.
+Short friendly message: "Page not found. Let's get you back."
+"Go Home" CTA button in brand primary color.
+Subtle background using brand colors (gradient or texture).
+Brand colors: [palette].
+```
+
+**2. Generate the page visual**
+**3. Extract element map for that page (same format as Step 3b)**
+**4. Build HTML to exactly match the generated visual**
+**5. Run the index.html checklist adapted for that page**
+**6. Run the responsive checklist**
+
+---
+
+## Step 6 -- File Delivery
+
+```
+[brand-name]/
+  index.html
+  [all inner pages].html
+  404.html
+  tokens.css
+  tokens.json
+  tailwind.config.js
+  sitemap.xml
+  robots.txt
+  assets/
+    logo.svg
+    logo.png
+    favicon.png
+    hero.[ext]
+    [all generated images]
+  icons/
+    [any custom SVG icons]
+```
+
+---
+
+## Quality Rules
+
+- Every color comes from tokens.css -- no hardcoded hex in HTML
+- Every font comes from Google Fonts CDN -- no system font guessing
+- Every icon comes from Lucide CDN or is a generated SVG -- no emoji as icons
+- Every image is either generated by imagegen or sourced with a real URL -- no placeholder divs
+- Spacing uses only the 8px grid values from tokens.css
+- All interactive elements have :hover and :focus states
+- Lighthouse score target: Performance 90+, Accessibility 90+, SEO 100
+
+---
+
+## What This Skill Does NOT Do
+
+- Backend, auth, databases -- static only
+- Custom CMS -- use content.json as the data layer
+- E-commerce checkout -- layout only, no payment processing
+- Pixel-perfect clone of the reference image -- the confirmed imagegen visual is the spec, not the original image
