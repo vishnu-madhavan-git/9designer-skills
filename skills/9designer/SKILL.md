@@ -66,14 +66,26 @@ Nothing is guessed. Nothing is improvised.
 
 ## Step 1 -- Analyze
 
+**First: check for user-specified category or intent.**
+
+If the user said anything like "make it a SaaS", "turn this into a bakery",
+"I want a gaming site", "design it as a portfolio" -- that instruction overrides
+everything the image suggests. The image becomes visual inspiration only
+(color energy, aesthetic mood, imagery style). Brand name, sections, content
+structure, and nav/layout decisions all follow the specified category.
+
+If no category was specified -- read the image and infer it.
+
 Read the reference image silently. Extract:
 
-- Visual category (SaaS / gaming / fashion / food / agency / portfolio / tech / etc.)
-- Dominant tone (aggressive / minimal / luxury / editorial / playful / technical / warm)
-- Color temperature (dark / light / colorful / monochrome)
-- Layout style (full-bleed / split / centered / asymmetric / editorial)
-- Imagery style (photography / illustration / 3D / abstract / gradient / mixed)
-- Section count and types visible or implied
+- Category: use user override if given, otherwise infer from image
+  (SaaS / gaming / fashion / food / agency / portfolio / tech / finance /
+   health / beauty / bakery / real estate / music / sports / other)
+- Dominant tone (aggressive / minimal / luxury / editorial / playful / technical / warm / bold)
+- Color temperature (dark / light / colorful / monochrome / gradient-heavy)
+- Layout energy (structured / editorial / chaotic / minimal / dense / airy)
+- Imagery style (photography / illustration / 3D / abstract / gradient / mixed / typographic)
+- Implied site scale (single long-scroll / multi-page standard / large multi-section)
 
 Do not output anything yet. Carry this into Step 2.
 
@@ -143,6 +155,88 @@ GRID
   column-gap:     [px]
   row-gap:        [px]
   section-padding: [px] vertical desktop / [px] vertical mobile
+
+----------------------------------------
+LAYOUT VARIANT
+----------------------------------------
+  Choose one from each row. Pick based on the reference image energy,
+  the category, and the tone. Vary every time -- do not default to the same choices.
+
+  nav-style:
+    top-transparent-blur  | top-solid       | left-sidebar
+    right-sidebar         | bottom-bar      | floating-pill
+    hamburger-only        | mega-menu
+
+  hero-style:
+    banner-short          | half-viewport   | full-viewport
+    super-tall            | typographic-only| split-50-50
+    split-asymmetric      | full-bleed-overlay | product-dominant
+    editorial-diagonal    | centered-radial | video-bg
+
+  scroll-behavior:
+    standard-vertical     | snap-sections   | horizontal-sections
+    parallax              | sticky-text     | cinematic
+
+  motion-level:
+    static                | subtle          | moderate
+    rich                  | cinematic
+
+  layout-mood:
+    minimal               | editorial       | dense
+    bold-maximalist       | brutalist       | playful
+    luxury                | technical
+
+  code-stack:
+    html-css-js           | react-ts-tailwind | html-alpinejs | html-gsap
+
+  site-scale:
+    micro                 | standard        | large
+
+  SELECTED:
+    nav-style:       [chosen]
+    hero-style:      [chosen]
+    scroll-behavior: [chosen]
+    motion-level:    [chosen]
+    layout-mood:     [chosen]
+    code-stack:      [chosen]
+    site-scale:      [chosen]
+
+  RATIONALE: [1 sentence explaining why these choices fit this image + category]
+
+  Nav position implementation:
+    left-sidebar:   fixed left, 240px wide, content margin-left: 240px
+    right-sidebar:  fixed right, 240px wide, content margin-right: 240px
+    bottom-bar:     fixed bottom, full width, flex row icon+label tabs
+    floating-pill:  fixed top 20px, centered, max-width 640px, glassmorphism bg
+    hamburger-only: no visible nav, trigger button top-right, fullscreen overlay menu
+
+  Hero height implementation:
+    banner-short:   height: clamp(120px, 20vh, 200px)
+    half-viewport:  height: 50vh, min-height: 400px
+    full-viewport:  height: 100vh, min-height: 600px
+    super-tall:     height: 180vh (parallax scroll through)
+    typographic-only: min-height: 100vh, no images, type fills space
+
+  Scroll implementation:
+    snap-sections:       scroll-snap-type: y mandatory on container,
+                         scroll-snap-align: start on each section
+    horizontal-sections: display: flex, overflow-x: scroll, scroll-snap-type: x mandatory,
+                         each section width: 100vw
+    sticky-text:         position: sticky, top: 0, height: 100vh on text col
+                         image col scrolls behind it
+
+  Motion implementation:
+    static:   no transition, no animation, instant render
+    subtle:   .reveal { opacity: 0 --> 1, 0.3s ease }
+    moderate: .reveal { opacity + translateY(24px --> 0), 0.5s ease, stagger 100ms }
+    rich:     parallax on hero, number counters, stagger 150ms, hover: translateY(-4px)
+    cinematic: GSAP ScrollTrigger, timeline per section, scrub: true
+
+  Code stack implementation:
+    html-css-js:       standalone .html files + tokens.css + vanilla JS
+    react-ts-tailwind: bundle.html with React 18 CDN + TypeScript babel + Tailwind CDN
+    html-alpinejs:     Alpine.js CDN, x-data/x-show/x-transition directives
+    html-gsap:         GSAP 3 CDN + ScrollTrigger plugin, timeline animations
 
 ----------------------------------------
 SECTIONS
@@ -294,32 +388,83 @@ This document is the single source of truth. Every decision is made here. Nothin
 
 ---
 
+## Step 2b -- Blueprint Summary Card
+
+After writing the full blueprint, output this short card BEFORE generating the imagegen.
+This gives the user an instant readable snapshot of every major decision.
+
+```
++------------------------------------------------------------------+
+|  BLUEPRINT PREVIEW -- [BRAND NAME]                               |
++------------------------------------------------------------------+
+|  "[TAGLINE]"                                                     |
+|                                                                  |
+|  Category:   [CATEGORY]            Tone:    [TONE]               |
+|  Nav:        [NAV STYLE]                                         |
+|  Hero:       [HERO STYLE]                                        |
+|  Scroll:     [SCROLL BEHAVIOR]     Motion:  [MOTION LEVEL]       |
+|  Mood:       [LAYOUT MOOD]         Stack:   [CODE STACK]         |
+|                                                                  |
+|  Colors:     [PRIMARY] [ACCENT] [BG] [TEXT]                      |
+|  Fonts:      [DISPLAY FONT] + [BODY FONT]                        |
+|                                                                  |
+|  Sections:   [N] -- [comma list of section names]                |
+|  Pages:      [comma list of page files]                          |
+|  Assets:     [N] images to generate + [N] Lucide icons           |
++------------------------------------------------------------------+
+|  Generating landing page visual now...                           |
++------------------------------------------------------------------+
+```
+
+Immediately after printing this card, generate the imagegen visual.
+Do not wait for user input between the card and the imagegen call.
+The user sees both at the same time and confirms both together.
+
+---
+
 ## Step 3 -- Generate Imagegen Visual FROM Blueprint
 
 Translate the blueprint into one imagegen prompt. The visual must reflect what is written
 in the blueprint -- every section, every layout, every color, every asset slot.
 
-Build the prompt by reading the blueprint top to bottom:
+Build the prompt by reading the blueprint top to bottom.
+The prompt must reflect the chosen LAYOUT VARIANT -- nav position, hero style,
+scroll behavior, motion level, and layout mood must all be visible in the visual.
 
 ```
-A full-length [CATEGORY] website landing page for a brand called [BRAND NAME].
+A full-length [CATEGORY] website for a brand called [BRAND NAME].
 "[TAGLINE]"
 
-Vertical scroll layout showing all sections in this exact order:
+Layout variant: [NAV STYLE] navigation, [HERO STYLE] hero, [LAYOUT MOOD] aesthetic.
 
-[1] NAV: [exact nav description from blueprint]
-[2] HERO: [exact hero spec from blueprint -- layout %, headline text, cta positions, image slot]
-[3] [SECTION NAME]: [exact section spec]
-[4] [SECTION NAME]: [exact section spec]
+[NAV STYLE VISUAL NOTE:
+  If left-sidebar: show vertical sidebar panel on left, content offset right.
+  If bottom-bar: show tab bar fixed at bottom, no top nav.
+  If floating-pill: show floating capsule nav centered at top.
+  If hamburger-only: show minimal trigger button only, no links visible.
+  If top-transparent-blur: show full horizontal nav, transparent bg.
+  Default: describe nav as it appears in blueprint.]
+
+Full vertical layout showing all sections top to bottom:
+
+[1] [NAV: describe exactly as in blueprint -- position, logo, links, CTA]
+[2] [HERO: describe hero style -- height, layout split or full-bleed, headline position,
+    asset position, CTA buttons. Reference hero-style from blueprint.]
+[3] [SECTION: describe layout, bg color, content, asset placement]
+[4] [SECTION: ...]
 ...
-[N] FOOTER: [exact footer spec]
+[N] [FOOTER: columns, logo, links, social]
 
-Exact colors: primary [hex], accent [hex], bg [hex], surface [hex], text [hex].
-Typography: [display-font] [weight] for headlines, [body-font] for body text.
-Imagery: [imagery style description].
-Tone: [tone]. Layout precision: [grid and spacing description].
-Clean professional website mockup, full vertical page view,
-all sections visible, high detail, sharp, pixel-perfect design reference.
+Exact brand colors: [PRIMARY hex], [ACCENT hex], [BG hex], [SURFACE hex], [TEXT hex].
+Typography: [DISPLAY FONT] [weight] [size]px for headlines, [BODY FONT] for body.
+Imagery style: [imagery style from blueprint].
+Mood: [LAYOUT MOOD -- e.g. editorial with large asymmetric type / bold maximalist with
+      oversized elements / minimal with generous whitespace / brutalist raw grid].
+[MOTION NOTE: if motion-level is rich or cinematic, describe UI as if mid-animation --
+ hero text appearing, cards in stagger, parallax layers offset].
+
+Clean professional website design mockup, full vertical page view,
+all sections visible, high detail, sharp, production-ready.
 ```
 
 Generate the image. Do not proceed to PAUSE until the image is generated.
