@@ -1,12 +1,12 @@
 # 9Designer
 
-> Blueprint-first image-to-website Codex skill: reference image -> locked blueprint -> imagegen preview -> confirmation -> generated assets -> deploy-ready website.
+> Blueprint-first image-to-website Codex skill: reference image -> locked blueprint -> imagegen preview -> confirmation -> generated assets -> animated Next.js + Tailwind + Motion website -> Vercel deployment.
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 [![Codex Skills](https://img.shields.io/badge/Codex-Skills-111827.svg)](skills/)
 [![Primary Workflow](https://img.shields.io/badge/Workflow-Blueprint%20%E2%86%92%20Preview%20%E2%86%92%20Build-0f766e.svg)](#how-it-works)
 
-9Designer is an installable Codex skill suite for turning a single reference image into a real website. The current source of truth is [`skills/9designer/SKILL.md`](skills/9designer/SKILL.md): it writes the full website blueprint first, renders that blueprint as an `imagegen` visual for review, waits for confirmation, then generates assets and builds the working site directly from the locked blueprint.
+9Designer is an installable Codex skill suite for turning a single reference image into a real website. The current source of truth is [`skills/9designer/SKILL.md`](skills/9designer/SKILL.md): it writes the full website blueprint first, renders that blueprint as an `imagegen` visual for review, waits for confirmation, then generates assets and builds the working Next.js + Tailwind + Motion for React site directly from the locked blueprint.
 
 The old mental model was design -> assets -> website. The current model is stricter:
 
@@ -15,7 +15,8 @@ The old mental model was design -> assets -> website. The current model is stric
 3. Generate an `imagegen` preview from that blueprint.
 4. Pause for user confirmation.
 5. Generate all assets from the blueprint asset slots.
-6. Build every page, token, component, and interaction from the blueprint.
+6. Build every page, token, component, Motion animation, and interaction from the blueprint.
+7. Deploy the completed site to Vercel when the workflow reaches final handoff.
 
 ## Preview
 
@@ -65,6 +66,7 @@ flowchart LR
   E --> F["Generate assets<br/>from blueprint slots"]
   F --> G["Build website<br/>tokens, pages, components, interactions"]
   G --> H["Visual QA<br/>desktop, tablet, mobile, repair loop"]
+  H --> I["Deploy<br/>Vercel production URL"]
 ```
 
 Core rule:
@@ -121,7 +123,7 @@ Use $9designer with this reference image.
 
 Write the complete website blueprint first. Then generate one imagegen preview from that blueprint and pause for my confirmation.
 
-After I say GO, generate every asset from the blueprint asset list and build the complete responsive website directly from the blueprint.
+After I say GO, generate every asset from the blueprint asset list and build the complete responsive Next.js + Tailwind + Motion for React website directly from the blueprint.
 ```
 
 After the preview is generated, respond with one of the confirmation signals from the skill, such as:
@@ -141,7 +143,9 @@ If the preview needs changes, ask for the change before saying `GO`. The bluepri
 - **No generic replacements:** social icons, decorative marks, and UI icons must match the reference world or use verified official marks.
 - **Code-native text:** navigation, headings, paragraphs, buttons, forms, and footer copy stay real HTML/CSS whenever possible.
 - **Token-driven build:** `tokens.css`, optional `tokens.json`, and optional `tailwind.config.js` are derived from the blueprint values.
+- **Motion-ready by default:** Next.js builds use Motion for React, the current package behind Framer Motion-style React animation.
 - **Responsive by contract:** desktop, tablet, mobile, and small-mobile behavior are specified before implementation.
+- **Vercel handoff:** the primary skill includes final production deployment guidance.
 - **Repair loop expected:** the first render is not final; visual QA drives targeted fixes before handoff.
 
 ## Modular Helpers
@@ -267,7 +271,7 @@ Start with [CONTRIBUTING.md](CONTRIBUTING.md), then open an issue or pull reques
 
 Suggested GitHub repository settings:
 
-- Description: `Blueprint-first image-to-website Codex skill: turn a reference image into a locked blueprint, imagegen preview, generated assets, and deploy-ready website.`
+- Description: `Blueprint-first image-to-website Codex skill: turn a reference image into a locked blueprint, imagegen preview, generated assets, animated Next.js site, and Vercel deployment.`
 - Topics: `codex-skills`, `image-to-website`, `design-to-code`, `screenshot-to-code`, `website-cloning`, `image-generation`, `frontend`, `react`, `vite`, `ai-design`, `blueprint-first`
 - Social preview image: `docs/media/social-preview.png`
 

@@ -5,7 +5,7 @@ Use this checklist after pushing the public repo polish.
 ## Repository Description
 
 ```text
-Blueprint-first image-to-website Codex skill: turn a reference image into a locked blueprint, imagegen preview, generated assets, and deploy-ready website.
+Blueprint-first image-to-website Codex skill: turn a reference image into a locked blueprint, imagegen preview, generated assets, animated Next.js site, and Vercel deployment.
 ```
 
 ## Topics
@@ -23,6 +23,10 @@ vite
 ai-design
 blueprint-first
 visual-qa
+framer-motion
+motion-react
+nextjs
+vercel
 ```
 
 ## Social Preview

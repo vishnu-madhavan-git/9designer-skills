@@ -37,7 +37,7 @@ Use $9designer with this reference image.
 
 Write the complete website blueprint first. Generate one imagegen preview from that blueprint and pause for my confirmation.
 
-When I say GO, generate every asset from the blueprint asset list and build the complete responsive website directly from the blueprint.
+When I say GO, generate every asset from the blueprint asset list and build the complete responsive Next.js + Tailwind + Motion for React website directly from the blueprint.
 ```
 
 The skill runs this sequence:
@@ -50,6 +50,7 @@ The skill runs this sequence:
 6. Build all pages from the blueprint.
 7. Run desktop, tablet, mobile, and small-mobile QA.
 8. Repair mismatches before final handoff.
+9. Deploy to Vercel when the build is approved and ready.
 
 ## 3. Confirm Or Revise
 
@@ -91,6 +92,7 @@ A good 9Designer run should produce:
 - Transparent logos, icons, dividers, and overlays where needed.
 - An asset manifest that explains cleanup status and intended use.
 - `tokens.css`, optional `tokens.json`, and optional `tailwind.config.js` derived from blueprint values.
+- Motion for React animations for reveals, menus, hover states, and layout transitions when the blueprint calls for motion.
 - A real responsive frontend site with local assets.
 - Functional buttons, forms, menus, filters, toggles, and page links when specified.
 - Build results plus a visual QA ledger backed by screenshots, manual comparison, optional Playwright captures, or optional pixel diffs.
@@ -103,4 +105,4 @@ A good 9Designer run should produce:
 - Do not replace custom icons with generic placeholders.
 - Do not use image-generated paragraph text for normal website copy.
 - Do not build the final website as a pasted screenshot.
-- Do not call a site deploy-ready until responsive QA and build verification are complete.
+- Do not call a site deploy-ready until responsive QA, build verification, and deployment handoff are complete.

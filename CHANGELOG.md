@@ -4,6 +4,7 @@ All notable changes to 9Designer Skills are tracked here.
 
 ## Unreleased
 
+- Consolidated the active `$9designer` install around the repo source of truth and added Motion for React / Framer Motion animation defaults for Next.js builds.
 - Reframed the public README and docs around the current blueprint-first `$9designer` source of truth: blueprint first, `imagegen` preview second, confirmation third, assets and website build after approval.
 - Added 9Designer v5.0 workflow upgrades: two-turn analyze/confirm/build flow, image generation asset pipeline (logos, hero, icons, photos before HTML), pixel-diff QA with quadrant scoring, Radix-style 12-step color scales, mathematical typescale (Perfect Fourth / Golden Ratio / Major Third), Style Dictionary tokens.json export, tailwind.config.js token mapping, content.json content layer, React + shadcn/ui complexity gate, optional p5.js generative backgrounds, optional Three.js / Sketchfab 3D assets, optional Figma/Penpot MCP sync, D3 design system map, subagent dispatch for large sites. All external tools marked optional with manual fallbacks. Reference files added under `skills/9designer/references/`.
 - Added fast development mode with a fast-track plan helper, P0/P1/P2 asset prioritization, early app-shell guidance, code-native UI shortcuts, and targeted QA repair loops.
