@@ -152,42 +152,55 @@ async function main() {
   const consoleMessages = [];
 
   try {
-    for (const viewport of mergeViewports(args.viewports)) {
-      const page = await browser.newPage({
-        viewport: { width: viewport.width, height: viewport.height },
-        deviceScaleFactor: 1,
-      });
-      page.on("console", (message) => {
-        if (["error", "warning"].includes(message.type())) {
-          consoleMessages.push({
-            viewport: viewport.name,
-            type: message.type(),
-            text: message.text(),
+    const viewports = mergeViewports(args.viewports);
+    const results = await Promise.all(
+      viewports.map(async (viewport) => {
+        const page = await browser.newPage({
+          viewport: { width: viewport.width, height: viewport.height },
+          deviceScaleFactor: 1,
+        });
+        const messages = [];
+        page.on("console", (message) => {
+          if (["error", "warning"].includes(message.type())) {
+            messages.push({
+              viewport: viewport.name,
+              type: message.type(),
+              text: message.text(),
+            });
+          }
+        });
+
+        await page.goto(args.url, { waitUntil: "domcontentloaded" });
+        if (args.reduceMotion) {
+          await page.addStyleTag({
+            content: `
+              *, *::before, *::after {
+                animation-delay: 0s !important;
+                animation-duration: 0.001s !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-delay: 0s !important;
+                transition-duration: 0s !important;
+              }
+            `,
           });
         }
-      });
+        await waitForStablePage(page, args.wait);
 
-      await page.goto(args.url, { waitUntil: "domcontentloaded" });
-      if (args.reduceMotion) {
-        await page.addStyleTag({
-          content: `
-            *, *::before, *::after {
-              animation-delay: 0s !important;
-              animation-duration: 0.001s !important;
-              animation-iteration-count: 1 !important;
-              scroll-behavior: auto !important;
-              transition-delay: 0s !important;
-              transition-duration: 0s !important;
-            }
-          `,
-        });
-      }
-      await waitForStablePage(page, args.wait);
+        const file = path.join(outDir, `${viewport.name}.png`);
+        await page.screenshot({ path: file, fullPage: args.fullPage });
+        await page.close();
 
-      const file = path.join(outDir, `${viewport.name}.png`);
-      await page.screenshot({ path: file, fullPage: args.fullPage });
-      screenshots.push({ ...viewport, file });
-      await page.close();
+        return {
+          screenshot: { ...viewport, file },
+          messages,
+        };
+      })
+    );
+
+    for (const result of results) {
+      screenshots.push(result.screenshot);
+      consoleMessages.push(...result.messages);
     }
   } finally {
     await browser.close();
