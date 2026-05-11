@@ -124,13 +124,9 @@ def alpha_stats(image) -> dict:
     image = image.convert("RGBA")
     alpha = image.getchannel("A")
     extrema = alpha.getextrema()
-    transparent = 0
-    opaque = 0
-    for value in alpha.tobytes():
-        if value == 0:
-            transparent += 1
-        if value == 255:
-            opaque += 1
+    hist = alpha.histogram()
+    transparent = hist[0]
+    opaque = hist[255]
     total = image.size[0] * image.size[1]
     return {
         "alpha_min": extrema[0],
