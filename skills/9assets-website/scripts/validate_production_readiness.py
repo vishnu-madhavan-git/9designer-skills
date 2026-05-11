@@ -109,17 +109,20 @@ def text_scan(root: Path, errors: list[dict[str, str]], warnings: list[dict[str,
         if path.exists():
             candidates.append(path)
 
+    compiled_placeholder_patterns = [(pattern, re.compile(pattern, re.IGNORECASE)) for pattern in PLACEHOLDER_PATTERNS]
+    compiled_remote_image_pattern = re.compile(r"<img[^>]+src=[\"']https?://", re.IGNORECASE)
+
     for path in candidates:
         try:
             text = path.read_text(encoding="utf-8", errors="ignore")
         except Exception:
             continue
         rel = path.relative_to(root).as_posix()
-        for pattern in PLACEHOLDER_PATTERNS:
-            if re.search(pattern, text, re.IGNORECASE):
-                add(warnings, "placeholder_text", f"Possible placeholder text in {rel}: {pattern}")
+        for pattern_str, compiled_pattern in compiled_placeholder_patterns:
+            if compiled_pattern.search(text):
+                add(warnings, "placeholder_text", f"Possible placeholder text in {rel}: {pattern_str}")
                 break
-        if re.search(r"<img[^>]+src=[\"']https?://", text, re.IGNORECASE):
+        if compiled_remote_image_pattern.search(text):
             add(warnings, "remote_image", f"Remote image URL found in {rel}. Prefer local exported assets.")
 
 
